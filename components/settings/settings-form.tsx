@@ -114,12 +114,14 @@ export const SettingsForm = () => {
           <FormDescription>
             See your plan and billing information
           </FormDescription>
-          <div>
-            Your are on the free account plan.
-          </div>
+          <div>Your are on the free account plan.</div>
           <Button
             disabled={isLoading}
             variant="destructiveLight"
+            onClick={(e) => {
+              e.preventDefault();
+              toast({ description: "We are working on the paid plan!" });
+            }}
           >
             Upgrade
           </Button>
@@ -129,11 +131,13 @@ export const SettingsForm = () => {
         <div className="flex w-full gap-5">
           <Link
             href={"/"}
-            className=" shadow-neonLight w-full flex items-center justify-center"
+            className="shadow-neonLight w-full flex items-center justify-center rounded-md"
           >
             Back
           </Link>
-          <Button type="submit" className="w-full">Save Project</Button>
+          <Button type="submit" className="w-full">
+            Save Project
+          </Button>
         </div>
       </form>
     </Form>
