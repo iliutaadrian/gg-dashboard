@@ -17,6 +17,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Markdown from "react-markdown";
 import { useUser } from "@clerk/nextjs";
+import { Copy, Loader2 } from "lucide-react";
+// @ts-ignore
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+// @ts-ignore
+import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism"; // You can choose different styles
 
 const projectFormSchema = z.object({
   link: z.string().max(50, {
@@ -32,11 +37,16 @@ const defaultValues: Partial<TranslateFormValues> = {
   link: "https://www.youtube.com/watch?v=-v8pD0d5Bmk",
 };
 
-export const YoutubeForm = () => {
+interface Props {
+  setClicked: (value: boolean) => void;
+}
+
+export const YoutubeForm = ({ setClicked }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState("");
   const [isMounted, setMounted] = useState(false);
   const { isSignedIn } = useUser();
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -49,6 +59,7 @@ export const YoutubeForm = () => {
   if (!isMounted) return null;
 
   const onSubmit = async (data: TranslateFormValues) => {
+    setClicked(true);
     setIsLoading(true);
     if (!isSignedIn) {
       toast({
@@ -124,7 +135,29 @@ export const YoutubeForm = () => {
         >
           Summarize
         </Button>
-        <Markdown>{value}</Markdown>
+
+        {isLoading ? (
+          <Loader2 className="w-20 h-20 mx-auto text-primary animate-spin" />
+        ) : (
+          value && (
+            <div className="bg-transparent relative">
+              <Copy
+                className="w-6 h-6 text-muted-foreground right-5 top-5 absolute hover:text-primary cursor-pointer"
+                onClick={() => {
+                  handleCopy();
+                }}
+              />
+              <SyntaxHighlighter
+                language="markdown"
+                style={darcula}
+                wrapLongLines={true}
+                className="bg-transparent text-sm max-w-5xl overflow-none"
+              >
+                {value}
+              </SyntaxHighlighter>
+            </div>
+          )
+        )}
       </form>
     </Form>
   );
