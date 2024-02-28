@@ -16,13 +16,12 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Markdown from "react-markdown";
+import { useUser } from "@clerk/nextjs";
 
 const projectFormSchema = z.object({
-  link: z
-    .string()
-    .max(50, {
-      message: "Links cannot be larger than 50 chars",
-    }),
+  link: z.string().max(50, {
+    message: "Links cannot be larger than 50 chars",
+  }),
 });
 
 type TranslateFormValues = z.infer<typeof projectFormSchema>;
@@ -37,6 +36,7 @@ export const YoutubeForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState(localStorage.getItem("summary") || "");
   const [isMounted, setMounted] = useState(false);
+  const { isSignedIn } = useUser();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -50,6 +50,13 @@ export const YoutubeForm = () => {
 
   const onSubmit = async (data: TranslateFormValues) => {
     setIsLoading(true);
+    if (!isSignedIn) {
+      toast({
+        description: "Please sign in to use this feature.",
+      });
+      setIsLoading(false);
+      return;
+    }
 
     if (!localStorage.getItem("ok")) {
       toast({
@@ -66,18 +73,21 @@ export const YoutubeForm = () => {
     };
 
     try {
-      await axios.post("api/youtube-summary", {
-        ...formData,
-      }).then((data) => {
-        console.log(data);
-        let summary = "";
-        data.data && data.data.map((item: any) => {
-          summary += `${item.summary} `;
+      await axios
+        .post("api/youtube-summary", {
+          ...formData,
+        })
+        .then((data) => {
+          console.log(data);
+          let summary = "";
+          data.data &&
+            data.data.map((item: any) => {
+              summary += `${item.summary} `;
+            });
+          // window.location.href = `/chat/${data.data.chatId}`
+          localStorage.setItem("summary", summary);
+          setValue(summary);
         });
-        // window.location.href = `/chat/${data.data.chatId}`
-        localStorage.setItem("summary", summary);
-        setValue(summary);
-      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -100,7 +110,7 @@ export const YoutubeForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-10 max-w-3xl"
+        className="flex flex-col gap-10 w-full"
       >
         <FormField
           control={form.control}
@@ -120,9 +130,8 @@ export const YoutubeForm = () => {
         >
           Summarize
         </Button>
-        <Markdown>
-          {value}
-        </Markdown>
+        <h1>In order to get the summary, please sign in. POPuop here.</h1>
+        <Markdown>{value}</Markdown>
       </form>
     </Form>
   );

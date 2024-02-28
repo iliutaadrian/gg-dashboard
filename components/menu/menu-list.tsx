@@ -7,13 +7,12 @@ import { Folder, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 
 export const MenuList = () => {
-  const projects:any = []
+  const projects: any = [];
   const handleSubscription = async () => {
     try {
-      await axios.get("/api/stripe")
-        .then((data) => {
-          window.location.href = data.data.url;
-        });
+      await axios.get("/api/stripe").then((data) => {
+        window.location.href = data.data.url;
+      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -34,7 +33,7 @@ export const MenuList = () => {
           <LayoutDashboard />
           Dashboard
         </Link>
-        {projects.map((project:any) => {
+        {projects.map((project: any) => {
           return (
             <Link
               href={`/project/${project.id}`}
@@ -58,15 +57,15 @@ export const MenuList = () => {
           </Button>
         </div>
 
-        <div className="flex flex-row justify-between items-center">
-          <Button
-            onClick={handleSubscription}
-            variant="destructiveLight"
-            className="w-full"
-          >
-            Upgrade
-          </Button>
-        </div>
+        {/* <div className="flex flex-row justify-between items-center"> */}
+        {/*   <Button */}
+        {/*     onClick={handleSubscription} */}
+        {/*     variant="destructiveLight" */}
+        {/*     className="w-full" */}
+        {/*   > */}
+        {/*     Upgrade */}
+        {/*   </Button> */}
+        {/* </div> */}
       </div>
     </div>
   );

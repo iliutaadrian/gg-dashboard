@@ -1,13 +1,15 @@
-import { openaiSummary, preprocessText, segmentText } from "@/lib/openai-summary";
-import { checkOpenAIKey } from "@/lib/openai-translate";
+import {
+  openaiSummary,
+  preprocessText,
+  segmentText,
+} from "@/lib/openai-summary";
+import { checkOpenAIKey } from "@/lib/summary-process";
 import { options } from "@/types";
 import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { YoutubeTranscript } from "youtube-transcript";
 
-export async function POST(
-  request: Request,
-) {
+export async function POST(request: Request) {
   const user = await currentUser();
   if (!user) {
     return new NextResponse("Unauthorized", { status: 401 });
@@ -42,7 +44,7 @@ export async function POST(
       let segments = segmentText(summary);
 
       const segmentPromises = segments.map((segment) =>
-        preprocessText(segment, ok)
+        preprocessText(segment, ok),
       );
       const summaries = await Promise.all(segmentPromises);
       summary = summaries.join("");
@@ -61,4 +63,3 @@ export async function POST(
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
-

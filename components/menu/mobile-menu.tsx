@@ -26,13 +26,14 @@ export const MobileMenu = () => {
           <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
         <div className="flex flex-col gap-5 items-center w-full mt-5 text-foreground">
-           <Link
+          <Link
             href={"/"}
             className="text-sm hover:text-primary"
             onClick={() => setOpen(false)}
           >
             Dashboard
-          </Link>         <Link
+          </Link>{" "}
+          <Link
             href={"/quick-translate"}
             className="text-sm hover:text-primary"
             onClick={() => setOpen(false)}

@@ -1,13 +1,14 @@
 "use client";
 
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { UserButton } from "@clerk/nextjs";
-import { ModeToggle } from "../mode-toggle";
-import { Button } from "../ui/button";
-import { Menu } from "lucide-react";
+import Link from "next/link";
 import { MobileMenu } from "./mobile-menu";
+import { useUser } from "@clerk/clerk-react";
 
 export const Navbar = () => {
+  const { isSignedIn } = useUser();
+
   return (
     <nav className="fixed z-20 inset-x-0 top-0 px-10 shadow-neonLight align-middle flex flex-row justify-between items-center w-full h-16 bg-background">
       <Link
@@ -17,8 +18,7 @@ export const Navbar = () => {
         Tube Mind Sync
       </Link>
       <div className="md:hidden text-muted-foreground">
-
-        <MobileMenu/>
+        <MobileMenu />
       </div>
       <div className="hidden md:flex flex-row gap-5 align-middle items-center justify-end w-full">
         <Link
@@ -28,17 +28,21 @@ export const Navbar = () => {
           Settings
         </Link>
         <Link
-          href={"/"}
-          className=""
+          href={"/settings"}
+          className="text-sm text-muted-foreground hover:text-primary"
         >
-          <Button variant="destructiveLight">
-            Upgrade
-          </Button>
+          Openai Key
         </Link>
-        <div className="flex flex-row justify-evenly items-center gap-5">
-          <ModeToggle />
-          <UserButton />
-        </div>
+
+        {!isSignedIn ? (
+          <Link href={"/sign-in"} className="">
+            <Button variant="defaultLight">Login/Register</Button>
+          </Link>
+        ) : (
+          <div className="flex flex-row justify-evenly items-center gap-5">
+            <UserButton />
+          </div>
+        )}
       </div>
     </nav>
   );
