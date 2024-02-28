@@ -1,4 +1,7 @@
 import { strict_output } from "./gpt";
+import summary from "../public/summary.md";
+import { Configuration } from "openai/dist/configuration";
+import { OpenAIApi } from "openai";
 
 export const segmentText = (inputText: string) => {
   const segments = [];
@@ -6,7 +9,7 @@ export const segmentText = (inputText: string) => {
 
   let currentSegment = "";
   for (const word of words) {
-    if ((currentSegment + word).length < 3000) {
+    if ((currentSegment + word).length < 20000) {
       currentSegment += `${word} `;
     } else {
       segments.push(currentSegment.trim());
@@ -27,12 +30,22 @@ export const checkOpenAIKey = async (key: string) => {
   }
 
   try {
-    await strict_output(
-      `You are an assistan, you will confirm me that the request is ok`,
-      "Respond me with OK.",
-      { text: "OK" },
-      { api_key: key, num_tries: 3, verbose: false },
-    );
+    const configuration = new Configuration({
+      apiKey: key,
+    });
+    const openai = new OpenAIApi(configuration);
+
+    const response = await openai.createChatCompletion({
+      temperature: 1,
+      model: "gpt-3.5-turbo-0125",
+      messages: [
+        {
+          role: "system",
+          content: `You are an assistan, you will confirm me that the request is ok`,
+        },
+        { role: "user", content: "Respond me with OK." },
+      ],
+    });
     return true;
   } catch (error) {
     console.log(error);
@@ -40,22 +53,46 @@ export const checkOpenAIKey = async (key: string) => {
   }
 };
 
-export const gptTranslate = async (
-  default_language: string,
-  language: string,
-  note: string,
-  value: string,
-  key: string,
-) => {
-  const output = await strict_output(
-    `You are the best translator. You will receive a text in ${default_language}. You will translate the following text in ${language}. Take into consideration the following note points for translation: ${note}. I will include the text inside the symbols //: /text to be translated/. Do not include the symbol: /. Translate words like: empty, none, answer.`,
-    `Text: /${value}/ Translated text:`,
-    {
-      initial_text: "Initial text",
-      translated_text: "Translated text",
-    },
-    { api_key: key, num_tries: 3, verbose: true },
-  );
+export const preprocessText = async (segment: string, key: any) => {
+  const configuration = new Configuration({
+    apiKey: key,
+  });
+  const openai = new OpenAIApi(configuration);
 
-  return output;
+  const response = await openai.createChatCompletion({
+    temperature: 1,
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "system",
+        content: `You will receive a part of a video transcript. Clean up the transcript by removing any unnecessary filler words, repeated phrases, or irrelevant content. Only respond with the text.`,
+      },
+      { role: "user", content: `Segment: ${segment} ` },
+    ],
+  });
+  let res: string = response.data.choices[0].message?.content || "";
+  return res;
+};
+
+export const openaiSummary = async (transcript: string, key: string) => {
+  const configuration = new Configuration({
+    apiKey: key,
+  });
+  const openai = new OpenAIApi(configuration);
+
+  const response = await openai.createChatCompletion({
+    temperature: 1,
+    model: "gpt-3.5-turbo-0125",
+    messages: [
+      {
+        role: "system",
+        content: `You are an assistan, you will summarize the following text in the following format.`,
+      },
+      { role: "user", content: `${summary} Text: /${transcript}/` },
+    ],
+  });
+
+  let res: string = response.data.choices[0].message?.content || "";
+
+  return res;
 };

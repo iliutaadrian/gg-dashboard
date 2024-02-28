@@ -1,6 +1,7 @@
-Transform the following video transcript into a structured Markdown document in {{language}} with the detailed sections listed below. Each section will have this format: ### Section section content
+Transform the following video transcript into a structured Markdown document with the detailed sections listed below. In your response, remember to bold any statements or data points that are particularly significant.
+Each section will have this format: ### Section section content
 
-Sections:
+List of Sections:
 
 ### Main Concept
 
@@ -54,5 +55,3 @@ Conceive 5 engaging questions that will enable the viewer to reflect on and bett
 Encourage critical thinking and personal connection to the material
 Varied in scope, addressing different segments of the video
 Present the questions in a manner that prompts thoughtful consideration.
-
-In your document, remember to bold any statements or data points that are particularly significant. Utilize the {{page}} variable appropriately as a placeholder where necessary.\

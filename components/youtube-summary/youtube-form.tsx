@@ -34,7 +34,7 @@ const defaultValues: Partial<TranslateFormValues> = {
 
 export const YoutubeForm = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [value, setValue] = useState(localStorage.getItem("summary") || "");
+  const [value, setValue] = useState("");
   const [isMounted, setMounted] = useState(false);
   const { isSignedIn } = useUser();
   useEffect(() => {
@@ -78,13 +78,7 @@ export const YoutubeForm = () => {
           ...formData,
         })
         .then((data) => {
-          console.log(data);
-          let summary = "";
-          data.data &&
-            data.data.map((item: any) => {
-              summary += `${item.summary} `;
-            });
-          // window.location.href = `/chat/${data.data.chatId}`
+          let summary = data.data;
           localStorage.setItem("summary", summary);
           setValue(summary);
         });
@@ -130,7 +124,6 @@ export const YoutubeForm = () => {
         >
           Summarize
         </Button>
-        <h1>In order to get the summary, please sign in. POPuop here.</h1>
         <Markdown>{value}</Markdown>
       </form>
     </Form>

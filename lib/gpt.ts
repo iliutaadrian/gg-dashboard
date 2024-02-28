@@ -159,6 +159,7 @@ export async function strict_output(
         }
       }
       // let total_cost: number = openaiApiCalculateCost(usage);
+      let total_cost: number = 0;
 
       return list_input
         ? { ...output, total_cost }

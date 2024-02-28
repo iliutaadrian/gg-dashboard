@@ -1,9 +1,9 @@
 import {
+  checkOpenAIKey,
   openaiSummary,
   preprocessText,
   segmentText,
-} from "@/lib/openai-summary";
-import { checkOpenAIKey } from "@/lib/summary-process";
+} from "@/lib/summary-process";
 import { options } from "@/types";
 import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -40,8 +40,8 @@ export async function POST(request: Request) {
     }
 
     let summary = transcript;
-    while (summary.length > 5000) {
-      let segments = segmentText(summary);
+    if (summary.length > 20000) {
+      let segments = segmentText(transcript);
 
       const segmentPromises = segments.map((segment) =>
         preprocessText(segment, ok),
@@ -50,12 +50,7 @@ export async function POST(request: Request) {
       summary = summaries.join("");
     }
 
-    const response = await Promise.all(
-      options.map(async (option: any) => ({
-        ...option,
-        summary: await openaiSummary(summary, option.value, ok),
-      })),
-    );
+    const response = await openaiSummary(summary, ok);
 
     return new NextResponse(JSON.stringify(response), { status: 200 });
   } catch (error) {
