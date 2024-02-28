@@ -15,13 +15,19 @@ export type UserClerk = {
 // export type FullEntryType = Entry & {
 //   translationValues: any;
 // };
+//
+export type Usage = {
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+};
 
 export const options = [
   {
     name: "Main Concept Explanation",
     key: "main-concept",
     value:
-    "Main Concept Explanation:Break down the primary concept discussed in the video in a way that a 15-year-old can easily understand.",
+      "Main Concept Explanation:Break down the primary concept discussed in the video in a way that a 15-year-old can easily understand.",
   },
   {
     name: "Timeline Summary",
@@ -53,4 +59,4 @@ export const options = [
     value:
       "Q&A Based on Transcript:Formulate questions and answers based on the content of the video transcript.",
   },
-]
+];
