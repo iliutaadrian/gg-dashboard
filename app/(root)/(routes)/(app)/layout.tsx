@@ -8,7 +8,7 @@ export default function RoutesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div>
       <div
         className={
           "overflow-hidden w-full hidden flex-col md:w-80 fixed h-screen border-muted-foreground p-7 mt-16 pb-24 bg-primary/10"
@@ -20,6 +20,6 @@ export default function RoutesLayout({
       <div className={" pt-16 h-full"}>
         <div className={" h-full"}>{children}</div>
       </div>
-    </>
+    </div>
   );
 }
