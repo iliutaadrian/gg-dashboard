@@ -27,26 +27,23 @@ export const Navbar = () => {
       </div>
 
       <div className="hidden text-sm md:flex flex-row gap-5 align-middle items-center justify-end w-full">
-        {!isSignedIn ? (
+        {navigation.map((item) => (
+          <Link
+            key={item.name}
+            href={item.href}
+            className="text-sm hover:text-primary"
+          >
+            {item.name}
+          </Link>
+        ))}
+        {!isSignedIn && (
           <Link href={"/sign-in"} className="cursor-pointer">
             Login/Register{" "}
           </Link>
-        ) : (
-          <>
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-sm hover:text-primary"
-              >
-                {item.name}
-              </Link>
-            ))}
-            <div className="flex flex-row justify-evenly items-center gap-5">
-              <UserButton afterSignOutUrl="/" />
-            </div>
-          </>
         )}
+        <div className="flex flex-row justify-evenly items-center gap-5">
+          <UserButton afterSignOutUrl="/" />
+        </div>
         <ModeToggle />
       </div>
     </nav>

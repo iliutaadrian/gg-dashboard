@@ -1,8 +1,7 @@
-import { YoutubeForm } from "@/components/youtube-summary/youtube-form";
-import { Steps } from "@/components/dashboard/steps";
-import { getUserApiLimit } from "@/lib/stripe/api-limits";
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { YoutubeForm } from "@/components/youtube-summary/youtube-form";
+import { getUserApiLimit } from "@/lib/stripe/api-limits";
 import { Zap } from "lucide-react";
 
 async function Page() {
@@ -22,7 +21,7 @@ async function Page() {
       </div>
 
       <div className="flex flex-col mb-4">
-        <div className="flex flex-col gap-3 items-center shadow-neon rounded-md p-4 m-4">
+        <div className="flex flex-col gap-3 items-center shadow-neon rounded-md p-4 m-4 w-[360px]">
           <p>
             {limit[0]}/{limit[1]}{" "}
             <span className="text-muted-foreground animate-pulse">

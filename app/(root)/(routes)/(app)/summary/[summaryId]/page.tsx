@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { getUserApiLimit } from "@/lib/stripe/api-limits";
 import { Zap } from "lucide-react";
+import Link from "next/link";
 
 interface Params {
   summaryId: string;
@@ -27,7 +28,10 @@ async function Page({ params }: { params: Params }) {
         <p className="bg-transparent relative">{summary.summary}</p>
       </div>
 
-      <div className="flex flex-col mb-4">
+      <div className="flex flex-col mb-4 mt-5 gap-5">
+        <Link href={`/summary/`} className="w-full px-5">
+          <Button className="w-full">Generate Summary</Button>
+        </Link>
         <div className="flex flex-col gap-3 items-center shadow-neon rounded-md p-4 m-4">
           <p>
             {limit[0]}/{limit[1]}{" "}
