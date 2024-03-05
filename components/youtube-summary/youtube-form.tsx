@@ -22,10 +22,11 @@ import { Copy, Loader2 } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 // @ts-ignore
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism"; // You can choose different styles
+import router from "next/router";
 
 const projectFormSchema = z.object({
-  link: z.string().max(50, {
-    message: "Links cannot be larger than 50 chars",
+  link: z.string().max(150, {
+    message: "Links cannot be larger than 150 chars",
   }),
 });
 
@@ -37,11 +38,7 @@ const defaultValues: Partial<TranslateFormValues> = {
   link: "https://www.youtube.com/watch?v=-v8pD0d5Bmk",
 };
 
-interface Props {
-  setClicked: (value: boolean) => void;
-}
-
-export const YoutubeForm = ({ setClicked }: Props) => {
+export const YoutubeForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState("");
   const [isMounted, setMounted] = useState(false);
@@ -59,7 +56,6 @@ export const YoutubeForm = ({ setClicked }: Props) => {
   if (!isMounted) return null;
 
   const onSubmit = async (data: TranslateFormValues) => {
-    setClicked(true);
     setIsLoading(true);
     if (!isSignedIn) {
       toast({
@@ -69,18 +65,8 @@ export const YoutubeForm = ({ setClicked }: Props) => {
       return;
     }
 
-    if (!localStorage.getItem("ok")) {
-      toast({
-        variant: "destructive",
-        description: "Please enter your OpenAI API key in Settings.",
-      });
-      setIsLoading(false);
-      return;
-    }
-
     const formData = {
       ...data,
-      ok: localStorage.getItem("ok"),
     };
 
     try {
@@ -89,9 +75,7 @@ export const YoutubeForm = ({ setClicked }: Props) => {
           ...formData,
         })
         .then((data) => {
-          let summary = data.data;
-          localStorage.setItem("summary", summary);
-          setValue(summary);
+          window.location.href = `/summary/${data.data}`;
         });
     } catch (error) {
       toast({
@@ -136,27 +120,8 @@ export const YoutubeForm = ({ setClicked }: Props) => {
           Summarize
         </Button>
 
-        {isLoading ? (
+        {isLoading && (
           <Loader2 className="w-20 h-20 mx-auto text-primary animate-spin" />
-        ) : (
-          value && (
-            <div className="bg-transparent relative">
-              <Copy
-                className="w-6 h-6 text-muted-foreground right-5 top-5 absolute hover:text-primary cursor-pointer"
-                onClick={() => {
-                  handleCopy();
-                }}
-              />
-              <SyntaxHighlighter
-                language="markdown"
-                style={darcula}
-                wrapLongLines={true}
-                className="bg-transparent text-sm max-w-5xl overflow-none"
-              >
-                {value}
-              </SyntaxHighlighter>
-            </div>
-          )
         )}
       </form>
     </Form>

@@ -1,13 +1,17 @@
+import { SummaryTable, db } from "@/lib/db";
 import {
-  checkOpenAIKey,
   openaiSummary,
   preprocessText,
   segmentText,
-} from "@/lib/summary-process";
-import { options } from "@/types";
+} from "@/lib/gpt/summary-process";
+import {
+  checkUserApiLimit,
+  increaseUserApiLimit,
+} from "@/lib/stripe/api-limits";
 import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import { YoutubeTranscript } from "youtube-transcript";
+import { eq } from "drizzle-orm";
 
 export async function POST(request: Request) {
   const user = await currentUser();
@@ -16,19 +20,27 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { link, ok } = body;
+  const { link } = body;
 
-  const isValidKey = await checkOpenAIKey(ok);
-
-  if (!isValidKey) {
-    return new NextResponse(
-      "Bad OpenAI API key. Make sure to set it in settings.",
-      { status: 401 },
-    );
+  const freeTrial = await checkUserApiLimit();
+  if (!freeTrial) {
+    return new NextResponse("No more credits!", { status: 429 });
   }
 
-  if (!link) {
+  var regExp =
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  var match = link.match(regExp);
+  const linkId = match && match[2].length == 11 ? match[2] : "";
+  if (!link || !linkId) {
     return new NextResponse("Bad Request", { status: 400 });
+  }
+  const summaryStored = await db
+    .select()
+    .from(SummaryTable)
+    .where(eq(SummaryTable.id, linkId));
+  if (summaryStored.length > 0) {
+    // await increaseUserApiLimit();
+    return new NextResponse(linkId, { status: 200 });
   }
 
   try {
@@ -39,20 +51,32 @@ export async function POST(request: Request) {
       return new NextResponse("No transcript", { status: 400 });
     }
 
-    let summary = transcript;
-    if (summary.length > 20000) {
+    let summaryTranscript = transcript;
+    if (summaryTranscript.length > 20000) {
       let segments = segmentText(transcript);
 
       const segmentPromises = segments.map((segment) =>
-        preprocessText(segment, ok),
+        preprocessText(segment),
       );
       const summaries = await Promise.all(segmentPromises);
-      summary = summaries.join("");
+      summaryTranscript = summaries.join("");
     }
 
-    const response = await openaiSummary(summary, ok);
+    const { summary, title, description } =
+      await openaiSummary(summaryTranscript);
 
-    return new NextResponse(JSON.stringify(response), { status: 200 });
+    await db.insert(SummaryTable).values({
+      id: linkId,
+      user_id: user.id,
+      summary: summary,
+      link: link,
+      image: `https://img.youtube.com/vi/${linkId}/0.jpg`,
+      title: title,
+      description: description,
+    });
+    await increaseUserApiLimit();
+
+    return new NextResponse(linkId, { status: 200 });
   } catch (error) {
     console.error(error);
     return new NextResponse("Internal Server Error", { status: 500 });

@@ -9,15 +9,8 @@ export default function RoutesLayout({
 }) {
   return (
     <div>
-      <div
-        className={
-          "overflow-hidden w-full hidden flex-col md:w-80 fixed h-screen border-muted-foreground p-7 mt-16 pb-24 bg-primary/10"
-        }
-      >
-        <MenuList />
-      </div>
       <Navbar />
-      <div className={" pt-16 h-full"}>
+      <div className={" pt-20 h-full flex flex-col items-center"}>
         <div className={" h-full"}>{children}</div>
       </div>
     </div>

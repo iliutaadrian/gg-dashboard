@@ -22,7 +22,6 @@ interface Props {
 }
 export const MobileMenu = ({ navigation }: Props) => {
   const [open, setOpen] = useState(false);
-  console.log(navigation);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger>

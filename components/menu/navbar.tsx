@@ -10,8 +10,8 @@ import { MobileMenu } from "./mobile-menu";
 export const Navbar = () => {
   const { isSignedIn } = useUser();
   const navigation = [
-    { name: "Settings", href: "/settings" },
-    { name: "OpenAi Key", href: "/settings" },
+    { name: "Summary", href: "/summary" },
+    { name: "Summary List", href: "/summary-list" },
   ];
 
   return (

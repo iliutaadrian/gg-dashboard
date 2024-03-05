@@ -22,6 +22,8 @@ export type Usage = {
   total_tokens: number;
 };
 
+export const MAX_FREE_CREDITS = 2;
+
 export const options = [
   {
     name: "Main Concept Explanation",

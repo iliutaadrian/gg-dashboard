@@ -1,4 +1,4 @@
-import { checkOpenAIKey } from "@/lib/summary-process";
+import { checkOpenAIKey } from "@/lib/gpt/summary-process";
 import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
