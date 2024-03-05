@@ -82,7 +82,7 @@ export function Price() {
                   ${price.price}
                 </h3>
               </div>
-              <div>
+              <div className="flex flex-col gap-2">
                 {price.facilities_yes.map((facility, index) => (
                   <p className="flex items-center" key={index}>
                     <CheckIcon className="w-6 h-6 text-primary mr-2" />
