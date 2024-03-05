@@ -1,13 +1,4 @@
 "use client";
-import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
-import { CheckIcon, XIcon } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 export function Testimonial() {
   return (

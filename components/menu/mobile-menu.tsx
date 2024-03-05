@@ -14,8 +14,15 @@ import {
 import { Button } from "../ui/button";
 import { useState } from "react";
 
-export const MobileMenu = () => {
+interface Props {
+  navigation: {
+    name: string;
+    href: string;
+  }[];
+}
+export const MobileMenu = ({ navigation }: Props) => {
   const [open, setOpen] = useState(false);
+  console.log(navigation);
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger>
@@ -26,34 +33,17 @@ export const MobileMenu = () => {
           <SheetTitle>Menu</SheetTitle>
         </SheetHeader>
         <div className="flex flex-col gap-5 items-center w-full mt-5 text-foreground">
-          <Link
-            href={"/"}
-            className="text-sm hover:text-primary"
-            onClick={() => setOpen(false)}
-          >
-            Dashboard
-          </Link>{" "}
-          <Link
-            href={"/quick-translate"}
-            className="text-sm hover:text-primary"
-            onClick={() => setOpen(false)}
-          >
-            Quick Translate
-          </Link>
-          <Link
-            href={"/settings"}
-            className="text-sm hover:text-primary"
-            onClick={() => setOpen(false)}
-          >
-            Settings
-          </Link>
-          <Button
-            variant="destructiveLight"
-            className="w-full"
-            onClick={() => setOpen(false)}
-          >
-            Upgrade
-          </Button>
+          {navigation.length > 0 &&
+            navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="text-sm hover:text-primary"
+                onClick={() => setOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
           <div className="flex flex-row justify-evenly items-center gap-5">
             <ModeToggle />
             <UserButton />
