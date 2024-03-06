@@ -2,56 +2,72 @@
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { CheckIcon, XIcon } from "lucide-react";
+import axios from "axios";
+import { toast } from "../ui/use-toast";
+import { useUser } from "@clerk/nextjs";
 
 export function Price() {
+  const { isSignedIn } = useUser();
+
   const prices = [
     {
       name: "Starter",
-      price: 10,
-      initial_price: 29,
+      price: 7,
+      initial_price: 15,
       popular: false,
-      link: "https://buy.stripe.com/5kA0g9wXf4aY2P3aJh",
       facilities_yes: [
-        "NextJS boilerplate",
-        "SEO & Blog",
-        "Mailgun emails",
-        "Stripe payments",
-        "MongoDB / Supabase",
-        "Google Oauth & Magic Links",
-        "Components & animations",
+        "100 Videos",
+        "TLDR Summaries",
+        "Timestamped Breakdowns",
+        "Key Insights",
+        "Best Quotes",
+        "QA",
+        "40+ Languages",
       ],
-      facilities_no: [
-        "ChatGPT prompts for terms & privacy",
-        "Discord community",
-        "Lifetime updates",
-      ],
+      facilities_no: [],
     },
     {
       name: "Pro",
-      price: 100,
-      initial_price: 299,
+      price: 20,
+      initial_price: 35,
       popular: true,
-      link: "https://buy.stripe.com/5kA0g9wXf4aY2P3aJh",
       facilities_yes: [
-        "NextJS boilerplate",
-        "SEO & Blog",
-        "Mailgun emails",
-        "Stripe payments",
-        "MongoDB / Supabase",
-        "Google Oauth & Magic Links",
-        "Components & animations",
-        "ChatGPT prompts for terms & privacy",
-        "Lifetime updates",
-        "Discord community",
+        "1000 Videos",
+        "TLDR Summaries",
+        "Timestamped Breakdowns",
+        "Key Insights",
+        "Best Quotes",
+        "QA",
+        "40+ Languages",
       ],
       facilities_no: [],
     },
   ];
+
+  const onStripeSubmit = async (object: any) => {
+    if (!isSignedIn) {
+      window.location.href = "/sign-in";
+      return;
+    }
+    try {
+      await axios
+        .post("/api/stripe", {
+          ...object,
+        })
+        .then((data) => {
+          window.location.href = data.data.url;
+        });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        // @ts-ignore
+        description: error.response.data,
+      });
+    }
+  };
+
   return (
-    <div
-      className=" md:max-w-5xl mx-auto py-10 flex flex-col items-center"
-      id="pricing"
-    >
+    <div className=" md:max-w-5xl mx-auto flex flex-col items-center mb-10">
       <h1 className="text-2xl md:text-4xl font-bold text-primary text-center">
         Pricing
       </h1>
@@ -99,7 +115,10 @@ export function Price() {
                   </p>
                 ))}
               </div>
-              <Button className="w-full cursor-pointer" link={price.link}>
+              <Button
+                className="w-full cursor-pointer"
+                onClick={() => onStripeSubmit(price)}
+              >
                 Get Started
               </Button>
               <div className="text-sm text-muted-foreground">

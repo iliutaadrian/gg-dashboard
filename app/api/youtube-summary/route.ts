@@ -39,7 +39,7 @@ export async function POST(request: Request) {
     .from(SummaryTable)
     .where(eq(SummaryTable.id, linkId));
   if (summaryStored.length > 0) {
-    // await increaseUserApiLimit();
+    await increaseUserApiLimit();
     return new NextResponse(linkId, { status: 200 });
   }
 

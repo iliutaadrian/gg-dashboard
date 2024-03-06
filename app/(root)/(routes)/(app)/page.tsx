@@ -21,6 +21,7 @@ function Page() {
       <Steps />
       <Features />
       <Features2 />
+      <div id="pricing" className="h-20"></div>
       <Price />
       <Faq />
       <Cta />

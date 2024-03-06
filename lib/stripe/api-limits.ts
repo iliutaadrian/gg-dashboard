@@ -16,13 +16,44 @@ export const increaseUserApiLimit = async () => {
     .where(eq(UserAPILimitTable.user_id, userId));
 
   if (userApiLimits.length === 0) {
-    await db
-      .insert(UserAPILimitTable)
-      .values({ user_id: userId, limit: MAX_FREE_CREDITS, used: 1 });
+    await db.insert(UserAPILimitTable).values({
+      user_id: userId,
+      limit: MAX_FREE_CREDITS,
+      used: 1,
+      stripeCustomerId: "",
+    });
   } else {
     await db
       .update(UserAPILimitTable)
       .set({ used: userApiLimits[0].used + 1 })
+      .where(eq(UserAPILimitTable.user_id, userId));
+  }
+};
+
+export const buyCredits = async (
+  userId: string,
+  credits: number,
+  stripeCustomerId: string,
+) => {
+  const userApiLimits = await db
+    .select()
+    .from(UserAPILimitTable)
+    .where(eq(UserAPILimitTable.user_id, userId));
+
+  if (userApiLimits.length === 0) {
+    await db.insert(UserAPILimitTable).values({
+      user_id: userId,
+      limit: credits,
+      used: 0,
+      stripeCustomerId: stripeCustomerId,
+    });
+  } else {
+    await db
+      .update(UserAPILimitTable)
+      .set({
+        limit: credits + userApiLimits[0].limit,
+        stripeCustomerId: stripeCustomerId,
+      })
       .where(eq(UserAPILimitTable.user_id, userId));
   }
 };

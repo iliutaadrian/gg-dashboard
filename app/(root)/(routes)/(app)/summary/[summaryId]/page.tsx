@@ -1,8 +1,6 @@
 import getSummary from "@/actions/getSummary";
+import { CreditsAvailable } from "@/components/credits-available";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { getUserApiLimit } from "@/lib/stripe/api-limits";
-import { Zap } from "lucide-react";
 import Link from "next/link";
 
 interface Params {
@@ -11,7 +9,6 @@ interface Params {
 
 async function Page({ params }: { params: Params }) {
   const summary = await getSummary(params.summaryId);
-  const limit = await getUserApiLimit();
 
   if (!summary) {
     return <div>No summary found</div>;
@@ -32,21 +29,13 @@ async function Page({ params }: { params: Params }) {
         <Link href={`/summary/`} className="w-full px-5">
           <Button className="w-full">Generate Summary</Button>
         </Link>
-        <div className="flex flex-col gap-3 items-center shadow-neon rounded-md p-4 m-4">
-          <p>
-            {limit[0]}/{limit[1]}{" "}
-            <span className="text-muted-foreground animate-pulse">
-              Free Generations
-            </span>
-          </p>
-          <Progress value={(limit[0] / limit[1]) * 100} />
-          <Button>
-            Get More Generations <Zap className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+
+        <CreditsAvailable />
+
         <iframe
           id="myIframe"
           src={`//www.youtube.com/embed/${summary.id}`}
+          className="w-full h-96"
           width="360"
           height="315"
         ></iframe>

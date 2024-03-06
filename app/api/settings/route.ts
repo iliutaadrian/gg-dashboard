@@ -10,14 +10,14 @@ export async function POST(request: Request) {
 
   const body = await request.json();
   const { ok } = body;
-  const isValidKey = await checkOpenAIKey(ok);
-
-  if (!isValidKey) {
-    return new NextResponse(
-      "Bad OpenAI API key. Make sure you are using a valid key.",
-      { status: 401 },
-    );
-  }
+  // const isValidKey = await checkOpenAIKey(ok);
+  //
+  // if (!isValidKey) {
+  //   return new NextResponse(
+  //     "Bad OpenAI API key. Make sure you are using a valid key.",
+  //     { status: 401 },
+  //   );
+  // }
 
   return new NextResponse("OK", { status: 200 });
 }
