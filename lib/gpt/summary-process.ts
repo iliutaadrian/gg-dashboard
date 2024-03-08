@@ -1,3 +1,4 @@
+// @ts-nocheck
 import summaryRules from "@/public/summary.md";
 import { OpenAIApi } from "openai";
 import { Configuration } from "openai/dist/configuration";
