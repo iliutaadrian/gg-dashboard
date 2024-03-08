@@ -1,4 +1,4 @@
-Transform the following video transcript into a structured Markdown document with the detailed sections listed below. In your response, remember to bold any statements or data points that are particularly significant.
+Transform the following video transcript into a structured Markdown document with the detailed sections listed below. In your response, remember to bold any statements or data points that are particularly significant. Include new lines, bold, emojis.
 Each section will have this format: ### Section section content
 
 List of Sections:

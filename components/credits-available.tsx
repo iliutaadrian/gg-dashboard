@@ -5,7 +5,11 @@ import { Zap } from "lucide-react";
 import Link from "next/link";
 
 export const CreditsAvailable = async () => {
-  const limit = await getUserApiLimit();
+  let limit = await getUserApiLimit();
+  if (!limit) {
+    limit = [0, 2];
+  }
+
   return (
     <div className="flex flex-col mb-4 items-center">
       <div className="flex flex-col gap-3 items-center shadow-neon rounded-md p-4 m-4 w-[360px]">

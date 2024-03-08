@@ -68,7 +68,7 @@ export async function POST(request: Request) {
     await db.insert(SummaryTable).values({
       id: linkId,
       user_id: user.id,
-      summary: summary,
+      summary: JSON.stringify(summary),
       link: link,
       image: `https://img.youtube.com/vi/${linkId}/0.jpg`,
       title: title,

@@ -1,5 +1,4 @@
 import { ServerIcon } from "lucide-react";
-import { Rules } from "./rules";
 
 export const Features2 = () => {
   const features = [

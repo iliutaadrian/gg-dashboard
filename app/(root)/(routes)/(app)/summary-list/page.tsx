@@ -39,7 +39,7 @@ async function Page() {
               {summary.title}
             </p>
             <Image
-              src={summary.image}
+              src={summary.image || "/placeholder.png"}
               alt={summary.title}
               width={350}
               height={200}

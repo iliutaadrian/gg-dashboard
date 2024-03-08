@@ -22,7 +22,7 @@ async function Page({ params }: { params: Params }) {
           <span className="text-muted-foreground uppercase">Description </span>
           {summary.description}
         </p>
-        <p className="bg-transparent relative">{summary.summary}</p>
+        <p className="bg-transparent relative">{JSON.parse(summary.summary)}</p>
       </div>
 
       <div className="flex flex-col mb-4 mt-5 gap-5">

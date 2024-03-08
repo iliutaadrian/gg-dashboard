@@ -21,11 +21,9 @@ export async function POST(req: Request) {
     return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
   }
 
-  const session = event.data.object as Stripe.Checkout.Session;
-
   if (event.type === "checkout.session.completed") {
     const paymentIntent = event.data.object;
-    const userID = paymentIntent.metadata.userId;
+    const userID = paymentIntent?.metadata?.userId;
     if (!userID) {
       return new NextResponse("Webhook Error", { status: 400 });
     }
