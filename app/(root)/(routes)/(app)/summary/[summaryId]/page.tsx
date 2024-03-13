@@ -25,16 +25,23 @@ async function Page({ params }: { params: Params }) {
           <span className="text-muted-foreground uppercase">Description </span>
           {summary.description}
         </p>
-        {sections.map((s) => (
-          <div key={s.id} className="flex flex-col mb-4 mt-5 gap-5">
-            <h2 className="text-2xl font-bold tracking-tight">{s.name}</h2>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: marked(s.response),
-              }}
-            />
-          </div>
-        ))}
+        {sections.map(
+          (s: {
+            name: string;
+            key: string;
+            value: string;
+            response: string;
+          }) => (
+            <div key={s.key} className="flex flex-col mb-4 mt-5 gap-5">
+              <h2 className="text-2xl font-bold tracking-tight">{s.name}</h2>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: marked(s.response),
+                }}
+              />
+            </div>
+          ),
+        )}
       </div>
 
       <div className="flex flex-col mb-4 mt-5 gap-5">
