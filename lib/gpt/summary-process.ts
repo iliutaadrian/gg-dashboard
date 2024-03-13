@@ -1,7 +1,5 @@
-// @ts-nocheck
-import summaryRules from "@/public/summary.md";
-import { OpenAIApi } from "openai";
-import { Configuration } from "openai/dist/configuration";
+import { summary_sections } from "@/types";
+import { gpt_response } from "./gpt";
 
 export const segmentText = (inputText: string) => {
   const segments = [];
@@ -24,93 +22,47 @@ export const segmentText = (inputText: string) => {
   return segments;
 };
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
-
 export const checkOpenAIKey = async () => {
-  try {
-    const response = await openai.createChatCompletion({
-      temperature: 1,
-      model: "gpt-3.5-turbo-0125",
-      messages: [
-        {
-          role: "system",
-          content: `You are an assistan, you will confirm me that the request is ok`,
-        },
-        { role: "user", content: "Respond me with OK." },
-      ],
-    });
-    return true;
-  } catch (error) {
-    console.log(error);
-    return false;
-  }
+  const response = await gpt_response(
+    "You are an assistan, you will confirm me that the request is ok",
+    "Respond me with OK.",
+  );
+  return response === "OK";
 };
 
 export const preprocessText = async (segment: string) => {
-  const response = await openai.createChatCompletion({
-    temperature: 1,
-    model: "gpt-3.5-turbo-0125",
-    messages: [
-      {
-        role: "system",
-        content: `You will receive a part of a video transcript. Clean up the transcript by removing any unnecessary filler words, repeated phrases, or irrelevant content. Only respond with the text.`,
-      },
-      { role: "user", content: `Segment: ${segment} ` },
-    ],
-  });
-  let res: string = response.data.choices[0].message?.content || "";
-  return res;
+  const response = await gpt_response(
+    "You will receive a part of a video transcript. Clean up the transcript by removing any unnecessary filler words, repeated phrases, or irrelevant content. Only respond with the text.",
+    `Segment: ${segment} `,
+  );
+
+  return response;
 };
 
 export const openaiSummary = async (transcript: string) => {
-  let response = await openai.createChatCompletion({
-    temperature: 1,
-    model: "gpt-3.5-turbo-0125",
-    messages: [
-      {
-        role: "system",
-        content: `You are an assitant, you will summarize the following text in the following format.`,
-      },
-      { role: "user", content: `${summaryRules} Text: /${transcript}/` },
-    ],
-  });
-  const summary = response.data.choices[0].message?.content || "";
+  const title = await gpt_response(
+    "You are a english professional. You will summarize the following text in the following format.",
+    `Give me a good title for the following. Only respond with the title. Text: /${transcript}/`,
+  );
 
-  response = await openai.createChatCompletion({
-    temperature: 1,
-    model: "gpt-3.5-turbo-0125",
-    messages: [
-      {
-        role: "system",
-        content: `You are an assitant, you will summarize the following text in the following format.`,
-      },
-      {
-        role: "user",
-        content: `Give me a good title for the following. Only respond with the title. Text: /${transcript}/`,
-      },
-    ],
-  });
-  const title = response.data.choices[0].message?.content || "";
+  const description = await gpt_response(
+    "You are a english professional. You will summarize the following text in the following format.",
+    `Give me a good description for the following text. Maximum 250 characters. Only respond with the description. Text: /${transcript}/`,
+  );
 
-  response = await openai.createChatCompletion({
-    temperature: 1,
-    model: "gpt-3.5-turbo-0125",
-    messages: [
-      {
-        role: "system",
-        content: `You are an assitant, you will summarize the following text in the following format.`,
-      },
-      {
-        role: "user",
-        content: `Give me a good description for the following text. Maximum 250 characters. Only respond with the description. Text: /${transcript}/`,
-      },
-    ],
+  const segmentPromises = summary_sections.map(async (section) => {
+    const response = await gpt_response(
+      "Transform the following video transcript into a structured Markdown section with the detailed sections listed below. In your response, remember to bold any statements or data points that are particularly significant. Include new lines, bold, emojis.",
+      `Section: ${section.value} Text: /${transcript}/`,
+    );
+
+    return {
+      ...section,
+      response,
+    };
   });
-  const description = response.data.choices[0].message?.content || "";
+
+  const summary = await Promise.all(segmentPromises);
 
   return {
     summary,

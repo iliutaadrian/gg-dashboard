@@ -2,6 +2,33 @@ import { Usage } from "@/types";
 import { Configuration, OpenAIApi } from "openai";
 // import { openaiApiCalculateCost } from "./utils";
 
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+const openai = new OpenAIApi(configuration);
+
+export async function gpt_response(system_prompt: string, user_prompt: string) {
+  try {
+    const response = await openai.createChatCompletion({
+      temperature: 1,
+      model: "gpt-3.5-turbo-0125",
+      messages: [
+        {
+          role: "system",
+          content: system_prompt,
+        },
+        { role: "user", content: user_prompt },
+      ],
+    });
+    let res: string = response.data.choices[0].message?.content || "";
+    return res;
+  } catch (error) {
+    console.log(error);
+    return "";
+  }
+}
+
 interface OutputFormat {
   [key: string]: string | string[] | OutputFormat;
 }

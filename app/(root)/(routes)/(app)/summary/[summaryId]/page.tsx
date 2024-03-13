@@ -2,6 +2,8 @@ import getSummary from "@/actions/getSummary";
 import { CreditsAvailable } from "@/components/credits-available";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Flag } from "lucide-react";
+import { marked } from "marked";
 
 interface Params {
   summaryId: string;
@@ -13,6 +15,7 @@ async function Page({ params }: { params: Params }) {
   if (!summary) {
     return <div>No summary found</div>;
   }
+  const sections = JSON.parse(summary.summary);
 
   return (
     <div className="flex flex-col-reverse lg:flex-row sm:gap-20 text-white max-w-7xl w-full px-10 mx-auto">
@@ -22,7 +25,16 @@ async function Page({ params }: { params: Params }) {
           <span className="text-muted-foreground uppercase">Description </span>
           {summary.description}
         </p>
-        <p className="bg-transparent relative">{JSON.parse(summary.summary)}</p>
+        {sections.map((s) => (
+          <div key={s.id} className="flex flex-col mb-4 mt-5 gap-5">
+            <h2 className="text-2xl font-bold tracking-tight">{s.name}</h2>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: marked(s.response),
+              }}
+            />
+          </div>
+        ))}
       </div>
 
       <div className="flex flex-col mb-4 mt-5 gap-5">
@@ -43,6 +55,12 @@ async function Page({ params }: { params: Params }) {
           Summary for the video:{" "}
           <span className="italic">{summary.title} </span>
         </p>
+        <Link href={`/summary/`} className="w-full px-5">
+          <Button variant="outline" className="w-full">
+            <Flag className="w-4 h-4 mr-2" />
+            Report Article
+          </Button>
+        </Link>
       </div>
     </div>
   );

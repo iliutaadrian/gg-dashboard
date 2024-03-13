@@ -1,11 +1,9 @@
 Transform the following video transcript into a structured Markdown document with the detailed sections listed below. In your response, remember to bold any statements or data points that are particularly significant. Include new lines, bold, emojis.
-Each section will have this format: ### Section section content
-
-List of Sections:
+Each section will have this format: ## Section section content
 
 ### Main Concept
 
-Demystify the video’s central theme or concept for a younger audience. Ensure your explanation is:
+Give me the main concept and central theme or concept for a younger audience. Ensure your explanation is:
 
 Easy to understand, avoiding jargon or complex terms
 Engaging and relevant to a 15-year-old’s world experience
@@ -23,7 +21,7 @@ Example format:
 
 ### Best Quotes
 
-Select poignant and memorable quotes from the video. These quotes should:
+Select memorable quotes from the video. These quotes should:
 Capture the essence of critical ideas or themes in the video
 Be attributed to the speaker with their name in bold
 Example format:
