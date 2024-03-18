@@ -1,7 +1,4 @@
 import getSummaryList from "@/actions/getSummaryList";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Zap } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 

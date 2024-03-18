@@ -4,10 +4,15 @@
 
 html,
 body,
-:root{
+:root {
   height: 100%;
 }
 
+h1,
+h2,
+h3 {
+  @apply py-3;
+}
 
 @layer base {
   :root {
