@@ -10,19 +10,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import Markdown from "react-markdown";
-import { useUser } from "@clerk/nextjs";
-import { Copy, Loader2 } from "lucide-react";
-// @ts-ignore
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-// @ts-ignore
-import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism"; // You can choose different styles
-import router from "next/router";
 
 const projectFormSchema = z.object({
   link: z.string().max(150, {
@@ -35,7 +29,7 @@ type TranslateFormValues = z.infer<typeof projectFormSchema>;
 const defaultValues: Partial<TranslateFormValues> = {
   // prompt: "do not translate golf related specific terms like Tee, Hole",
   // translate: "fr",
-  link: "https://www.youtube.com/watch?v=-v8pD0d5Bmk",
+  // link: "https://www.youtube.com/watch?v=zIJ1qRCPHUw",
 };
 
 export const YoutubeForm = () => {
@@ -67,6 +61,7 @@ export const YoutubeForm = () => {
 
     const formData = {
       ...data,
+      redo: false,
     };
 
     try {
@@ -88,13 +83,6 @@ export const YoutubeForm = () => {
     }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(value);
-    toast({
-      description: "Copied to clipboard",
-    });
-  };
-
   return (
     <Form {...form}>
       <form
@@ -107,7 +95,7 @@ export const YoutubeForm = () => {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Youtube Link</FormLabel>
-              <Input placeholder="Youtube Lihk..." {...field} />
+              <Input placeholder="Please enter a youtube link" {...field} />
               <FormMessage />
             </FormItem>
           )}

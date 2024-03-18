@@ -1,9 +1,9 @@
 import getSummary from "@/actions/getSummary";
 import { CreditsAvailable } from "@/components/credits-available";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Flag } from "lucide-react";
+import { ReportArticle } from "@/components/youtube-summary/report-article";
 import { marked } from "marked";
+import Link from "next/link";
 
 interface Params {
   summaryId: string;
@@ -62,12 +62,7 @@ async function Page({ params }: { params: Params }) {
           Summary for the video:{" "}
           <span className="italic">{summary.title} </span>
         </p>
-        <Link href={`/summary/`} className="w-full px-5">
-          <Button variant="outline" className="w-full">
-            <Flag className="w-4 h-4 mr-2" />
-            Report Article
-          </Button>
-        </Link>
+        <ReportArticle summaryId={params.summaryId} />
       </div>
     </div>
   );

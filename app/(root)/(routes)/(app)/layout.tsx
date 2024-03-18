@@ -1,5 +1,5 @@
 "use client";
-import { MenuList } from "@/components/menu/menu-list";
+import { Footer } from "@/components/dashboard/footer";
 import { Navbar } from "@/components/menu/navbar";
 
 export default function RoutesLayout({
@@ -8,11 +8,12 @@ export default function RoutesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="h-screen flex flex-col justify-between">
       <Navbar />
-      <div className={" pt-20 h-full flex flex-col items-center"}>
+      <div className={" pt-28 flex flex-col items-center"}>
         <div className={" h-full"}>{children}</div>
       </div>
+      <Footer />
     </div>
   );
 }

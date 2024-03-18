@@ -20,7 +20,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { link } = body;
+  const { link, redo } = body;
 
   const freeTrial = await checkUserApiLimit();
   if (!freeTrial) {
@@ -34,13 +34,17 @@ export async function POST(request: Request) {
   if (!link || !linkId) {
     return new NextResponse("Bad Request", { status: 400 });
   }
+
   const summaryStored = await db
     .select()
     .from(SummaryTable)
     .where(eq(SummaryTable.id, linkId));
-  if (summaryStored.length > 0) {
-    await increaseUserApiLimit();
-    return new NextResponse(linkId, { status: 200 });
+  if (!redo) {
+    if (summaryStored.length > 0) {
+      return new NextResponse(linkId, { status: 200 });
+    }
+  } else {
+    await db.delete(SummaryTable).where(eq(SummaryTable.id, linkId));
   }
 
   try {

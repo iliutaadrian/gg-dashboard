@@ -4,7 +4,6 @@ import { Faq } from "@/components/dashboard/faq";
 import { FeaturedOn } from "@/components/dashboard/featured_on";
 import { Features } from "@/components/dashboard/features";
 import { Features2 } from "@/components/dashboard/features_2";
-import { Footer } from "@/components/dashboard/footer";
 import { Hero } from "@/components/dashboard/hero";
 import { Price } from "@/components/dashboard/price";
 import { Reviews } from "@/components/dashboard/reviews";
@@ -25,7 +24,6 @@ function Page() {
       <Price />
       <Faq />
       <Cta />
-      <Footer />
     </div>
   );
 }
