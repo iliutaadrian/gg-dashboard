@@ -26,12 +26,6 @@ export const MAX_FREE_CREDITS = 5;
 
 export const summary_sections = [
   {
-    name: "Main Concept Explanation",
-    key: "main-concept",
-    value:
-      "Main Concept Explanation:Break down the primary concept discussed in the video in a way that a 15-year-old can easily understand. Easy to understand, avoiding jargon or complex terms.",
-  },
-  {
     name: "Timeline Summary",
     key: "timeline-summary",
     value: `Timeline Summary:Craft a timeline that captures 5 key moments from the video.
@@ -39,8 +33,7 @@ For each entry:
 Include the timestamp from the video
 Hyperlink the timestamp to the specific moment in the video using {{url}}
 Example format:
-
-- [00:00:00]({{url}}&t=0s): Introduction to the main topic`,
+- (correct emoji for the context) [00:00:00]({{url}}&t=0s): Introduction to the main topic`,
   },
   {
     name: "Key Insights",
@@ -51,7 +44,7 @@ Use emojis that represent the emotion or theme of each insight
 Offer concise but informative bullet points
 Example format:
 
-📊 Insight about data trends`,
+- (correct emoji for the context)📊 Insight about data trends`,
   },
   {
     name: "Best Quotes",
@@ -61,7 +54,7 @@ Capture the essence of critical ideas or themes in the video
 Be attributed to the speaker with their name in bold
 Example format:
 
-Speaker Name: "This is a memorable quote."`,
+- (correct emoji for the context) Speaker Name: "This is a memorable quote."`,
   },
   {
     name: "Q&A Based on Transcript",
@@ -69,7 +62,10 @@ Speaker Name: "This is a memorable quote."`,
     value: `Q&A Based on Transcript:Based on the transcript, craft questions and provide informative answers that could be part of an interview or Q&A session. Focus on:
 
 Diverse questions that touch on different aspects of the video content
-Complete answers that provide a deeper understanding of the topics discussed`,
+Complete answers that provide a deeper understanding of the topics discussed
+Example format:
+
+- bold text: (correct emoji for the context) Question: (question) not in bold: Answer: (answer) new line`,
   },
   {
     name: "Assimilation Questions",
@@ -78,6 +74,7 @@ Complete answers that provide a deeper understanding of the topics discussed`,
 
 Encourage critical thinking and personal connection to the material
 Varied in scope, addressing different segments of the video
-Present the questions in a manner that prompts thoughtful consideration.`,
+Present the questions in a manner that prompts thoughtful consideration.
+    - bold text: (correct emoji for the context) Question: (question) not in bold: Answer: (answer) new line`,
   },
 ];

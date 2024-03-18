@@ -52,7 +52,7 @@ export const openaiSummary = async (transcript: string) => {
 
   const segmentPromises = summary_sections.map(async (section) => {
     const response = await gpt_response(
-      "Transform the following video transcript into a structured Markdown section with the detailed sections listed below. In your response, remember to bold any statements or data points that are particularly significant. Include new lines, bold, emojis.",
+      "Transform the following video transcript into a structured Markdown section with the detailed sections listed below. Do not include Section name.",
       `Section: ${section.value} Text: /${transcript}/`,
     );
 
