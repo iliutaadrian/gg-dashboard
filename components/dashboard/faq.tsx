@@ -57,7 +57,9 @@ export function Faq() {
           <Accordion key={index} type="single" collapsible>
             <AccordionItem value={faq.question} className="my-5">
               <AccordionTrigger>{faq.question}</AccordionTrigger>
-              <AccordionContent>{faq.answer}</AccordionContent>
+              <AccordionContent className="text-muted-foreground">
+                {faq.answer}
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         ))}
