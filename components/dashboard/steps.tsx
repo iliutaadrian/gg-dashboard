@@ -29,7 +29,7 @@ export const Steps = (props: {}) => {
               </h3>
               <p className="mt-4 text-base md:text-lg text-muted-foreground">
                 Upload the YouTube video URL or enter the video title into Tube
-                Mind Sync's intuitive interface.
+                Mind Sync{"'"}s intuitive interface.
               </p>
             </div>
             <div>

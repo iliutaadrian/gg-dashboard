@@ -20,7 +20,7 @@ function Page() {
         </p>
         <p className="brz-tp-paragraph">
           These terms and conditions outline the rules and regulations for the
-          use of <strong className="website_name">TubeMindSync</strong>'
+          use of <strong className="website_name">TubeMindSync</strong>
           Website, located at{" "}
           <a href="https://tubemindsync.vercel.app" className="website_url">
             tubemindsync.vercel.app
@@ -57,7 +57,7 @@ function Page() {
           We employ the use of cookies. By accessing{" "}
           <strong className="website_url">tubemindsync.vercel.app</strong>, you
           agree to use cookies in agreement with the{" "}
-          <strong className="website_name">TubeMindSync</strong>' Terms and
+          <strong className="website_name">TubeMindSync</strong> Terms and
           Conditions and Privacy Policy.
         </p>
         <p className="brz-tp-paragraph">
@@ -170,10 +170,13 @@ function Page() {
           </li>
         </ul>
         <p className="brz-tp-paragraph">
-          You shall not use the "
-          <strong className="website_name company_name">Tube Mind Sync</strong>"
+          You shall not use the {'"'}
+          <strong className="website_name company_name">Tube Mind Sync</strong>
+          {'"'}
           name or the{" "}
-          <strong className="website_name company_name">Tube Mind Sync</strong>{" "}
+          <strong className="website_name company_name">
+            Tube Mind Sync
+          </strong>{" "}
           logo, either alone or in combination with other words or design
           elements. You may not use any of the foregoing names, marks, or logos
           in any press release, advertisement, or other promotional or marketing

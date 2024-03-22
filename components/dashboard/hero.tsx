@@ -33,8 +33,8 @@ export const Hero = () => {
             Unlock the Power of AI Summaries for YouTube Videos
           </h1>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            This will help you when it's too much content. It’s an AI YouTube
-            tool which finds the key points in topics like AI, Business,
+            This will help you when it{"'"}s too much content. It’s an AI
+            YouTube tool which finds the key points in topics like AI, Business,
             Finance, News, or Health.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">

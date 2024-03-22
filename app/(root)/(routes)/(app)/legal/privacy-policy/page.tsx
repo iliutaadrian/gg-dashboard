@@ -24,13 +24,13 @@ function Page() {
             tubemindsync.vercel.app
           </a>
           ) and <span className="website_name">TubeMindSync</span> services
-          ("Services"), and the choices that
+          (ervices), and the choices that
           <span className="website_name">TubeMindSync</span> provides in
           connection with our collection and use of your information. This
           Privacy Policy is intended for website publisher customers
-          ("Publishers"), website merchant customers ("Merchants") and
-          individual users of websites and apps. For Publishers and Merchants,
-          this Policy explains how
+          (Publishers), website merchant customers (Merchants) and individual
+          users of websites and apps. For Publishers and Merchants, this Policy
+          explains how
           <span className="website_name">TubeMindSync</span> may collect, use
           and disclose information associated with your company and with your
           company’s websites and apps that use
@@ -144,7 +144,7 @@ function Page() {
           <li>
             where we contract with third parties to provide certain services,
             such as advertising, analytics, data management services, web
-            hosting, and web development ("Service Providers"). We ask Service
+            hosting, and web development (Service Providers) We ask Service
             Providers to confirm that their privacy and security practices are
             consistent with ours, we provide our Service Providers with only the
             information necessary for them to perform the services we request,
@@ -202,7 +202,7 @@ function Page() {
           to be relevant to you because they are based on inferences drawn from
           location data, web viewing data collected across non-affiliated sites
           over time, and/or application use data collected across non-affiliated
-          apps over time. This is called "interest-based advertising." In
+          apps over time. This is called interest-based advertising. In
           addition, certain third parties may collect data on the
           <span className="website_name">TubeMindSync</span> website and combine
           this data with information collected from other websites over time for
@@ -248,9 +248,9 @@ function Page() {
           <span className="website_name">TubeMindSync</span>’s use of local
           storage or the browser cache to provide its services, please (1) use
           any tools provided by your browser to clear local storage and the
-          browser cache, and (2) turn on any "Do Not Track" header setting
-          offered by your browser. As long as the two steps are completed and
-          maintained on a browser,
+          browser cache, and (2) turn on any Do Not Track header setting offered
+          by your browser. As long as the two steps are completed and maintained
+          on a browser,
           <span className="website_name">TubeMindSync</span> will not use local
           storage or the cache on that browser to identify and sync browsers and
           devices. If you also want to opt out of
@@ -270,8 +270,8 @@ function Page() {
           on mobile apps, you may download the DAA’s AppChoices application from
           the Android or iOS app store on your mobile device. Users outside the
           United States may not have access to this application; instead, you
-          can use "Limit Ad Tracking" in your iOS settings or "Opt out of
-          interest-based ads" in your Android settings to limit{" "}
+          can use Limit Ad Tracking in your iOS settings or Opt out of
+          interest-based ads in your Android settings to limit{" "}
           <span className="website_name">TubeMindSync</span>’s collection of
           data for interest-based advertising.
         </p>

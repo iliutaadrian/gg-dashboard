@@ -34,7 +34,7 @@ export const Features = () => {
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className=" font-semibold leading-7 text-primary">Lean faster</h2>
           <p className="mt-2 text-3xl font-bold sm:text-4xl">
-            Unlock the Power of Tube Mind Sync's Cutting-Edge Features
+            Unlock the Power of Tube Mind Sync{"'"}s Cutting-Edge Features
           </p>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
             Explore the advanced features of Tube Mind Sync designed to
