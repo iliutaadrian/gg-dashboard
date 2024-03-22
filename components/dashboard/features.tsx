@@ -3,27 +3,27 @@ import { CloudIcon } from "lucide-react";
 export const Features = () => {
   const features = [
     {
-      name: "Push to deploy",
+      name: "Unlock Key Ideas",
       description:
-        "Morbi viverra dui mi arcu sed. Tellus semper adipiscing suspendisse semper morbi. Odio urna massa nunc massa.",
+        "Get the pivotal points and key ideas from any YouTube video, allowing you to grasp the essence of the content effortlessly.",
       icon: CloudIcon,
     },
     {
-      name: "SSL certificates",
+      name: "Language Translation",
       description:
-        "Sit quis amet rutrum tellus ullamcorper ultricies libero dolor eget. Sem sodales gravida quam turpis enim lacus amet.",
+        "Access translations of summaries in your preferred language with Eightify, eliminating language barriers and expanding your reach.",
       icon: CloudIcon,
     },
     {
-      name: "Simple queues",
+      name: "Enhanced Navigation",
       description:
-        "Quisque est vel vulputate cursus. Risus proin diam nunc commodo. Lobortis auctor congue commodo diam neque.",
+        "Navigate through videos with ease using summarized paragraphs with timestamps, enabling efficient content exploration.",
       icon: CloudIcon,
     },
     {
-      name: "Advanced security",
+      name: "Time-Saving Solution",
       description:
-        "Arcu egestas dolor vel iaculis in ipsum mauris. Tincidunt mattis aliquet hac quis. Id hac maecenas ac donec pharetra eget.",
+        "Save valuable time by quickly understanding the essence of lengthy videos, empowering you to focus on what matters most.",
       icon: CloudIcon,
     },
   ];
@@ -32,16 +32,16 @@ export const Features = () => {
     <div className=" py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className=" font-semibold leading-7 text-primary">
-            Deploy faster
-          </h2>
+          <h2 className=" font-semibold leading-7 text-primary">Lean faster</h2>
           <p className="mt-2 text-3xl font-bold sm:text-4xl">
-            Everything you need to deploy your app
+            Unlock the Power of Tube Mind Sync's Cutting-Edge Features
           </p>
           <p className="mt-6 text-lg leading-8 text-muted-foreground">
-            Quis tellus eget adipiscing convallis sit sit eget aliquet quis.
-            Suspendisse eget egestas a elementum pulvinar et feugiat blandit at.
-            In mi viverra elit nunc.
+            Explore the advanced features of Tube Mind Sync designed to
+            revolutionize your YouTube video consumption experience. From
+            accurate AI-generated summaries to seamless navigation and language
+            translation, discover how our platform empowers you to grasp the
+            essence of any video effortlessly.
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">

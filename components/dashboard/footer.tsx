@@ -5,11 +5,10 @@ import { CalendarDaysIcon } from "lucide-react";
 export const Footer = () => {
   return (
     <>
-      <footer className="bg-primary/5 text-white py-10">
+      <footer className="bg-primary/5 text-white pt-10">
         <div className="max-w-6xl mx-auto px-4 grid grid-cols-4 gap-8">
           <div>
             <h1 className="text-3xl text-primary font-bold">Tube Mind Sync</h1>
-            <h1>© 2023. All rights reserved.</h1>
           </div>
           <div>
             <h3 className="font-semibold text-lg mb-4 uppercase">Links</h3>
@@ -57,6 +56,9 @@ export const Footer = () => {
             </ul>
           </div>
         </div>
+        <h1 className="text-center pt-10 text-sm font-thin">
+          © 2023. All rights reserved.
+        </h1>
       </footer>
     </>
   );

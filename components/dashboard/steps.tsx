@@ -25,10 +25,11 @@ export const Steps = (props: {}) => {
                 <span className="text-xl font-semibold ">1</span>
               </div>
               <h3 className="mt-6 text-xl  text-white font-semibold leading-tight md:mt-10">
-                Select template
+                Discover
               </h3>
               <p className="mt-4 text-base md:text-lg text-muted-foreground">
-                Select template accourding to your requirement
+                Upload the YouTube video URL or enter the video title into Tube
+                Mind Sync's intuitive interface.
               </p>
             </div>
             <div>
@@ -36,10 +37,11 @@ export const Steps = (props: {}) => {
                 <span className="text-xl font-semibold ">2</span>
               </div>
               <h3 className="mt-6 text-xl text-white font-semibold leading-tight md:mt-10">
-                Enter Your Details
+                Generate
               </h3>
               <p className="mt-4 text-base md:text-lg text-muted-foreground">
-                Put in your personalized details and let the AI do the rest.
+                Our advanced AI algorithms analyze the video content and
+                generate concise summaries, highlighting the essential points.
               </p>
             </div>
             <div>
@@ -47,10 +49,11 @@ export const Steps = (props: {}) => {
                 <span className="text-xl font-semibold ">3</span>
               </div>
               <h3 className="mt-6 text-xl text-white font-semibold leading-tight md:mt-10">
-                Publish it
+                Explore
               </h3>
               <p className="mt-4 text-base  md:text-lg text-muted-foreground">
-                Use output as you like
+                Navigate through the summarized paragraphs with timestamps,
+                enabling seamless navigation and efficient content consumption.
               </p>
             </div>
           </div>

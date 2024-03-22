@@ -8,9 +8,9 @@ export function Testimonial() {
         <figure className="mt-10">
           <blockquote className="text-center  font-semibold leading-8 sm:text-xl sm:leading-9">
             <p>
-              “Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
-              expedita voluptas culpa sapiente alias molestiae. Numquam corrupti
-              in laborum sed rerum et corporis.”
+              “"Tube Mind Sync's AI summaries have revolutionized the way I
+              consume YouTube content. Now, I can quickly understand the key
+              points of any video, saving me valuable time. Highly recommended!"
             </p>
           </blockquote>
           <figcaption className="mt-10">
@@ -20,7 +20,7 @@ export function Testimonial() {
               alt=""
             />
             <div className="mt-4 flex items-center justify-center space-x-3 text-base">
-              <div className="font-semibold">Judith Black</div>
+              <div className="font-semibold">Sara Johnson</div>
               <svg
                 viewBox="0 0 2 2"
                 width={3}
@@ -30,7 +30,7 @@ export function Testimonial() {
               >
                 <circle cx={1} cy={1} r={1} />
               </svg>
-              <div className="">CEO of Workcation</div>
+              <div className="">Content Creator</div>
             </div>
           </figcaption>
         </figure>

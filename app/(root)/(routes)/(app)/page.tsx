@@ -19,7 +19,7 @@ function Page() {
       <Testimonial />
       <Steps />
       <Features />
-      <Features2 />
+      {/* <Features2 /> */}
       <div id="pricing" className="h-20"></div>
       <Price />
       <Faq />
