@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iliuta - GG Test</title>
+  </head>
+  <body>
+    <img
+      src="https://static.golfgenius.com/assets/cms/logo_ggs_header-d24f8ad3c0efe58d29a2291eec6f65f1aee2c1778f62b028512719b9ccb0c698.png"
+      alt="Logo ggs header"
+      style="width: 500px"
+    />
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+          const App = () => {
+            const [emailArray, setData] = React.useState([]);
+            const [selectedEmail, setSelectedEmail] = React.useState({});
+            const [isLoading, setLoading] = React.useState(false);
+            const [markdown, setMarkdown] = React.useState("");
+            const [markdownText, setMarkdownText] = React.useState("");
+            const [testChecker, setTestChecker] = React.useState("");
+
+            const fetchData = () => {
+              setLoading(true);
+              fetch("/fetch_data")
+                .then((response) => response.json())
+                .then((emailArray) => {
+                  setData(emailArray.data);
+                  setLoading(false);
+                })
+                .catch((error) =>
+                  console.error("Error fetching emailArray:", error),
+                );
+            };
+
+            const generateMarkdown = () => {
+              setLoading(true);
+              let first_email = emailArray[selectedEmail];
+              let last_email = emailArray[emailArray.length - 1];
+
+              setMarkdown(`
+                **Test Suite Status**
+                <p>Test failures today: [${last_email.number_of_failures}](${last_email.link}) failures</p>
+                <p>Test failures before: [${first_email.number_of_failures}](${first_email.link}) failures</p>
+
+              `);
+      setMarkdownText(`**Test Suite Status**\nTest failures today: [${last_email.number_of_failures}](${last_email.link}) failures\nTest failures before: [${first_email.number_of_failures}](${first_email.link}) failures`);
+              setLoading(false);
+            };
+
+            const generateTestChecker = () => {
+              setLoading(true);
+              let first_email = emailArray[selectedEmail];
+              let last_email = emailArray[emailArray.length - 1];
+
+              setLoading(true);
+              setTestChecker(`ruby test_checker.rb ${first_email.link} ${last_email.link}`);
+              setLoading(false);
+            };
+
+            return (
+              <div>
+                <div className="inline">
+                  <h1>GG Test Deploy Checklist</h1>
+                  {isLoading ? <div className="lds-dual-ring"></div> : null}
+                </div>
+                  <div className="container">
+                  <h2>1. Github Deploy PRS<span> - only if you have access</span></h2>
+                  <button onClick={() => window.location.href = "https://github.com/golfgenius/golfgenius_deployment/pulls?q=is%3Aopen+is%3Apr"}>See Open PRs</button>
+                  <button onClick={() => window.location.href = "https://github.com/golfgenius/golfgenius_deployment/pulls?q=is%3Apr+is%3Aclosed"}>See Closed PRs</button>
+                </div>
+                <div className="container">
+
+                  <h2>2. Fetch Last Jenkins Report Data</h2>
+                  {isLoading ? (
+                    <button disabled>Loading...</button>
+                  ) : (
+                    <button onClick={fetchData}>Fetch Data</button>
+                  )}
+                </div>
+                <div className="container">
+                  <h2>3. Select Last Deploy Date</h2>
+                  <select id="dropdown" value={selectedEmail} onChange={(e) => setSelectedEmail(e.target.value)}>
+                    <option value="">Select Option</option>
+                    {emailArray.map((value, index) => (
+                      <option key={value.index} value={index}>
+                        {value.subject} {value.date}
+                      </option>
+                    ))}
+                  </select>
+                  {isLoading ? (
+                    <button disabled>Loading...</button>
+                  ) : (
+                    <button onClick={generateMarkdown}>Generate Markdown</button>
+                  )}
+                  {% raw %}
+                  {
+                  markdown && (
+                  <div >
+                  <button className="copyText" onClick={() => navigator.clipboard.writeText(markdownText)}>Copy Text</button>
+                  <div className="markdownCls" dangerouslySetInnerHTML={{ __html: `${markdown}` }}>
+                  </div>
+                  </div>
+                  )
+                  }
+                  {% endraw %}
+                </div>
+
+                <div className="container">
+                  <h2>4. Download Diff File</h2>
+                  {isLoading ? (
+                    <button disabled>Loading...</button>
+                  ) : (
+                    <button onClick={generateTestChecker}>Download Diff File</button>
+                  )}
+                </div>
+                  {% raw %}
+                  {
+                  testChecker && (
+                  <div >
+                  <button className="copyText" onClick={() => navigator.clipboard.writeText(testChecker)}>Copy Text</button>
+                  <div className="markdownCls" dangerouslySetInnerHTML={{ __html: `${testChecker}` }}>
+                  </div>
+                  </div>
+                  )
+                  }
+                  {% endraw %}
+              </div>
+            );
+          };
+
+          ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+
+    <style>
+      body {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f2672921;
+      }
+      .inline {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+      }
+      .markdownCls {
+        padding: 10px;
+        border-radius: 4px;
+        background-color: #efcbcb;
+        text-align: left;
+      }
+      .copyText {
+        cursor: pointer;
+        background: none;
+        color: black;
+        margin: 10px;
+      }
+      button {
+        background-color: #ff6633;
+        border-radius: 4px;
+        color: white;
+        padding: 5px 10px;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #ff4d40;
+      }
+
+      select {
+        height: 30px;
+        width: 400px;
+        border-radius: 4px;
+      }
+
+      .lds-dual-ring {
+        display: inline-block;
+        width: 70px;
+        height: 70px;
+      }
+      .lds-dual-ring:after {
+        content: " ";
+        display: block;
+        width: 34px;
+        height: 34px;
+        margin: 8px;
+        border-radius: 50%;
+        border: 6px solid #ff6633;
+        border-color: #ff6633 transparent #ff6633 transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+      }
+      @keyframes lds-dual-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </body>
+</html>

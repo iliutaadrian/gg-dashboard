@@ -1,5 +1,6 @@
-import { checkOpenAIKey } from "@/lib/gpt/summary-process";
+import { SettingsTable, db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs";
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -9,15 +10,48 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { ok } = body;
-  // const isValidKey = await checkOpenAIKey(ok);
-  //
-  // if (!isValidKey) {
-  //   return new NextResponse(
-  //     "Bad OpenAI API key. Make sure you are using a valid key.",
-  //     { status: 401 },
-  //   );
-  // }
+  const { imap, email, api_key, projects } = body;
+
+  if (!imap || !email || !api_key) {
+    return new NextResponse("Missing required fields", { status: 400 });
+  }
+
+  try {
+    const userSettings = await db
+      .select()
+      .from(SettingsTable)
+      .where(eq(SettingsTable.user_id, user.id));
+
+    if (userSettings.length === 0) {
+      await db.insert(SettingsTable).values({
+        user_id: user.id,
+        imap,
+        email,
+        api_key,
+        projects: projects ? projects : "",
+      });
+    } else {
+      let projectsEdited = "";
+      if (projects !== "") {
+        projectsEdited = projects
+          .split(",")
+          .filter((project: string) => project !== "")
+          .join(",");
+      }
+      await db
+        .update(SettingsTable)
+        .set({
+          imap,
+          email,
+          api_key,
+          projects: projectsEdited,
+        })
+        .where(eq(SettingsTable.user_id, user.id));
+    }
+  } catch (error) {
+    console.log(error);
+    return new NextResponse("Something went wrong", { status: 500 });
+  }
 
   return new NextResponse("OK", { status: 200 });
 }

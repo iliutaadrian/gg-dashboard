@@ -1,29 +1,21 @@
-"use client";
-import { Cta } from "@/components/dashboard/cta";
-import { Faq } from "@/components/dashboard/faq";
-import { FeaturedOn } from "@/components/dashboard/featured_on";
-import { Features } from "@/components/dashboard/features";
-import { Features2 } from "@/components/dashboard/features_2";
-import { Hero } from "@/components/dashboard/hero";
-import { Price } from "@/components/dashboard/price";
-import { Reviews } from "@/components/dashboard/reviews";
-import { Steps } from "@/components/dashboard/steps";
-import { Testimonial } from "@/components/dashboard/testimonial";
+import getSettings from "@/actions/getSettings";
+import { JenkinsSteps } from "@/components/jenkins-tests/jenkins-steps";
+import { Separator } from "@/components/ui/separator";
 
-function Page() {
+async function Page() {
+  const settings = await getSettings();
+  if (!settings) {
+    return null;
+  }
+
   return (
-    <div>
-      <Hero />
-      <Reviews />
-      <FeaturedOn />
-      <Testimonial />
-      <Steps />
-      <Features />
-      {/* <Features2 /> */}
-      <div id="pricing" className="h-20"></div>
-      <Price />
-      <Faq />
-      <Cta />
+    <div className="flex flex-col p-10 max-w-5xl mx-auto">
+      <h2 className="text-2xl font-bold tracking-tight">
+        Jenkins Report Test Difference
+      </h2>
+      <p className="text-muted-foreground">Make sure to follow each step.</p>
+      <Separator className="bg-muted-foreground my-5" />
+      <JenkinsSteps project={settings.projects} />
     </div>
   );
 }

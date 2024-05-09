@@ -1,5 +1,3 @@
-"use client";
-import { Footer } from "@/components/dashboard/footer";
 import { Navbar } from "@/components/menu/navbar";
 
 export default function RoutesLayout({
@@ -10,10 +8,9 @@ export default function RoutesLayout({
   return (
     <div className="h-screen flex flex-col justify-between">
       <Navbar />
-      <div className={" pt-28 flex flex-col items-center"}>
-        <div className={" h-full"}>{children}</div>
+      <div className={" pt-10 flex flex-col items-center"}>
+        <div className={" h-full w-full"}>{children}</div>
       </div>
-      <Footer />
     </div>
   );
 }

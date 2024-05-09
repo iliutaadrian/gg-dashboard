@@ -2,7 +2,7 @@
 
 const nextConfig = {
   images: {
-    domains: ["img.youtube.com"],
+    domains: ["tailwindui.com"],
   },
   webpack: (config) => {
     config.module.rules.push({

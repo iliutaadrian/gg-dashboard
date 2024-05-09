@@ -1,26 +1,18 @@
 "use client";
 
-import { useUser } from "@clerk/clerk-react";
 import { UserButton } from "@clerk/nextjs";
+import { GearIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import { useState } from "react";
 import { ModeToggle } from "../mode-toggle";
 import { MobileMenu } from "./mobile-menu";
 
 export const Navbar = () => {
-  const { isSignedIn } = useUser();
-  const navigation = [
-    { name: "Summary", href: "/summary" },
-    { name: "Summary List", href: "/summary-list" },
-  ];
+  const navigation = [{ name: "Settings", href: "/settings", icon: GearIcon }];
 
   return (
-    <nav className="fixed z-20 inset-x-0 top-0 px-10 shadow-neonLight align-middle flex flex-row justify-between items-center w-full h-16 bg-background">
-      <Link
-        href={"/"}
-        className="text-2xl font-bold text-primary min-w-[200px]"
-      >
-        Tube Mind Sync
+    <nav className="fixed z-20 inset-x-0 top-0 px-10 shadow-neonLight align-middle flex flex-row justify-between items-center w-full h-12 bg-background">
+      <Link href={"/"} className="text-lg font-bold text-primary min-w-[200px]">
+        Jenkins Tests
       </Link>
       <div className="md:hidden text-muted-foreground">
         <MobileMenu navigation={navigation} />
@@ -33,18 +25,11 @@ export const Navbar = () => {
             href={item.href}
             className="text-sm hover:text-primary"
           >
-            {item.name}
+            <item.icon className="w-5 h-5 hover:text-primary" />
           </Link>
         ))}
-        {!isSignedIn && (
-          <Link href={"/sign-in"} className="cursor-pointer">
-            Login/Register{" "}
-          </Link>
-        )}
-        <div className="flex flex-row justify-evenly items-center gap-5">
-          <UserButton afterSignOutUrl="/" />
-        </div>
         <ModeToggle />
+        <UserButton afterSignOutUrl="/" />
       </div>
     </nav>
   );

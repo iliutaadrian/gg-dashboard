@@ -11,8 +11,8 @@ import { Analytics } from "@vercel/analytics/react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Tube Mind Sync",
-  description: "Talk with your data",
+  title: "GG Dashboard",
+  description: "All in one dashboard",
 };
 
 export default function RootLayout({
