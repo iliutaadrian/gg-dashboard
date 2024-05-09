@@ -1,49 +1,41 @@
-## Youtube to Second Brain
-Transform YouTube videos into actionable insights with 
-- AI-powered summaries,
-- key highlights,
--  memorable quotes.
+## Jenkins Test Difference with Rspec Tool
 
-  
-Effortlessly assimilate information and build your second brain on **Notion**. 
-Elevate your learning experience and save time while staying ahead with MindSync – where AI meets personalized knowledge curation!
+### Take information about date, test number, url content from email
+
+<img src="https://github.com/iliutaadrian/jenkins-rspec-test-difference/assets/11472785/b0476c94-465b-4002-9bb0-2e65defb807a" width="700">
+
+### Settings with email, project data
+
+<img src="https://github.com/iliutaadrian/jenkins-rspec-test-difference/assets/11472785/1428232e-975e-4f4d-a560-d231b9d8c431" width="700">
+
+### Fetch data from email and parse docuement content
+
+<img src="https://github.com/iliutaadrian/jenkins-rspec-test-difference/assets/11472785/b239ba4a-de80-4da1-a073-0bb7766e704c" width="700">
+
+### Select report from the last 10 days to compare with
+
+<img src="https://github.com/iliutaadrian/jenkins-rspec-test-difference/assets/11472785/458c1c49-69b1-4b6a-a89f-1c95ab64ce63" width="700"> 
+
+### Generate difference and see only new failing tests
+
+<img src="https://github.com/iliutaadrian/jenkins-rspec-test-difference/assets/11472785/ee0175d3-0685-48da-8aa5-b89e988f1774" width="700"> 
+
 
 ## Technologies Used
 
 - Next.js: A React framework for building server-side rendered and static websites.
-- Pusher: A real-time communication platform that enables bi-directional communication between servers and clients.
-- Tailwind CSS: A utility-first CSS framework for quickly building custom designs.
-- Prisma with PostgreSQL: A modern database toolkit for TypeScript and Node.js.
-- TypeScript: A statically typed superset of JavaScript that compiles to plain JavaScript.
+- Flask: LightWeight Python Backend
 
 ## Installation
-
-Clone the repository and install the dependencies:
-This is a [Next.js](https://nextjs.org/) project
-
-## Getting Started
 
 First, run the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+
+pip install -r backend/requirments.txt
+python app.py
 ```
-
-
-Functinoalities:
-- file manipulation
-- file generation
-- algo to make this as efficient as possible
-- drizzle orm
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/route.ts`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 
