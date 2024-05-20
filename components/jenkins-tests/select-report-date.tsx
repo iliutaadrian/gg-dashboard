@@ -44,6 +44,14 @@ export const SelectReportDate = () => {
       (report) => report.subject.toLocaleLowerCase() === value,
     );
 
+    if (!selected || !last) {
+      toast({
+        variant: "destructive",
+        description: "Select a valid report date.",
+      });
+      return;
+    }
+
     setFile_1(selected.link);
     setFile_2(last.link);
     setMarkdown(

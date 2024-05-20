@@ -12,14 +12,13 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { FolderOpenIcon, LinkIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
-import { Settings } from "@/lib/db";
-import { FolderOpen, FolderOpenIcon, LinkIcon, TrashIcon } from "lucide-react";
 
 const projectFormSchema = z.object({
   imap: z.string(),
@@ -27,12 +26,13 @@ const projectFormSchema = z.object({
   password: z.string(),
   api_key: z.string(),
   projects: z.string(),
+  bookmarks: z.any(),
 });
 
 type SettingsFormValues = z.infer<typeof projectFormSchema>;
 
 interface Props {
-  settings: Settings;
+  settings: any;
 }
 export const SettingsForm = ({ settings }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +56,7 @@ export const SettingsForm = ({ settings }: Props) => {
     imap: "imap.gmail.com",
     email: settings.email,
     api_key: settings.api_key,
-    projects: settings.projects.map((p) => p.value).join(","),
+    projects: settings.projects.map((p: any) => p.value).join(","),
   };
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(projectFormSchema),
@@ -212,7 +212,7 @@ export const SettingsForm = ({ settings }: Props) => {
               <FormDescription>
                 Input your bookmark url and name and add it to your list.
               </FormDescription>
-              {bookmarks.map((item) => (
+              {bookmarks.map((item: { name: string; url: string }) => (
                 <div
                   key={item.name}
                   className="flex items-center justify-between gap-2 w-full"

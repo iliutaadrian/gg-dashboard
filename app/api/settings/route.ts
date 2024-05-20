@@ -29,7 +29,7 @@ export async function POST(request: Request) {
         email,
         api_key,
         projects: projects ? projects : "",
-        bookmarks: bookmarks ? JSON.stringy(bookmarks) : "",
+        bookmarks: bookmarks ? JSON.stringify(bookmarks) : "",
       });
     } else {
       let projectsEdited = "";
