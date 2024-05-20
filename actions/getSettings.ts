@@ -21,6 +21,7 @@ const getSettings = async () => {
         email: "",
         api_key: "",
         projects: [],
+        bookmarks: [],
       };
     }
 
@@ -29,6 +30,7 @@ const getSettings = async () => {
       projects: settings[0].projects
         ? settings[0].projects.split(",").map((p) => ({ value: p, label: p }))
         : [],
+      bookmarks: settings[0].bookmarks ? JSON.parse(settings[0].bookmarks) : [],
     };
   } catch (error: any) {
     console.log(error);

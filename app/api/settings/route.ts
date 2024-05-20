@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { imap, email, api_key, projects } = body;
+  const { imap, email, api_key, projects, bookmarks } = body;
 
   if (!imap || !email || !api_key) {
     return new NextResponse("Missing required fields", { status: 400 });
@@ -29,6 +29,7 @@ export async function POST(request: Request) {
         email,
         api_key,
         projects: projects ? projects : "",
+        bookmarks: bookmarks ? JSON.stringy(bookmarks) : "",
       });
     } else {
       let projectsEdited = "";
@@ -38,6 +39,7 @@ export async function POST(request: Request) {
           .filter((project: string) => project !== "")
           .join(",");
       }
+
       await db
         .update(SettingsTable)
         .set({
@@ -45,6 +47,7 @@ export async function POST(request: Request) {
           email,
           api_key,
           projects: projectsEdited,
+          bookmarks: JSON.stringify(bookmarks),
         })
         .where(eq(SettingsTable.user_id, user.id));
     }

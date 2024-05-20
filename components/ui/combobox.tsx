@@ -57,7 +57,6 @@ export function Combobox({ list, text, value, setValue, disabled }: Props) {
                 key={item.value}
                 value={item.value}
                 onSelect={(currentValue) => {
-                  console.log(currentValue);
                   setValue(currentValue);
                   setOpen(false);
                 }}

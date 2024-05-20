@@ -19,6 +19,7 @@ import { z } from "zod";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import { Settings } from "@/lib/db";
+import { FolderOpen, FolderOpenIcon, LinkIcon, TrashIcon } from "lucide-react";
 
 const projectFormSchema = z.object({
   imap: z.string(),
@@ -34,8 +35,22 @@ interface Props {
   settings: Settings;
 }
 export const SettingsForm = ({ settings }: Props) => {
-  console.log(settings);
   const [isLoading, setIsLoading] = useState(false);
+  const [link, setLink] = useState({ name: "", url: "" });
+  const [bookmarks, setBookmarks] = useState(settings.bookmarks);
+
+  const addLink = (e: any) => {
+    e.preventDefault();
+    setBookmarks([...bookmarks, link]);
+    setLink({ name: "", url: "" });
+  };
+
+  const removeLink = (e: any, index: number) => {
+    e.preventDefault();
+    const newLinks = [...bookmarks];
+    newLinks.splice(index, 1);
+    setBookmarks(newLinks);
+  };
 
   const defaultValues: Partial<SettingsFormValues> = {
     imap: "imap.gmail.com",
@@ -54,6 +69,7 @@ export const SettingsForm = ({ settings }: Props) => {
     try {
       const response = await axios.post("/api/settings", {
         ...data,
+        bookmarks: bookmarks,
       });
 
       if (response.status === 200) {
@@ -174,6 +190,81 @@ export const SettingsForm = ({ settings }: Props) => {
                 placeholder="Your Jenkins project name..."
                 {...field}
               />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div>
+          <h2 className="text-xl font-medium tracking-tight">
+            Bookmark Settings
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            Add or remove bookmarks
+          </p>
+          <Separator className=" my-2" />
+        </div>
+        <FormField
+          control={form.control}
+          name="bookmarks"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Add a new Bookmark</FormLabel>
+              <FormDescription>
+                Input your bookmark url and name and add it to your list.
+              </FormDescription>
+              {bookmarks.map((item) => (
+                <div
+                  key={item.name}
+                  className="flex items-center justify-between gap-2 w-full"
+                >
+                  <div className="flex items-center gap-2 w-full">
+                    <div className="text-md w-40 overflow-x-hidden whitespace-nowrap">
+                      {item.name}
+                    </div>
+                    <Link
+                      href={item.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="cursor-pointer text-muted-foreground overflow-hidden whitespace-nowrap flex-1 w-80"
+                    >
+                      {item.url}
+                    </Link>
+                  </div>
+                  <Button
+                    size="icon"
+                    onClick={(e) => removeLink(e, bookmarks.indexOf(item))}
+                  >
+                    <TrashIcon className="w-5 h-5" />
+                  </Button>
+                </div>
+              ))}
+
+              <div className="flex items-center gap-2 pt-5">
+                <LinkIcon />
+                <Input
+                  type="text"
+                  placeholder="Bookmark Title"
+                  value={link.name}
+                  onChange={(e) => setLink({ ...link, name: e.target.value })}
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <FolderOpenIcon />
+                <Input
+                  type="text"
+                  placeholder="Bookmark Name"
+                  value={link.url}
+                  onChange={(e) => setLink({ ...link, url: e.target.value })}
+                />
+                <Button
+                  size="icon"
+                  className="text-xl"
+                  onClick={(e) => addLink(e)}
+                >
+                  +
+                </Button>
+              </div>
+
               <FormMessage />
             </FormItem>
           )}

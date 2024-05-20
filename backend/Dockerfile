@@ -1,8 +1,6 @@
 ## docker build -t ggtestcheck .
 ## docker run -d -p 6969:6969 ggtestcheck
 
-
-
 # Use the official Python image as base
 FROM python:3.9-slim
 

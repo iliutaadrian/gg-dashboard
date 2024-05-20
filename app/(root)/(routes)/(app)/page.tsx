@@ -15,7 +15,10 @@ async function Page() {
       </h2>
       <p className="text-muted-foreground">Make sure to follow each step.</p>
       <Separator className="bg-muted-foreground my-5" />
-      <JenkinsSteps project={settings.projects} />
+      <JenkinsSteps
+        project={settings.projects}
+        bookmarks={settings.bookmarks}
+      />
     </div>
   );
 }

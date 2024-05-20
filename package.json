@@ -28,7 +28,7 @@
     "@radix-ui/react-toast": "^1.1.4",
     "@tanstack/react-table": "^8.10.6",
     "@types/lodash": "^4.14.198",
-    "@types/node": "20.5.9",
+    "@types/node": "20.5.1",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "@vercel/analytics": "^1.2.2",

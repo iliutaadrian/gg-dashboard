@@ -26,6 +26,7 @@ export const SettingsTable = pgTable("settings", {
   email: text("email").notNull(),
   api_key: text("apiKey").notNull(),
   projects: text("projects").notNull(),
+  bookmarks: text("bookmarks"),
 });
 
 export type Settings = typeof SettingsTable.$inferSelect;
