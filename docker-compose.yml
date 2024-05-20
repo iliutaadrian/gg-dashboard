@@ -1,15 +1,6 @@
 version: "3.8"
 
 services:
-  nextjs:
-    build:
-      context: ./nextjs-app
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    networks:
-      - my-network
-
   python:
     build:
       context: ./backend
@@ -18,6 +9,16 @@ services:
       - "6969:6969"
     networks:
       - my-network
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - my-network
+    depends_on:
+      - python
 
 networks:
   my-network:

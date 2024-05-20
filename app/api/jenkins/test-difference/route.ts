@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   }
   try {
     const data = await axios
-      .get("http://127.0.0.1:6969/get_test_diff", {
+      .get(`${process.env.BACKEND_URL}/get_test_diff`, {
         params: {
           file_1,
           file_2,
