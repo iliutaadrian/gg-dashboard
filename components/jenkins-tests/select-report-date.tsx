@@ -57,8 +57,8 @@ export const SelectReportDate = () => {
 
     setMarkdown(`
 **Test Suite Status** <br />
-Test failures today: [${last.number_of_failures}](${last.link}) failures <br />
-Test failures before: [${selected.number_of_failures}](${selected.link}) failures
+Test failures today: [${last.number_of_failures}](${last.link}) failures currently <br />
+Test failures before: [${selected.number_of_failures}](${selected.link}) failures in the last deployment
 `);
 
     setIsLoading(false);
