@@ -54,16 +54,12 @@ export const SelectReportDate = () => {
 
     setFile_1(selected.link);
     setFile_2(last.link);
-    setMarkdown(
-      `     **Test Suite Status** <br />
-            Test failures today:
-            [${last.number_of_failures}](${last.link})
-            failures <br />
-            Test failures before:
-            [${selected.number_of_failures}](${selected.link})
-            failures
-`,
-    );
+
+    setMarkdown(`
+**Test Suite Status** <br />
+Test failures today: [${last.number_of_failures}](${last.link}) failures <br />
+Test failures before: [${selected.number_of_failures}](${selected.link}) failures
+`);
 
     setIsLoading(false);
     setStep(3);
@@ -71,7 +67,7 @@ export const SelectReportDate = () => {
   };
 
   const copyMarkdown = () => {
-    navigator.clipboard.writeText(markdown);
+    navigator.clipboard.writeText(markdown.replace(/\<br \/\>/g, ""));
     toast({
       description: "Markdown copied to clipboard.",
     });
@@ -124,10 +120,11 @@ export const SelectReportDate = () => {
             **Test Suite Status** <br />
             Test failures today:
             [x](http://s3.amazonaws.com/xxxxxxxxxx-xxx/coverage/20xx-xx-xx/xx-xx/rspec.txt)
-            failures <br />
+            failures currently
+            <br />
             Test failures before:
             [x](http://s3.amazonaws.com/xxxxxxxxxx-xxx/coverage/20xx-xx-xx/xx-xx/rspec.txt)
-            failures
+            failures in the last deployment
           </div>
         )}
       </CardFooter>
