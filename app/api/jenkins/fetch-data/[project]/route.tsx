@@ -33,7 +33,7 @@ export async function GET(
     }
 
     const data = await axios
-      .get(`${process.env.BACKEND_URL}/fetch_data`, {
+      .get(`http://python:6969/fetch_data`, {
         params: {
           imap_server: "imap.gmail.com",
           email_address: userSettings[0].email,
