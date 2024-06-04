@@ -31,18 +31,18 @@ export const SelectReportDate = () => {
 
   const reportsList =
     reports.length > 0
-      ? reports.map((report: ReportJenkins) => ({
-          label: `${report.subject} - ${report.date} - ${report.number_of_failures}`,
-          value: report.subject,
-        }))
+      ? reports
+          .map((report: ReportJenkins) => ({
+            label: `#${report.build} - ${report.date} - ${report.number_of_failures} failures`,
+            value: report.build,
+          }))
+          .sort((a, b) => b.value - a.value)
       : [];
 
   const select_report = async (e: any) => {
     e.preventDefault();
     let last = reports[reportsList.length - 1];
-    let selected = reports.find(
-      (report) => report.subject.toLocaleLowerCase() === value,
-    );
+    let selected = reports.find((report) => report.build === value);
 
     if (!selected || !last) {
       toast({
@@ -57,8 +57,8 @@ export const SelectReportDate = () => {
 
     setMarkdown(`
 **Test Suite Status** <br />
-Test failures today: [${last.number_of_failures}](${last.link}) failures currently <br />
-Test failures before: [${selected.number_of_failures}](${selected.link}) failures in the last deployment
+Test failures today - [Build #${last.build}](${last.link}): ${last.number_of_failures} failures currently <br />
+Test failures before - [Build #${selected.build}](${selected.link}): ${selected.number_of_failures} failures in the last deployment
 `);
 
     setIsLoading(false);
@@ -118,13 +118,13 @@ Test failures before: [${selected.number_of_failures}](${selected.link}) failure
         ) : (
           <div className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm">
             **Test Suite Status** <br />
-            Test failures today:
-            [x](http://s3.amazonaws.com/xxxxxxxxxx-xxx/coverage/20xx-xx-xx/xx-xx/rspec.txt)
-            failures currently
+            Test failures today - [Build
+            #xxxx](http://s3.amazonaws.com/xxxxxxxxxx-xxx/coverage/20xx-xx-xx/xx-xx/rspec.txt):
+            x failures currently
             <br />
-            Test failures before:
-            [x](http://s3.amazonaws.com/xxxxxxxxxx-xxx/coverage/20xx-xx-xx/xx-xx/rspec.txt)
-            failures in the last deployment
+            Test failures before - [Build
+            #xxxx](http://s3.amazonaws.com/xxxxxxxxxx-xxx/coverage/20xx-xx-xx/xx-xx/rspec.txt):
+            x failures in the last deployment
           </div>
         )}
       </CardFooter>

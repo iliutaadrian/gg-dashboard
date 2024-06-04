@@ -111,23 +111,27 @@ export const FetchData = ({ project }: Props) => {
       <CardFooter className="border-t px-6 py-4 flex flex-col gap-2">
         {reports.length === 0 ? (
           <div className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm">
-            Last Report <br />
-            xxxx_xxxxxxx - Build # xxxx - Successful! - x failures
-            <Link href="#" className="ml-3 underline">
-              View Report
+            Last Report{" "}
+            <Link href="#" className="underline">
+              View
             </Link>
+            <br />
+            Build #xxxx - x failures
           </div>
         ) : (
           <div className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm">
-            Last Report <br />
-            {reports[reports.length - 1].subject} -{" "}
-            {reports[reports.length - 1].number_of_failures} failures
+            Last Report{" "}
             <Link
               href={reports[reports.length - 1].link}
-              className="ml-3 underline"
+              className="underline"
+              target="_blank"
             >
-              View Report
+              View
             </Link>
+            <br />
+            Build #{reports[reports.length - 1].build} -{" "}
+            {reports[reports.length - 1].number_of_failures} failures -{" "}
+            {reports[reports.length - 1].date}
           </div>
         )}
       </CardFooter>

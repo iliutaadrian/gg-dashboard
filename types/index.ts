@@ -5,6 +5,7 @@ export type UserClerk = {
 };
 
 export type ReportJenkins = {
+  build: string;
   date: string;
   link: string;
   number_of_failures: string;

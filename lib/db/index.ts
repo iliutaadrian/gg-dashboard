@@ -29,6 +29,26 @@ export const SettingsTable = pgTable("settings", {
   bookmarks: text("bookmarks"),
 });
 
+export const BuildTable = pgTable("builds", {
+  id: serial("id").primaryKey(),
+  build: text("build").notNull(),
+  project: text("project").notNull(),
+  date: text("date").notNull(),
+  link: text("link").notNull(),
+  number_of_failures: text("number_of_failures").notNull(),
+  subject: text("subject").notNull(),
+});
+
+export const TestTable = pgTable("tests", {
+  id: text("id").primaryKey(),
+  build: text("build").notNull(),
+  name: text("name").notNull(),
+  ocurrences: text("ocurrences").notNull(),
+});
+
 export type Settings = typeof SettingsTable.$inferSelect;
+export type Build = typeof BuildTable.$inferSelect;
+export type Test = typeof TestTable.$inferSelect;
+
 // Connect to Vercel Postgres
 export const db = drizzle(sql);

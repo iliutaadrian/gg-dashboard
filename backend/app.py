@@ -38,7 +38,7 @@ def fetch_data():
     mail = connect_to_gmail(imap_server, email_address, password)
     mail.select(mailbox)
 
-    email_ids = search_emails(mail, mailbox, search_criteria, num_emails=20)
+    email_ids = search_emails(mail, mailbox, search_criteria, num_emails=3)
     email_data_list = fetch_and_parse_emails(
         mail, email_ids, link_pattern, failures_pattern
     )
@@ -70,6 +70,7 @@ def fetch_data():
 
             response.append(
                 {
+                    "build": email_info["build"],
                     "subject": email_info["subject"],
                     "link": email_info["link"],
                     "number_of_failures": email_info["number_of_failures"],
@@ -105,6 +106,7 @@ def fetch_and_parse_emails(mail, email_ids, link_pattern, failures_pattern):
 
         email_info = {
             "subject": subject,
+            "build": subject.split("#")[1].split(" ")[1],
             "link": "",
             "date": "",
             "number_of_failures": "",
@@ -132,6 +134,7 @@ def fetch_and_parse_emails(mail, email_ids, link_pattern, failures_pattern):
 
     return email_data_list
 
+
 # TEST DIFF
 @app.route("/get_test_diff", methods=["GET"])
 def get_test_diff():
@@ -145,13 +148,12 @@ def get_test_diff():
     diff = [test for test in file_2_tests if test not in file_1_tests]
     response = []
     for test in diff:
-        response.append({
-            "number": test.number,
-            "name": test.name,
-            "content": test.content
-        })
+        response.append(
+            {"number": test.number, "name": test.name, "content": test.content}
+        )
 
     return response
+
 
 class Test:
     def __init__(self, name, number):
@@ -176,7 +178,7 @@ def get_tests_from_file(test_file_url):
     response = requests.get(test_file_url, headers=headers)
 
     # Process file content
-    test_file_buffer = ''
+    test_file_buffer = ""
     # print(test_file_buffer)
     # return
 
@@ -184,29 +186,29 @@ def get_tests_from_file(test_file_url):
     test_name_regex = r"\s\s[0-9]+\)"
     write_to_buffer = False
 
-    first_char = ''
+    first_char = ""
     for line in response.iter_lines(decode_unicode=True):
-      if len(line) == 0:
-        first_char = ''
-      else:
-        first_char = line[0]
+        if len(line) == 0:
+            first_char = ""
+        else:
+            first_char = line[0]
 
-      if write_to_buffer and re.match(r"[A-Za-z]", first_char):
-        write_to_buffer = False
+        if write_to_buffer and re.match(r"[A-Za-z]", first_char):
+            write_to_buffer = False
 
-      if "Failures:" in line:
-          write_to_buffer = True
+        if "Failures:" in line:
+            write_to_buffer = True
 
-      if write_to_buffer:
-          test_file_buffer += line
-          test_file_buffer += "\n"
+        if write_to_buffer:
+            test_file_buffer += line
+            test_file_buffer += "\n"
 
-          if re.match(test_name_regex, line):
-              test_name_tmp = line.split(")")
-              tests.append(Test(test_name_tmp[1].strip(), test_name_tmp[0].strip()))
-          else:
-              if len(tests) > 0:
-                  tests[-1].content += line + "\n"
+            if re.match(test_name_regex, line):
+                test_name_tmp = line.split(")")
+                tests.append(Test(test_name_tmp[1].strip(), test_name_tmp[0].strip()))
+            else:
+                if len(tests) > 0:
+                    tests[-1].content += line + "\n"
 
     # Save downloaded content to a file
     parsed_url = urlparse(test_file_url)
@@ -215,7 +217,6 @@ def get_tests_from_file(test_file_url):
         file.write(test_file_buffer)
 
     return tests
-
 
 
 if __name__ == "__main__":

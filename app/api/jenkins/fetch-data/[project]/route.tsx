@@ -1,4 +1,4 @@
-import { SettingsTable, db } from "@/lib/db";
+import { Build, BuildTable, SettingsTable, db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs";
 import axios from "axios";
 import { eq } from "drizzle-orm";
@@ -31,9 +31,8 @@ export async function GET(
         { status: 401 },
       );
     }
-
     const data = await axios
-      .get(`http://python:6969/fetch_data`, {
+      .get(`http://127.0.0.1:6969/fetch_data`, {
         params: {
           imap_server: "imap.gmail.com",
           email_address: userSettings[0].email,
@@ -45,7 +44,33 @@ export async function GET(
         return res.data.data;
       });
 
-    return new NextResponse(JSON.stringify(data), { status: 200 });
+    const previousBuilds = await db
+      .select()
+      .from(BuildTable)
+      .where(eq(BuildTable.project, params.project));
+    const builds = previousBuilds.map((item) => item.build);
+
+    for (const item of data) {
+      if (!builds.includes(item.build)) {
+        await db.insert(BuildTable).values({
+          project: params.project,
+          build: item.build,
+          date: item.date,
+          link: item.link,
+          number_of_failures: item.number_of_failures,
+          subject: item.subject,
+        });
+      }
+    }
+
+    return new NextResponse(
+      JSON.stringify(
+        previousBuilds.slice(previousBuilds.length - 10, previousBuilds.length),
+      ),
+      {
+        status: 200,
+      },
+    );
   } catch (error) {
     console.log(error);
     return new NextResponse("Something went wrong", { status: 500 });
