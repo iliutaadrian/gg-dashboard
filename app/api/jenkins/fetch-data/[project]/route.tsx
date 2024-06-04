@@ -31,18 +31,6 @@ export async function GET(
         { status: 401 },
       );
     }
-    const data = await axios
-      .get(`http://127.0.0.1:6969/fetch_data`, {
-        params: {
-          imap_server: "imap.gmail.com",
-          email_address: userSettings[0].email,
-          password: userSettings[0].api_key,
-          project: params.project,
-        },
-      })
-      .then((res) => {
-        return res.data.data;
-      });
 
     const previousBuilds = await db
       .select()
@@ -50,17 +38,34 @@ export async function GET(
       .where(eq(BuildTable.project, params.project));
     const builds = previousBuilds.map((item) => item.build);
 
-    for (const item of data) {
-      if (!builds.includes(item.build)) {
-        await db.insert(BuildTable).values({
-          project: params.project,
-          build: item.build,
-          date: item.date,
-          link: item.link,
-          number_of_failures: item.number_of_failures,
-          subject: item.subject,
+    try {
+      const data = await axios
+        .get(`http://python:6969/fetch_data`, {
+          params: {
+            imap_server: "imap.gmail.com",
+            email_address: userSettings[0].email,
+            password: userSettings[0].api_key,
+            project: params.project,
+          },
+        })
+        .then((res) => {
+          return res.data.data;
         });
+
+      for (const item of data) {
+        if (!builds.includes(item.build)) {
+          await db.insert(BuildTable).values({
+            project: params.project,
+            build: item.build,
+            date: item.date,
+            link: item.link,
+            number_of_failures: item.number_of_failures,
+            subject: item.subject,
+          });
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
 
     return new NextResponse(

@@ -37,7 +37,7 @@ export function Combobox({ list, text, value, setValue, disabled }: Props) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[500px] py-7 justify-between"
+          className="w-full py-7 justify-between"
         >
           {value
             ? list.find((item) => item.value.toLocaleLowerCase() === value)

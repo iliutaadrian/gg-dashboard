@@ -18,6 +18,7 @@ async function Page() {
       <JenkinsSteps
         project={settings.projects}
         bookmarks={settings.bookmarks}
+        builds={settings.builds}
       />
     </div>
   );

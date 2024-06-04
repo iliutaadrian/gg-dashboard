@@ -18,6 +18,7 @@ import {
 import React from "react";
 import { Copy } from "lucide-react";
 import { toast } from "../ui/use-toast";
+import { set } from "date-fns";
 
 export const SelectReportDate = () => {
   const { reports } = useReportsJenkinsStore();
@@ -39,8 +40,8 @@ export const SelectReportDate = () => {
           .sort((a, b) => b.value - a.value)
       : [];
 
-  const select_report = async (e: any) => {
-    e.preventDefault();
+  const select_report = async (value: any) => {
+    setValue(value);
     let last = reports[reportsList.length - 1];
     let selected = reports.find((report) => report.build === value);
 
@@ -92,18 +93,18 @@ Test failures before - [Build #${selected.build}](${selected.link}): ${selected.
           <Combobox
             disabled={step > 1 ? false : true}
             list={reportsList}
-            setValue={setValue}
             text="Select your report..."
             value={value}
+            setValue={select_report}
           />
-          <Button
-            onClick={select_report}
-            isLoading={isLoading}
-            className="w-40"
-            disabled={step > 1 ? false : true}
-          >
-            Select Report
-          </Button>
+          {/* <Button */}
+          {/*   onClick={select_report} */}
+          {/*   isLoading={isLoading} */}
+          {/*   className="w-40" */}
+          {/*   disabled={step > 1 ? false : true} */}
+          {/* > */}
+          {/*   Select Report */}
+          {/* </Button> */}
         </form>
       </CardContent>
       <CardFooter className="border-t px-6 py-4 flex flex-col gap-2">

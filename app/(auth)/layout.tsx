@@ -10,7 +10,7 @@ export default async function RootLayout({
       }
     >
       <h1 className="text-3xl font-medium py-5">
-        Create/Register for free to get started!
+        {/* Create/Register for free to get started! */}
       </h1>
       {children}
     </div>
