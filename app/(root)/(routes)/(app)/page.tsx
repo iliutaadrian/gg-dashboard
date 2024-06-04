@@ -3,7 +3,7 @@ import { JenkinsSteps } from "@/components/jenkins-tests/jenkins-steps";
 import { Separator } from "@/components/ui/separator";
 
 async function Page() {
-  const settings = await getSettings();
+  const settings: any = await getSettings();
   if (!settings) {
     return null;
   }

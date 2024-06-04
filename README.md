@@ -14,12 +14,11 @@
 
 ### Select report from the last 10 days to compare with
 
-<img src="https://github.com/iliutaadrian/jenkins-rspec-test-difference/assets/11472785/458c1c49-69b1-4b6a-a89f-1c95ab64ce63" width="700"> 
+<img src="https://github.com/iliutaadrian/jenkins-rspec-test-difference/assets/11472785/458c1c49-69b1-4b6a-a89f-1c95ab64ce63" width="700">
 
 ### Generate difference and see only new failing tests
 
-<img src="https://github.com/iliutaadrian/jenkins-rspec-test-difference/assets/11472785/ee0175d3-0685-48da-8aa5-b89e988f1774" width="700"> 
-
+<img src="https://github.com/iliutaadrian/jenkins-rspec-test-difference/assets/11472785/ee0175d3-0685-48da-8aa5-b89e988f1774" width="700">
 
 ## Technologies Used
 
@@ -38,4 +37,6 @@ pip install -r backend/requirments.txt
 python app.py
 ```
 
+## DOCKER
 
+docker compose build && docker compose up -d

@@ -9,12 +9,12 @@ import { Bookmarks } from "./bookmarks";
 interface Props {
   project: ComboList[];
   bookmarks: { name: string; url: string }[];
-  builds: { buildsNumber: string[]; buildsFailed: string[] };
+  builds: { buildsNumber: string[]; buildsFailed: string[] } | null;
 }
 export const JenkinsSteps = ({ project, bookmarks, builds }: Props) => {
   return (
     <div className="p-10 max-w-5xl mx-auto flex flex-col gap-5">
-      <Analytics builds={builds} />
+      {builds && <Analytics builds={builds} />}
       <Bookmarks bookmarks={bookmarks} />
       <FetchData project={project} />
       <SelectReportDate />

@@ -1,6 +1,4 @@
 "use client";
-import { Combobox } from "@/components/ui/combobox";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,16 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Combobox } from "@/components/ui/combobox";
 import { ReportJenkins } from "@/types";
+import { Copy } from "lucide-react";
+import React from "react";
 import {
   useReportsJenkinsStore,
   useStepStore,
   useTestsJenkinsStore,
 } from "../reports-jenkins-store";
-import React from "react";
-import { Copy } from "lucide-react";
 import { toast } from "../ui/use-toast";
-import { set } from "date-fns";
 
 export const SelectReportDate = () => {
   const { reports } = useReportsJenkinsStore();
@@ -37,7 +35,7 @@ export const SelectReportDate = () => {
             label: `#${report.build} - ${report.date} - ${report.number_of_failures} failures`,
             value: report.build,
           }))
-          .sort((a, b) => b.value - a.value)
+          .sort((a: any, b: any) => b.value - a.value)
       : [];
 
   const select_report = async (value: any) => {

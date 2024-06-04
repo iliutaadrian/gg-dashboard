@@ -1,5 +1,6 @@
 "use client";
 import { ComboList } from "@/types";
+// @ts-ignore
 import { Chart } from "chart.js";
 import { useEffect } from "react";
 import {
@@ -101,7 +102,9 @@ export const Analytics = ({ builds }: Props) => {
         },
       },
     };
+    // @ts-ignore
     var ctx = document.getElementById("line-chart").getContext("2d");
+    // @ts-ignore
     window.myLine = new Chart(ctx, config);
   }, []);
   return (
