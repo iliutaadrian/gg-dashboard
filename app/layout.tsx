@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={cn("bg-background", inter.className)}>
         <ReactQuery>
           <ClerkProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
               {children}
             </ThemeProvider>
             <Toaster />
