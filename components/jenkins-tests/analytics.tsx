@@ -11,9 +11,10 @@ import {
   CardTitle,
 } from "../ui/card";
 import { AreaChart, Book } from "lucide-react";
+import { Build } from "@/lib/db";
 
 interface Props {
-  builds: { buildsNumber: string[]; buildsFailed: string[] };
+  builds: { buildsNumber: string[]; buildsFailed: string[]; data: Build[] };
 }
 export const Analytics = ({ builds }: Props) => {
   useEffect(() => {

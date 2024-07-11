@@ -17,8 +17,13 @@ import {
   useTestsJenkinsStore,
 } from "../reports-jenkins-store";
 import { toast } from "../ui/use-toast";
+import { Build } from "@/lib/db";
 
-export const SelectReportDate = () => {
+interface Props {
+  builds: { buildsNumber: string[]; buildsFailed: string[], data: Build[] } | null;
+}
+
+export const SelectReportDate = ({ builds }: Props) => {
   const { reports } = useReportsJenkinsStore();
   const { step, setStep } = useStepStore();
   const { setFile_1, setFile_2 } = useTestsJenkinsStore();
@@ -28,14 +33,21 @@ export const SelectReportDate = () => {
 
   const [markdown, setMarkdown] = React.useState("");
 
+  const lastBuild = builds?.data?.length ? builds.data[builds.data.length - 1] : {
+    number_of_failures: "x",
+    build: "xxxx",
+    date: "XXX, xx XX XX",
+    link: "#",
+  };
+
   const reportsList =
     reports.length > 0
       ? reports
-          .map((report: ReportJenkins) => ({
-            label: `#${report.build} - ${report.date} - ${report.number_of_failures} failures`,
-            value: report.build,
-          }))
-          .sort((a: any, b: any) => b.value - a.value)
+        .map((report: ReportJenkins) => ({
+          label: `#${report.build} - ${report.date} - ${report.number_of_failures} failures`,
+          value: report.build,
+        }))
+        .sort((a: any, b: any) => b.value - a.value)
       : [];
 
   const select_report = async (value: any) => {
@@ -118,8 +130,8 @@ Test failures before - [Build #${selected.build}](${selected.link}): ${selected.
           <div className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm">
             **Test Suite Status** <br />
             Test failures today - [Build
-            #xxxx](http://s3.amazonaws.com/xxxxxxxxxx-xxx/coverage/20xx-xx-xx/xx-xx/rspec.txt):
-            x failures currently
+            #{lastBuild.build}]({lastBuild.link}):{" "}
+            {lastBuild.number_of_failures} failures currently
             <br />
             Test failures before - [Build
             #xxxx](http://s3.amazonaws.com/xxxxxxxxxx-xxx/coverage/20xx-xx-xx/xx-xx/rspec.txt):

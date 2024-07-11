@@ -21,17 +21,26 @@ import {
   useTestsJenkinsStore,
 } from "../reports-jenkins-store";
 import { setSeconds } from "date-fns";
+import { Build } from "@/lib/db";
 
 interface Props {
   project: ComboList[];
+  builds: { buildsNumber: string[]; buildsFailed: string[], data: Build[] } | null;
 }
 
-export const FetchData = ({ project }: Props) => {
+export const FetchData = ({ project, builds }: Props) => {
   const { reports, setReports } = useReportsJenkinsStore();
   const { setStep } = useStepStore();
 
   const [value, setValue] = React.useState(project[0]?.value);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const lastBuild = builds?.data?.length ? builds.data[builds.data.length - 1] : {
+    number_of_failures: "x",
+    build: "xxxx",
+    date: "XXX, xx XX XX",
+    link: "#",
+  };
 
   const onClick = async (e: any) => {
     setIsLoading(true);
@@ -101,10 +110,10 @@ export const FetchData = ({ project }: Props) => {
           </Link>
           <Button
             isLoading={isLoading}
-            className="w-40"
+            className="w-48"
             onClick={(e) => onClick(e)}
           >
-            Fetch Data
+            Manually Fetch
           </Button>
         </form>
       </CardContent>
@@ -112,11 +121,12 @@ export const FetchData = ({ project }: Props) => {
         {reports.length === 0 ? (
           <div className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm">
             Last Report{" "}
-            <Link href="#" className="underline">
+            <Link href={lastBuild.link} className="underline">
               View
             </Link>
             <br />
-            Build #xxxx - x failures
+            Build #{lastBuild.build} - {lastBuild.number_of_failures} failures -{" "}
+            {lastBuild.date}
           </div>
         ) : (
           <div className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm">

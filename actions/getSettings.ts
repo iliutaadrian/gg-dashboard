@@ -39,6 +39,7 @@ const getSettings = async () => {
         : [],
       bookmarks: settings[0].bookmarks ? JSON.parse(settings[0].bookmarks) : [],
       builds: {
+        data: buildsQuery,
         buildsNumber,
         buildsFailed,
       },
