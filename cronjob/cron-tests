@@ -1,0 +1,7 @@
+# cronjob
+# Run the cron job every day at 8:30 AM
+# 30 8 * * * curl http://nextcurl http://nextjs:3000/api/jenkins/cron js:3000/api/jenkins/cron >> /var/log/cron.log 2>&1
+* * * * * curl http://nextjs:3000/api/jenkins/cron >> /var/log/cron.log 2>&1
+* * * * * echo "test" >> /var/log/cron.log
+
+
