@@ -18,7 +18,6 @@ import { ComboList, ReportJenkins } from "@/types";
 import {
   useReportsJenkinsStore,
   useStepStore,
-  useTestsJenkinsStore,
 } from "../reports-jenkins-store";
 import { setSeconds } from "date-fns";
 import { Build } from "@/lib/db";

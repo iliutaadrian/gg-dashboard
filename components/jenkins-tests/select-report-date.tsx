@@ -14,7 +14,7 @@ import React, { useEffect } from "react";
 import {
   useReportsJenkinsStore,
   useStepStore,
-  useTestsJenkinsStore,
+  useSelectedJenkinsReportsStore,
 } from "../reports-jenkins-store";
 import { toast } from "../ui/use-toast";
 import { Build } from "@/lib/db";
@@ -26,7 +26,7 @@ interface Props {
 export const SelectReportDate = ({ builds }: Props) => {
   const { reports } = useReportsJenkinsStore();
   const { step, setStep } = useStepStore();
-  const { setFile_1, setFile_2 } = useTestsJenkinsStore();
+  const { setSelectedReport_1, setSelectedReport_2 } = useSelectedJenkinsReportsStore();
 
   const [value, setValue] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
@@ -69,8 +69,8 @@ export const SelectReportDate = ({ builds }: Props) => {
       return;
     }
 
-    setFile_1(selected.link);
-    setFile_2(last.link);
+    setSelectedReport_1(selected);
+    setSelectedReport_2(last);
 
     setMarkdown(`
 **Test Suite Status** <br />

@@ -9,15 +9,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useState } from "react";
-import { useStepStore, useTestsJenkinsStore } from "../reports-jenkins-store";
+import { useStepStore, useSelectedJenkinsReportsStore } from "../reports-jenkins-store";
 import axios from "axios";
 import { toast } from "../ui/use-toast";
+import { Accordion } from "@radix-ui/react-accordion";
+import { AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 
 export const GenerateDiff = () => {
   const { step, setStep } = useStepStore();
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState("");
-  const { file_1, file_2 } = useTestsJenkinsStore();
+  const [data, setData] = useState({} as { number: number; name: string; content: string }[]);
+  const { selectedReport_1, selectedReport_2 } = useSelectedJenkinsReportsStore();
 
   const getDiff = async (e: any) => {
     setIsLoading(true);
@@ -25,19 +28,19 @@ export const GenerateDiff = () => {
 
     await axios
       .post(`/api/jenkins/test-difference`, {
-        file_1,
-        file_2,
+        file_1: selectedReport_1.link,
+        file_2: selectedReport_2.link,
       })
       .then((res) => {
         if (res.status === 200) {
-          let data = "";
+          setData(res.data);
+          let data = `Test difference between: Build #${selectedReport_1.build} - #${selectedReport_2.build} \n\n`;
           res.data.map((element: any) => {
-            data += `<b>${element.number}) ${element.name}</b><br />`;
-            data += element.content + "<br /><br />";
+            data += `${element.number}) ${element.name}\n`;
           });
           setValue(data);
           toast({
-            description: "Test diff generated successfully.",
+            description: "Test difference generated successfully.",
           });
         }
       })
@@ -49,12 +52,16 @@ export const GenerateDiff = () => {
       })
       .finally(() => {
         setIsLoading(false);
-        // setStep(4)
+        setStep(4)
       });
   };
 
-  const generateFile = async (e: any) => {
+  const copyDiff = (e: any) => {
     e.preventDefault();
+    navigator.clipboard.writeText(value);
+    toast({
+      description: "Test difference copied to clipboard.",
+    });
   };
 
   return (
@@ -82,16 +89,48 @@ export const GenerateDiff = () => {
           >
             See difference
           </Button>
-          <Button className="w-40" disabled={step > 4 ? false : true}>
-            Download File
+          <Button className="w-40" disabled={step > 3 ? false : true} onClick={(e) => copyDiff(e)}>
+            Copy Difference
           </Button>
         </form>
       </CardContent>
       <CardFooter className="border-t px-6 py-4">
-        <div
-          className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm h-[300px] overflow-y-auto"
-          dangerouslySetInnerHTML={{ __html: value }}
-        />
+        <div className="flex flex-col items-center gap-5 w-full">
+          {data.length &&
+            data.map((element: any) => {
+              return (
+                <Accordion
+                  key={element.number}
+                  type="single"
+                  collapsible
+                  className="w-full"
+                >
+                  <AccordionItem value={`item-${element.name}`}>
+                    <AccordionTrigger>
+                      <div className="flex items-center gap-5">
+                        <div className="w-10 h-10 rounded-full border-2 border-primary flex justify-center items-center">
+                          <p>{element.number}</p>
+                        </div>
+                        {element.name}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div
+                        className="bg-gray-800 text-white p-5 text-sm rounded-sm h-[200px] overflow-y-auto"
+                        dangerouslySetInnerHTML={{ __html: element.content }}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              )
+            })
+          }
+        </div>
+
+        {/* <div */}
+        {/*   className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm h-[300px] overflow-y-auto" */}
+        {/*   dangerouslySetInnerHTML={{ __html: value }} */}
+        {/* /> */}
       </CardFooter>
     </Card>
   );

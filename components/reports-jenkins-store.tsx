@@ -19,14 +19,16 @@ export const useStepStore = create<{
   setStep: (newStep: number) => set({ step: newStep }),
 }));
 
-export const useTestsJenkinsStore = create<{
-  file_1: string;
-  file_2: string;
-  setFile_1: (newFile_1: string) => void;
-  setFile_2: (newFile_2: string) => void;
+export const useSelectedJenkinsReportsStore = create<{
+  selectedReport_1: ReportJenkins;
+  selectedReport_2: ReportJenkins;
+  setSelectedReport_1: (newSelectedReport_1: ReportJenkins) => void;
+  setSelectedReport_2: (newSelectedReport_2: ReportJenkins) => void;
 }>((set) => ({
-  file_1: "",
-  file_2: "",
-  setFile_1: (newFile_1: string) => set({ file_1: newFile_1 }),
-  setFile_2: (newFile_2: string) => set({ file_2: newFile_2 }),
+  selectedReport_1: {} as ReportJenkins,
+  selectedReport_2: {} as ReportJenkins,
+  setSelectedReport_1: (newSelectedReport_1: ReportJenkins) =>
+    set({ selectedReport_1: newSelectedReport_1 }),
+  setSelectedReport_2: (newSelectedReport_2: ReportJenkins) =>
+    set({ selectedReport_2: newSelectedReport_2 }),
 }));
