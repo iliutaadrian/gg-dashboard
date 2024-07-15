@@ -13,9 +13,6 @@ interface Props {
   builds: { buildsNumber: string[]; buildsFailed: string[]; data: Build[] };
 }
 
-// 1. responsabilities
-// 2. future
-
 export const JenkinsSteps = ({ project, bookmarks, builds }: Props) => {
   return (
     <div className="p-10 max-w-5xl mx-auto flex flex-col gap-5">

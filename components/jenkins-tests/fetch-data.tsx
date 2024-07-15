@@ -13,7 +13,7 @@ import Link from "next/link";
 import { toast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { ComboList, ReportJenkins } from "@/types";
 import {
   useReportsJenkinsStore,
@@ -34,6 +34,13 @@ export const FetchData = ({ project, builds }: Props) => {
 
   const [value, setValue] = React.useState(project[0]?.value);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  useEffect(() => {
+    if (builds?.data?.length) {
+      setStep(2);
+      setReports(builds.data);
+    }
+  }, [builds, setStep]);
 
   const lastBuild = builds?.data?.length ? builds.data[builds.data.length - 1] : {
     number_of_failures: "x",
@@ -103,11 +110,6 @@ export const FetchData = ({ project, builds }: Props) => {
             setValue={setValue}
             text="Select your project..."
           />
-          <Link href="settings">
-            <Button size="icon" className="text-xl">
-              +
-            </Button>
-          </Link>
           <Button
             isLoading={isLoading}
             className="w-48"

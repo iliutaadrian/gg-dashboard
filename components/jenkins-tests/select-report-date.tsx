@@ -10,7 +10,7 @@ import {
 import { Combobox } from "@/components/ui/combobox";
 import { ReportJenkins } from "@/types";
 import { Copy } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useReportsJenkinsStore,
   useStepStore,
@@ -49,6 +49,12 @@ export const SelectReportDate = ({ builds }: Props) => {
         }))
         .sort((a: any, b: any) => b.value - a.value)
       : [];
+
+  useEffect(() => {
+    if (reports.length > 0) {
+      select_report(reports[reports.length - 4].build);
+    }
+  }, [reports]);
 
   const select_report = async (value: any) => {
     setValue(value);
@@ -107,14 +113,6 @@ Test failures before - [Build #${selected.build}](${selected.link}): ${selected.
             value={value}
             setValue={select_report}
           />
-          {/* <Button */}
-          {/*   onClick={select_report} */}
-          {/*   isLoading={isLoading} */}
-          {/*   className="w-40" */}
-          {/*   disabled={step > 1 ? false : true} */}
-          {/* > */}
-          {/*   Select Report */}
-          {/* </Button> */}
         </form>
       </CardContent>
       <CardFooter className="border-t px-6 py-4 flex flex-col gap-2">
