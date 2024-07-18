@@ -6,7 +6,7 @@ from email.header import decode_header
 from urllib.parse import urlparse
 
 import requests
-from flask import Flask, render_template, request
+from flask import Flask, jsonify, render_template, request  
 
 app = Flask(__name__)
 
@@ -154,6 +154,16 @@ def get_test_diff():
 
     return response
 
+@app.route("/get_test", methods=["GET"])
+def get_testf():
+    file_url = request.args.get("file")
+
+    file_tests = get_tests_from_file(file_url)
+        
+    file_tests_dict = [test.to_dict() for test in file_tests]
+
+    return jsonify(file_tests_dict)
+
 
 class Test:
     def __init__(self, name, number):
@@ -163,6 +173,13 @@ class Test:
 
     def __eq__(self, other):
         return self.name == other.name and self.content == other.content
+
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "number": self.number,
+            "content": self.content
+        }
 
 
 def get_tests_from_file(test_file_url):

@@ -12,7 +12,7 @@ export const Navbar = () => {
   return (
     <nav className="fixed z-20 inset-x-0 top-0 px-10 shadow-neonLight align-middle flex flex-row justify-between items-center w-full h-12 bg-background">
       <Link href={"/"} className="text-lg font-bold text-primary min-w-[200px]">
-        Jenkins Tests
+        GG Dashboard
       </Link>
       <div className="md:hidden text-muted-foreground">
         <MobileMenu navigation={navigation} />

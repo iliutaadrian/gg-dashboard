@@ -40,10 +40,11 @@ export const BuildTable = pgTable("builds", {
 });
 
 export const TestTable = pgTable("tests", {
-  id: text("id").primaryKey(),
+  id: serial("id").primaryKey(),
   build: text("build").notNull(),
+  number: integer("number").notNull(),
   name: text("name").notNull(),
-  ocurrences: text("ocurrences").notNull(),
+  content: text("content").notNull(),
 });
 
 export type Settings = typeof SettingsTable.$inferSelect;

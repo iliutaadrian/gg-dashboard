@@ -1,4 +1,4 @@
-import { Build, BuildTable, SettingsTable, db } from "@/lib/db";
+import { Build, BuildTable, SettingsTable, Test, TestTable, db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs";
 import axios from "axios";
 import { clear, debug } from "console";
@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 export async function GET(
   request: Request,
 ) {
+
   try {
     const userSettings = await db
       .select()
@@ -51,6 +52,27 @@ export async function GET(
             link: item.link,
             number_of_failures: item.number_of_failures,
             subject: item.subject,
+          })
+
+          const data = await axios
+            .get(`http://python:6969/get_test`, {
+              params: {
+                file: item.link,
+              },
+            })
+            .then((res) => {
+              return res.data;
+            });
+
+          data.forEach(async (t: Test) => {
+            await db
+              .insert(TestTable)
+              .values({
+                build: item.build,
+                number: t.number,
+                name: t.name,
+                content: t.content,
+              });
           })
         }
       }
