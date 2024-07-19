@@ -29,55 +29,51 @@ export async function GET(
       .where(eq(BuildTable.project, projects[0]));
     const builds = previousBuilds.map((item) => item.build);
 
-    try {
-      const data = await axios
-        .get(`http://python:6969/fetch_data`, {
-          params: {
-            imap_server: "imap.gmail.com",
-            email_address: userSettings[0].email,
-            password: userSettings[0].api_key,
-            project: projects[0],
-          },
+    const data = await axios
+      .get(`${process.env.PYTHON_URL}/fetch_data`, {
+        params: {
+          imap_server: "imap.gmail.com",
+          email_address: userSettings[0].email,
+          password: userSettings[0].api_key,
+          project: projects[0],
+        },
+      })
+      .then((res) => {
+        return res.data.data;
+      });
+
+    for (const item of data) {
+      if (!builds.includes(item.build)) {
+        await db.insert(BuildTable).values({
+          project: projects[0],
+          build: item.build,
+          date: item.date,
+          link: item.link,
+          number_of_failures: item.number_of_failures,
+          subject: item.subject,
         })
-        .then((res) => {
-          return res.data.data;
-        });
 
-      for (const item of data) {
-        if (!builds.includes(item.build)) {
-          await db.insert(BuildTable).values({
-            project: projects[0],
-            build: item.build,
-            date: item.date,
-            link: item.link,
-            number_of_failures: item.number_of_failures,
-            subject: item.subject,
+        const data = await axios
+          .get(`${process.env.PYTHON_URL}/get_test`, {
+            params: {
+              file: item.link,
+            },
           })
+          .then((res) => {
+            return res.data;
+          });
 
-          const data = await axios
-            .get(`http://python:6969/get_test`, {
-              params: {
-                file: item.link,
-              },
-            })
-            .then((res) => {
-              return res.data;
+        data.forEach(async (t: Test) => {
+          await db
+            .insert(TestTable)
+            .values({
+              build: item.build,
+              number: t.number,
+              name: t.name,
+              content: t.content,
             });
-
-          data.forEach(async (t: Test) => {
-            await db
-              .insert(TestTable)
-              .values({
-                build: item.build,
-                number: t.number,
-                name: t.name,
-                content: t.content,
-              });
-          })
-        }
+        })
       }
-    } catch (error) {
-      console.log(error);
     }
 
     previousBuilds = await db
@@ -93,6 +89,7 @@ export async function GET(
         status: 200,
       },
     );
+
   } catch (error) {
     console.log(error);
     return new NextResponse("Something went wrong", { status: 500 });

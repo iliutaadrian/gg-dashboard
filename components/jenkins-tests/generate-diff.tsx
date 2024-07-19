@@ -28,8 +28,8 @@ export const GenerateDiff = () => {
 
     await axios
       .post(`/api/jenkins/test-difference`, {
-        file_1: selectedReport_1.link,
-        file_2: selectedReport_2.link,
+        file_1: selectedReport_1.build,
+        file_2: selectedReport_2.build,
       })
       .then((res) => {
         if (res.status === 200) {
