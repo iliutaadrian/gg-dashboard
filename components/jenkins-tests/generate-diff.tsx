@@ -97,7 +97,7 @@ export const GenerateDiff = () => {
           </div>
         </CardTitle>
         <CardDescription>
-          Select the report date you want to compare with.
+          See test difference between selected reports and occurrences of each test in the last 10 builds.
         </CardDescription>
       </CardHeader>
       <CardContent>
