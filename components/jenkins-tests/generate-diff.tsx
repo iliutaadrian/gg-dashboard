@@ -15,11 +15,20 @@ import { toast } from "../ui/use-toast";
 import { Accordion } from "@radix-ui/react-accordion";
 import { AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 
+
+type Test = {
+  number: number;
+  name: string;
+  content: string;
+  occurrences: number;
+  occurrences_builds: string[];
+}
 export const GenerateDiff = () => {
   const { step, setStep } = useStepStore();
   const [isLoading, setIsLoading] = useState(false);
   const [value, setValue] = useState("");
-  const [data, setData] = useState({} as { number: number; name: string; content: string }[]);
+  const [testDiff, setTestDiff] = useState({} as Test[]);
+  const [otherTests, setOtherTests] = useState({} as Test[]);
   const { selectedReport_1, selectedReport_2 } = useSelectedJenkinsReportsStore();
 
   const getDiff = async (e: any) => {
@@ -33,9 +42,11 @@ export const GenerateDiff = () => {
       })
       .then((res) => {
         if (res.status === 200) {
-          setData(res.data);
+          setTestDiff(res.data.test_diff);
+          setOtherTests(res.data.other_tests);
+
           let data = `Test difference between: Build #${selectedReport_1.build} - #${selectedReport_2.build} \n\n`;
-          res.data.map((element: any) => {
+          res.data.test_diff.map((element: any) => {
             data += `${element.number}) ${element.name}\n`;
           });
           setValue(data);
@@ -62,6 +73,16 @@ export const GenerateDiff = () => {
     toast({
       description: "Test difference copied to clipboard.",
     });
+  };
+
+  const getSeverity = (number: number) => {
+    if (number > 4) {
+      return "bg-green-500";
+    } else if (number >= 2) {
+      return "bg-yellow-500";
+    } else {
+      return "bg-red-500";
+    }
   };
 
   return (
@@ -94,10 +115,11 @@ export const GenerateDiff = () => {
           </Button>
         </form>
       </CardContent>
-      <CardFooter className="border-t px-6 py-4">
-        <div className="flex flex-col items-center gap-5 w-full">
-          {data.length &&
-            data.map((element: any) => {
+      <CardFooter className="flex flex-col gap-10 border-t px-6 py-4">
+        <div className="flex flex-col gap-5 w-full">
+          Test Difference
+          {testDiff.length &&
+            testDiff.map((element: Test) => {
               return (
                 <Accordion
                   key={element.number}
@@ -108,13 +130,23 @@ export const GenerateDiff = () => {
                   <AccordionItem value={`item-${element.name}`}>
                     <AccordionTrigger>
                       <div className="flex items-center gap-5">
-                        <div className="w-10 h-10 rounded-full border-2 border-primary flex justify-center items-center">
-                          <p>{element.number}</p>
+                        <div className={`${getSeverity(element.occurrences)} w-10 h-10 rounded-full border-2 border-primary flex justify-center items-center`}>
+                          <p> {element.number}</p>
                         </div>
                         {element.name}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent>
+                    <AccordionContent className="flex flex-col gap-5">
+                      <p className="flex items-center text-md gap-2">
+                        <span className="font-bold text-primary">Occurrences</span>
+                        {element.occurrences}
+                      </p>
+
+                      <p className="flex items-center text-md gap-2">
+                        <span className="font-bold text-primary">Builds</span>
+                        {element.occurrences_builds.join(", ")}
+                      </p>
+
                       <div
                         className="bg-gray-800 text-white p-5 text-sm rounded-sm h-[200px] overflow-y-auto"
                         dangerouslySetInnerHTML={{ __html: element.content }}
@@ -127,10 +159,48 @@ export const GenerateDiff = () => {
           }
         </div>
 
-        {/* <div */}
-        {/*   className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm h-[300px] overflow-y-auto" */}
-        {/*   dangerouslySetInnerHTML={{ __html: value }} */}
-        {/* /> */}
+        <div className="flex flex-col gap-5 w-full">
+          Other Tests
+          {otherTests.length &&
+            otherTests.map((element: Test) => {
+              return (
+                <Accordion
+                  key={element.number}
+                  type="single"
+                  collapsible
+                  className="w-full"
+                >
+                  <AccordionItem value={`item-${element.name}`}>
+                    <AccordionTrigger>
+                      <div className="flex items-center gap-5">
+                        <div className={`${getSeverity(element.occurrences)} w-10 h-10 rounded-full border-2 border-primary flex justify-center items-center`}>
+                          <p> {element.number}</p>
+                        </div>
+                        {element.name}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="flex flex-col gap-5">
+                      <p className="flex items-center text-md gap-2">
+                        <span className="font-bold text-primary">Occurrences</span>
+                        {element.occurrences}
+                      </p>
+
+                      <p className="flex items-center text-md gap-2">
+                        <span className="font-bold text-primary">Builds</span>
+                        {element.occurrences_builds.join(", ")}
+                      </p>
+
+                      <div
+                        className="bg-gray-800 text-white p-5 text-sm rounded-sm h-[200px] overflow-y-auto"
+                        dangerouslySetInnerHTML={{ __html: element.content }}
+                      />
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              )
+            })
+          }
+        </div>
       </CardFooter>
     </Card>
   );

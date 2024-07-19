@@ -155,7 +155,7 @@ def get_test_diff():
     return response
 
 @app.route("/get_test", methods=["GET"])
-def get_testf():
+def get_test():
     file_url = request.args.get("file")
 
     file_tests = get_tests_from_file(file_url)
