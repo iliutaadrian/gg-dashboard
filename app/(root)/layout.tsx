@@ -1,12 +1,12 @@
 export default async function RootLayout({
-   children,
+  children,
 }: {
-    children: React.ReactNode
+  children: React.ReactNode
 }) {
 
-    return (
-        <div className="h-full">
-            {children}
-        </div>
-    )
+  return (
+    <div className="h-full">
+      {children}
+    </div>
+  )
 }

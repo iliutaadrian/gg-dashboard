@@ -1,5 +1,7 @@
 import { BuildTable, SettingsTable, db } from "@/lib/db";
+import { formatDate } from "@/lib/utils";
 import { currentUser } from "@clerk/nextjs";
+import { clear } from "console";
 import { eq } from "drizzle-orm";
 
 const getSettings = async () => {
@@ -31,6 +33,7 @@ const getSettings = async () => {
       .where(eq(BuildTable.project, "test_develop"));
     const buildsNumber = buildsQuery.map((b) => b.build);
     const buildsFailed = buildsQuery.map((b) => b.number_of_failures);
+    const builds = buildsQuery.map((b) => ({ ...b, date: formatDate(b.date) }));
 
     return {
       ...settings[0],
@@ -39,7 +42,7 @@ const getSettings = async () => {
         : [],
       bookmarks: settings[0].bookmarks ? JSON.parse(settings[0].bookmarks) : [],
       builds: {
-        data: buildsQuery,
+        data: builds,
         buildsNumber,
         buildsFailed,
       },

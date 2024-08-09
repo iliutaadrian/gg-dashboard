@@ -7,29 +7,34 @@ import { ModeToggle } from "../mode-toggle";
 import { MobileMenu } from "./mobile-menu";
 
 export const Navbar = () => {
-  const navigation = [{ name: "Settings", href: "/settings", icon: GearIcon }];
+  const navigation = [{ name: "Jenkins Test Difference", title: "Jenkins", href: "/" }];
 
   return (
-    <nav className="fixed z-20 inset-x-0 top-0 px-10 shadow-neonLight align-middle flex flex-row justify-between items-center w-full h-12 bg-background">
-      <Link href={"/"} className="text-lg font-bold text-primary min-w-[200px]">
-        GG Dashboard
-      </Link>
-      <div className="md:hidden text-muted-foreground">
-        <MobileMenu navigation={navigation} />
-      </div>
+    <nav className="fixed z-20 inset-x-0 top-0 px-10 shadow-neonLight w-full h-14 bg-background flex align-middle">
+      <div className="flex flex-row align-middle items-center w-full max-w-6xl mx-auto">
+        <Link href={"/"} className="text-lg font-bold text-primary min-w-[150px]">
+          gg <span className="text-foreground">dashboard</span>
+        </Link>
 
-      <div className="hidden text-sm md:flex flex-row gap-5 align-middle items-center justify-end w-full">
         {navigation.map((item) => (
           <Link
             key={item.name}
             href={item.href}
-            className="text-sm hover:text-primary"
+            className={`${item.href === window.location.pathname ? 'text-primary' : 'text-muted-foreground'} text-sm hover:text-primary flex gap-2 text-muted-foreground`}
           >
-            <item.icon className="w-5 h-5 hover:text-primary" />
+            {item.title}
+            {/* <item.icon className="w-5 h-5 hover:text-primary" /> */}
           </Link>
         ))}
-        <ModeToggle />
-        <UserButton afterSignOutUrl="/" />
+
+        <div className="md:hidden text-muted-foreground">
+          <MobileMenu navigation={navigation} />
+        </div>
+
+        <div className="hidden text-sm md:flex flex-row gap-5 align-middle items-center justify-end w-full">
+          <ModeToggle />
+          <UserButton afterSignOutUrl="/" />
+        </div>
       </div>
     </nav>
   );

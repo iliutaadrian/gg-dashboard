@@ -74,8 +74,8 @@ export const SelectReportDate = ({ builds }: Props) => {
 
     setMarkdown(`
 **Test Suite Status** <br />
-Test failures today - [Build #${last.build}](${last.link}): ${last.number_of_failures} failures currently <br />
-Test failures before - [Build #${selected.build}](${selected.link}): ${selected.number_of_failures} failures in the last deployment
+Test failures ${last.date} - [Build #${last.build}](${last.link}): ${last.number_of_failures} failures currently <br />
+Test failures ${selected.date} - [Build #${selected.build}](${selected.link}): ${selected.number_of_failures} failures in the last deployment
 `);
 
     setIsLoading(false);
