@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Combobox } from "@/components/ui/combobox";
-import { ReportJenkins } from "@/types";
+import { BuildFull, ReportJenkins } from "@/types";
 import { Copy } from "lucide-react";
 import React, { useEffect } from "react";
 import {
@@ -17,10 +17,9 @@ import {
   useSelectedJenkinsReportsStore,
 } from "../reports-jenkins-store";
 import { toast } from "../ui/use-toast";
-import { Build } from "@/lib/db";
 
 interface Props {
-  builds: { buildsNumber: string[]; buildsFailed: string[], data: Build[] } | null;
+  builds: BuildFull[];
 }
 
 export const SelectReportDate = ({ builds }: Props) => {
@@ -33,7 +32,7 @@ export const SelectReportDate = ({ builds }: Props) => {
 
   const [markdown, setMarkdown] = React.useState("");
 
-  const lastBuild = builds?.data?.length ? builds.data[builds.data.length - 1] : {
+  const lastBuild = builds?.length ? builds[builds.length - 1] : {
     number_of_failures: "x",
     build: "xxxx",
     date: "XXX, xx XX XX",

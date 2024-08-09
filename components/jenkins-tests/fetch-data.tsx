@@ -14,17 +14,16 @@ import { toast } from "../ui/use-toast";
 import { ToastAction } from "../ui/toast";
 import axios from "axios";
 import React, { useEffect } from "react";
-import { ComboList, ReportJenkins } from "@/types";
+import { BuildFull, ComboList, ReportJenkins } from "@/types";
 import {
   useReportsJenkinsStore,
   useStepStore,
 } from "../reports-jenkins-store";
 import { setSeconds } from "date-fns";
-import { Build } from "@/lib/db";
 
 interface Props {
   project: ComboList[];
-  builds: { buildsNumber: string[]; buildsFailed: string[], data: Build[] } | null;
+  builds: BuildFull[];
 }
 
 export const FetchData = ({ project, builds }: Props) => {
@@ -35,13 +34,13 @@ export const FetchData = ({ project, builds }: Props) => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
-    if (builds?.data?.length) {
+    if (builds?.length) {
       setStep(2);
-      setReports(builds.data);
+      setReports(builds);
     }
   }, [builds, setStep]);
 
-  const lastBuild = builds?.data?.length ? builds.data[builds.data.length - 1] : {
+  const lastBuild = builds?.length ? builds[builds.length - 1] : {
     number_of_failures: "x",
     build: "xxxx",
     date: "XXX, xx XX XX",

@@ -31,9 +31,7 @@ const getSettings = async () => {
       .select()
       .from(BuildTable)
       .where(eq(BuildTable.project, "test_develop"));
-    const buildsNumber = buildsQuery.map((b) => b.build);
-    const buildsFailed = buildsQuery.map((b) => b.number_of_failures);
-    const builds = buildsQuery.map((b) => ({ ...b, date: formatDate(b.date) }));
+    const builds = buildsQuery.map((b) => ({ ...b, date: formatDate(b.date), dateBuild: b.date }));
 
     return {
       ...settings[0],
@@ -41,11 +39,7 @@ const getSettings = async () => {
         ? settings[0].projects.split(",").map((p) => ({ value: p, label: p }))
         : [],
       bookmarks: settings[0].bookmarks ? JSON.parse(settings[0].bookmarks) : [],
-      builds: {
-        data: builds,
-        buildsNumber,
-        buildsFailed,
-      },
+      builds
     };
   } catch (error: any) {
     console.log(error);

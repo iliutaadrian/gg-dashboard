@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { UserButton } from "@clerk/nextjs";
 import { GearIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
@@ -8,6 +9,13 @@ import { MobileMenu } from "./mobile-menu";
 
 export const Navbar = () => {
   const navigation = [{ name: "Jenkins Test Difference", title: "Jenkins", href: "/" }];
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+    }
+  }, []);
 
   return (
     <nav className="fixed z-20 inset-x-0 top-0 px-10 shadow-neonLight w-full h-14 bg-background flex align-middle">
@@ -20,7 +28,7 @@ export const Navbar = () => {
           <Link
             key={item.name}
             href={item.href}
-            className={`${item.href === window.location.pathname ? 'text-primary' : 'text-muted-foreground'} text-sm hover:text-primary flex gap-2 text-muted-foreground`}
+            className={`${item.href === currentPath ? 'text-primary' : 'text-muted-foreground'} text-sm hover:text-primary flex gap-2`}
           >
             {item.title}
             {/* <item.icon className="w-5 h-5 hover:text-primary" /> */}

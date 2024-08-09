@@ -1,3 +1,5 @@
+import { Build } from "@/lib/db";
+
 export type UserClerk = {
   id: string;
   username: string | null | undefined;
@@ -22,5 +24,7 @@ export type Usage = {
   completion_tokens: number;
   total_tokens: number;
 };
+
+export type BuildFull = Build & { dateBuild: Date }
 
 export const MAX_FREE_CREDITS = 5;

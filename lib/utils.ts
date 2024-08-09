@@ -18,8 +18,6 @@ function padZero(number: number) {
 }
 
 function formatToRO(date: Date) {
-
-  // Create a formatter for the 'Europe/Bucharest' timezone
   const roFormatter = new Intl.DateTimeFormat('ro-RO', {
     timeZone: 'Europe/Bucharest',
     day: 'numeric',
