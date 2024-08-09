@@ -10,12 +10,6 @@ async function Page() {
     return null;
   }
 
-  // TODO
-  // change date forma
-  // add ocurrences to each test
-  // test copy details
-  // test copy markdown with new details
-
   return (
     <div className="flex flex-col p-10 max-w-5xl mx-auto">
       <div className="flex fles-row justify-between align-middle items-center">

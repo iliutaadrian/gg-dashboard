@@ -31,10 +31,10 @@ function formatToRO(date: Date) {
 
   // Format the date
   const parts = roFormatter.formatToParts(date);
-  const day = parts.find(part => part.type === 'day').value;
-  const month = parts.find(part => part.type === 'month').value;
-  const hour = parts.find(part => part.type === 'hour').value;
-  const minute = parts.find(part => part.type === 'minute').value;
+  const day = parts.find(part => part.type === 'day')?.value;
+  const month = parts.find(part => part.type === 'month')?.value;
+  const hour = parts.find(part => part.type === 'hour')?.value;
+  const minute = parts.find(part => part.type === 'minute')?.value;
 
   // Combine the formatted components into the desired format
   return `${day}.${month} ${hour}:${minute} RO`;
