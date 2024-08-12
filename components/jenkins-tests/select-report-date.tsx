@@ -15,8 +15,10 @@ import {
   useReportsJenkinsStore,
   useStepStore,
   useSelectedJenkinsReportsStore,
+  useSettingsStore,
 } from "../reports-jenkins-store";
 import { toast } from "../ui/use-toast";
+import { db } from "@vercel/postgres";
 
 interface Props {
   builds: BuildFull[];
@@ -25,7 +27,8 @@ interface Props {
 export const SelectReportDate = ({ builds }: Props) => {
   const { reports } = useReportsJenkinsStore();
   const { step, setStep } = useStepStore();
-  const { setSelectedReport_1, setSelectedReport_2 } = useSelectedJenkinsReportsStore();
+  const { selectedReport_1, selectedReport_2, setSelectedReport_1, setSelectedReport_2 } = useSelectedJenkinsReportsStore();
+  const { settings, setSettings } = useSettingsStore()
 
   const [value, setValue] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
@@ -55,7 +58,7 @@ export const SelectReportDate = ({ builds }: Props) => {
     }
   }, [reports]);
 
-  const select_report = async (value: any) => {
+  const select_report = async (value: any, init = false) => {
     setValue(value);
     let last = reports[reportsList.length - 1];
     let selected = reports.find((report) => report.build === value);
@@ -83,10 +86,12 @@ Test failures ${selected.date} - [Build #${selected.build}](${selected.link}): $
   };
 
   const copyMarkdown = () => {
-    navigator.clipboard.writeText(markdown.replace(/\<br \/\>/g, ""));
-    toast({
-      description: "Markdown copied to clipboard.",
-    });
+    setSettings({ ...settings, last_deploy: selectedReport_2.build }, () => {
+      navigator.clipboard.writeText(markdown.replace(/\<br \/\>/g, ""));
+      toast({
+        description: `Markdown copied to clipboard. Last deployment: #${selectedReport_2.build}.`,
+      });
+    })
   };
   return (
     <Card className="shadow-neon border-muted-foreground bg-primary/5 hover:bg-primary/10 pb-2">
@@ -100,7 +105,7 @@ Test failures ${selected.date} - [Build #${selected.build}](${selected.link}): $
           </div>
         </CardTitle>
         <CardDescription>
-          Select the report date you want to compare with.
+          Select the date of the build in the last deployment. By copying the build you set a new deployment.
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -19,11 +19,14 @@ const getSettings = async () => {
 
     if (settings.length === 0) {
       return {
-        imap: "imap.gmail.com",
-        email: "",
-        api_key: "",
-        projects: [],
-        bookmarks: [],
+        settings: {
+          imap: "imap.gmail.com",
+          email: "",
+          api_key: "",
+          projects: [],
+          bookmarks: [],
+          last_deploy: ""
+        }
       };
     }
 
@@ -34,7 +37,7 @@ const getSettings = async () => {
     const builds = buildsQuery.map((b) => ({ ...b, date: formatDate(b.date), dateBuild: b.date }));
 
     return {
-      ...settings[0],
+      settings: settings[0],
       projects: settings[0].projects
         ? settings[0].projects.split(",").map((p) => ({ value: p, label: p }))
         : [],

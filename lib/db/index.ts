@@ -27,6 +27,7 @@ export const SettingsTable = pgTable("settings", {
   api_key: text("apiKey").notNull(),
   projects: text("projects").notNull(),
   bookmarks: text("bookmarks"),
+  last_deploy: text("lastDeploy"),
 });
 
 export const BuildTable = pgTable("builds", {

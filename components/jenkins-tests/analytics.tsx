@@ -31,7 +31,7 @@ import { BuildFull } from "@/types"
 
 const chartConfig = {
   failed: {
-    label: "Failed",
+    label: "Build/Failed",
     color: "hsl(var(--chart-3))",
   },
 
@@ -41,6 +41,8 @@ interface Props {
   builds: BuildFull[]
 }
 
+// formating of each test
+// save last built
 export function Analytics({ builds }: Props) {
   const [timeRange, setTimeRange] = React.useState("7d")
   const chartData = builds.map((b) => ({ date: b.dateBuild, failed: b.number_of_failures, builds: b.build }))
@@ -60,7 +62,7 @@ export function Analytics({ builds }: Props) {
 
   return (
     <Card className="shadow-neon border-muted-foreground bg-primary/5 pb-1">
-      <CardHeader >
+      <CardHeader className="flex flex-row align-middle items-center">
         <div className="grid flex-1 gap-1 text-center sm:text-left">
           <CardTitle>
             <div className="flex items-center gap-5">
@@ -104,7 +106,8 @@ export function Analytics({ builds }: Props) {
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={filteredData}>
+          <AreaChart data={filteredData} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
+          >
             <defs>
               <linearGradient id="fillFailed" x1="0" y1="0" x2="0" y2="1">
                 <stop

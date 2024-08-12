@@ -1,4 +1,4 @@
-import { Build } from "@/lib/db";
+import { Build, Settings } from "@/lib/db";
 
 export type UserClerk = {
   id: string;
@@ -24,6 +24,14 @@ export type Usage = {
   completion_tokens: number;
   total_tokens: number;
 };
+
+export type SettingsFull =
+  {
+    settings: Settings
+    project: ComboList[];
+    bookmarks: { name: string; url: string }[];
+    builds: BuildFull[]
+  }
 
 export type BuildFull = Build & { dateBuild: Date }
 

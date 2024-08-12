@@ -17,6 +17,7 @@ import React, { useEffect } from "react";
 import { BuildFull, ComboList, ReportJenkins } from "@/types";
 import {
   useReportsJenkinsStore,
+  useSettingsStore,
   useStepStore,
 } from "../reports-jenkins-store";
 import { setSeconds } from "date-fns";
@@ -29,6 +30,8 @@ interface Props {
 export const FetchData = ({ project, builds }: Props) => {
   const { reports, setReports } = useReportsJenkinsStore();
   const { setStep } = useStepStore();
+  const { settings } = useSettingsStore()
+  const lastDeploy = settings?.last_deploy
 
   const [value, setValue] = React.useState(project[0]?.value);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -120,7 +123,7 @@ export const FetchData = ({ project, builds }: Props) => {
       <CardFooter className="border-t px-6 py-4 flex flex-col gap-2">
         {reports.length === 0 ? (
           <div className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm">
-            Last Report{" "}
+            Last Build Report{": "}
             <Link href={lastBuild.link} className="underline">
               View
             </Link>
@@ -130,7 +133,7 @@ export const FetchData = ({ project, builds }: Props) => {
           </div>
         ) : (
           <div className="bg-gray-800 text-white p-5 text-sm w-full rounded-sm">
-            Last Report{" "}
+            Last Build Report{": "}
             <Link
               href={reports[reports.length - 1].link}
               className="underline"
@@ -142,6 +145,15 @@ export const FetchData = ({ project, builds }: Props) => {
             Build #{reports[reports.length - 1].build} -{" "}
             {reports[reports.length - 1].number_of_failures} failures -{" "}
             {reports[reports.length - 1].date}
+            {lastDeploy &&
+              (
+                <>
+                  <br />
+                  <br />
+                  Last deploy build: #{lastDeploy}
+                </>
+              )
+            }
           </div>
         )}
       </CardFooter>

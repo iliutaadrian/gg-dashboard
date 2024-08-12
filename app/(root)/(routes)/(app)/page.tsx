@@ -2,6 +2,7 @@ import getSettings from "@/actions/getSettings";
 import { JenkinsSteps } from "@/components/jenkins-tests/jenkins-steps";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { SettingsFull } from "@/types";
 import Link from "next/link";
 
 async function Page() {
@@ -26,6 +27,7 @@ async function Page() {
       </div>
       <Separator className="bg-muted-foreground my-5" />
       <JenkinsSteps
+        settings={settings.settings}
         project={settings.projects}
         bookmarks={settings.bookmarks}
         builds={settings.builds}

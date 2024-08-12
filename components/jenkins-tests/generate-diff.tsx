@@ -148,7 +148,8 @@ export const GenerateDiff = () => {
                       </p>
 
                       <div
-                        className="bg-gray-800 text-white p-5 text-sm rounded-sm h-[200px] overflow-y-auto"
+                        className="bg-gray-800 text-white p-3 text-sm rounded-sm h-[200px] overflow-y-auto"
+                        style={{ whiteSpace: 'pre-wrap' }}
                         dangerouslySetInnerHTML={{ __html: element.content }}
                       />
                     </AccordionContent>
@@ -191,7 +192,8 @@ export const GenerateDiff = () => {
                       </p>
 
                       <div
-                        className="bg-gray-800 text-white p-5 text-sm rounded-sm h-[200px] overflow-y-auto"
+                        className="bg-gray-800 text-white p-3 text-sm rounded-sm h-[200px] overflow-y-auto"
+                        style={{ whiteSpace: 'pre-wrap' }}
                         dangerouslySetInnerHTML={{ __html: element.content }}
                       />
                     </AccordionContent>
