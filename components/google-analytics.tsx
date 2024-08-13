@@ -5,20 +5,10 @@ const GoogleAnalytics = () => {
   return (
     <>
       <Script
-        strategy='lazyOnload'
-        src={`https://www.googletagmanager.com/gtag/js?id=G-NRXXBD8FMG`}
+        defer
+        src="http://192.168.100.69:3017/script.js"
+        data-website-id="eb4d12ed-c8c9-45fe-9a1c-c1afed80d32c"
       />
-
-      <Script id='' strategy='lazyOnload'>
-        {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-NRXXBD8FMG', {
-              page_path: window.location.pathname,
-              });
-          `}
-      </Script>
     </>
   );
 };
