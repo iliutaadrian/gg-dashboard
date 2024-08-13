@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ReactQuery from "@/components/react-query";
 import { Analytics } from "@vercel/analytics/react";
+import GoogleAnalytics from "@/components/google-analytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <GoogleAnalytics />
       <body className={cn("bg-background", inter.className)}>
         <ReactQuery>
           <ClerkProvider>
