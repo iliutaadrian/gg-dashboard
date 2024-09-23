@@ -22,10 +22,8 @@ jobs:
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           commands: |
-            cd /DATA/Credit-Spread-Algo
+            cd /Sites/jenkins-rspec-test-difference
             git reset --hard &&
             git checkout main &&
             git pull origin main &&
-            docker compose down &&
-            docker compose rm -fsv &&
-            docker compose up --build -d
+            docker compose build && docker compose up -d

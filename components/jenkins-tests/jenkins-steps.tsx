@@ -24,7 +24,7 @@ export const JenkinsSteps = ({ settings, project, bookmarks, builds }: Props) =>
   }, [settings, setSettings]);
 
   return (
-    <div className="p-10 max-w-5xl mx-auto flex flex-col gap-5">
+    <div className="md:p-10 w-full max-w-5xl mx-auto flex flex-col gap-5">
       <Analytics builds={builds} />
       <Bookmarks bookmarks={bookmarks} />
       <FetchData project={project} builds={builds} />

@@ -19,7 +19,7 @@ export const Navbar = () => {
 
   return (
     <nav className="fixed z-20 inset-x-0 top-0 px-10 shadow-neonLight w-full h-14 bg-background flex align-middle">
-      <div className="flex flex-row align-middle items-center w-full max-w-6xl mx-auto">
+      <div className="flex flex-row align-middle items-center w-full max-w-6xl mx-auto justify-between">
         <Link href={"/"} className="text-lg font-bold text-primary min-w-[150px]">
           gg <span className="text-foreground">dashboard</span>
         </Link>

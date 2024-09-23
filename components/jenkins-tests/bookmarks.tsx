@@ -35,7 +35,7 @@ export const Bookmarks = ({ bookmarks }: Props) => {
         <CardDescription>Usefull links for your deployment</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap justify-center">
           {bookmarks.map((link) => (
             <Button key={link.name} isLoading={isLoading} className="w-40">
               <Link href={link.url} target="_blank">

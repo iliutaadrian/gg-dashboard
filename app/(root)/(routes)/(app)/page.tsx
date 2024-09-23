@@ -12,7 +12,7 @@ async function Page() {
   }
 
   return (
-    <div className="flex flex-col p-10 max-w-5xl mx-auto">
+    <div className="flex flex-col p-10 w-full max-w-5xl mx-auto">
       <div className="flex fles-row justify-between align-middle items-center">
         <div className="flex flex-col">
           <h2 className="text-2xl font-bold tracking-tight">
