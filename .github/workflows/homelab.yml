@@ -20,6 +20,7 @@ jobs:
           host: ${{ vars.HOST }}
           username: root
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
           commands: |
             cd /Sites/jenkins-rspec-test-difference
             git reset --hard &&
