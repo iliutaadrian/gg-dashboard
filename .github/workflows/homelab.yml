@@ -1,29 +1,28 @@
 name: Deploy
-
 on:
   push:
     branches:
       - main
-
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: Production
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
+      - name: Debug Environment
+        run: |
+          echo "HOST is set to: ${{ secrets.HOST || vars.HOST }}"
+          echo "SSH_PRIVATE_KEY is set: ${{ secrets.SSH_PRIVATE_KEY != '' }}"
       - name: Execute Deployment
         uses: npgy/cloudflared-ssh-action@v2.0
         with:
-          host: ${{ vars.HOST }}
+          host: ${{ secrets.HOST || vars.HOST }}
           username: root
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          password: ${{ secrets.SSH_PASSWORD }}
           commands: |
             cd /Sites/jenkins-rspec-test-difference
-            git reset --hard &&
-            git checkout main &&
-            git pull origin main &&
-            docker compose build && docker compose up -d
+            touch yes.txt
+            # git checkout main &&
+            # git pull origin main &&
+            # docker compose build && docker compose up -d
