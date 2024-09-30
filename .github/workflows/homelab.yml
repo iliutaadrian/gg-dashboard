@@ -10,11 +10,13 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+      
       - name: Debug Environment
         run: |
           echo "HOST is set to: ${{ secrets.HOST || vars.HOST }}"
           echo "SSH_PRIVATE_KEY is set: ${{ secrets.SSH_PRIVATE_KEY != '' }}"
-      - name: Execute Deployment
+      
+      - name: Deploy to Homelab via Cloudflare
         uses: npgy/cloudflared-ssh-action@v2.0
         with:
           host: ${{ secrets.HOST || vars.HOST }}
