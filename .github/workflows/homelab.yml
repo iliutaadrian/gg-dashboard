@@ -7,7 +7,6 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: Production
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -17,29 +16,15 @@ jobs:
           echo "HOST is set to: ${{ secrets.HOST || vars.HOST }}"
           echo "SSH_PRIVATE_KEY is set: ${{ secrets.SSH_PRIVATE_KEY != '' }}"
       
-      - name: Setup SSH Debug
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.HOST || vars.HOST }} >> ~/.ssh/known_hosts
-      
-      - name: Print Public Key
-        run: |
-          ssh-keygen -y -f ~/.ssh/id_rsa
-      
-      - name: Test SSH Connection
-        run: ssh -v -i ~/.ssh/id_rsa root@${{ secrets.HOST || vars.HOST }} 'echo "SSH connection successful"'
-      
       - name: Deploy to Homelab via Cloudflare
         uses: npgy/cloudflared-ssh-action@v2.0
         with:
           host: ${{ secrets.HOST || vars.HOST }}
           username: root
           private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh_options: -vvv
           commands: |
             cd /Sites/jenkins-rspec-test-difference
-            touch yes.txt
-            # git checkout main &&
-            # git pull origin main &&
-            # docker compose build && docker compose up -d
+            git checkout main
+            git pull origin main
+            docker compose build && docker compose up -d
