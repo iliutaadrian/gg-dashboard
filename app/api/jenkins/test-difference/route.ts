@@ -20,8 +20,8 @@ export async function POST(request: Request) {
   try {
     const builds = [] as string[]
 
-    // take last 10 builds
-    for (let i = 0; i < 10; i++) {
+    // take last 20 builds
+    for (let i = 0; i < 30; i++) {
       builds.push((parseInt(file_2) - i).toString());
     }
 

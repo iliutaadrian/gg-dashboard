@@ -15,7 +15,6 @@ import { toast } from "../ui/use-toast";
 import { Accordion } from "@radix-ui/react-accordion";
 import { AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 
-
 type Test = {
   number: number;
   name: string;
@@ -47,7 +46,7 @@ export const GenerateDiff = () => {
 
           let data = `Test difference between: Build #${selectedReport_1.build} - ${selectedReport_1.date} -> #${selectedReport_2.build} - ${selectedReport_2.date} \n\n`;
           res.data.test_diff.map((element: any) => {
-            data += `${element.number}) ${element.name} - ${element.occurrences}/10: ${element.occurrences_builds}\n`;
+            data += `${element.number}) ${element.name} - ${element.occurrences}/30: ${element.occurrences_builds}\n`;
           });
           setValue(data);
           toast({
@@ -133,7 +132,7 @@ export const GenerateDiff = () => {
                         <div className={`${getSeverity(element.occurrences)} w-10 h-10 rounded-full border-2 border-primary flex justify-center items-center`}>
                           <p> {element.number}</p>
                         </div>
-                        {element.name} {element.occurrences}/10
+                        {element.name} {element.occurrences}/30
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="flex flex-col gap-5">
@@ -177,7 +176,7 @@ export const GenerateDiff = () => {
                         <div className={`${getSeverity(element.occurrences)} w-10 h-10 rounded-full border-2 border-primary flex justify-center items-center`}>
                           <p> {element.number}</p>
                         </div>
-                        {element.name} {element.occurrences}/10
+                        {element.name} {element.occurrences}/30
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="flex flex-col gap-5">
