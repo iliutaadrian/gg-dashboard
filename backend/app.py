@@ -38,10 +38,13 @@ def fetch_data():
     mail = connect_to_gmail(imap_server, email_address, password)
     mail.select(mailbox)
 
-    email_ids = search_emails(mail, mailbox, search_criteria, num_emails=4)
+    email_ids = search_emails(mail, mailbox, search_criteria, num_emails=20)
     email_data_list = fetch_and_parse_emails(
         mail, email_ids, link_pattern, failures_pattern
     )
+
+    for email_info in email_data_list:
+        print(email_info)
 
     mail.logout()
 

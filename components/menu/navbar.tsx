@@ -8,7 +8,10 @@ import { ModeToggle } from "../mode-toggle";
 import { MobileMenu } from "./mobile-menu";
 
 export const Navbar = () => {
-  const navigation = [{ name: "Jenkins Test Difference", title: "Jenkins", href: "/" }];
+  const navigation = [
+    { name: "GG Docs", title: "Search", href: "/" },
+    { name: "Jenkins Test Difference", title: "Tests", href: "/tests" }
+  ];
   const [currentPath, setCurrentPath] = useState("");
 
   useEffect(() => {
@@ -24,16 +27,17 @@ export const Navbar = () => {
           gg <span className="text-foreground">dashboard</span>
         </Link>
 
-        {navigation.map((item) => (
-          <Link
-            key={item.name}
-            href={item.href}
-            className={`${item.href === currentPath ? 'text-primary' : 'text-muted-foreground'} text-sm hover:text-primary flex gap-2`}
-          >
-            {item.title}
-            {/* <item.icon className="w-5 h-5 hover:text-primary" /> */}
-          </Link>
-        ))}
+        <div className="flex gap-8">
+          {navigation.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`${item.href === currentPath ? 'text-primary' : 'text-muted-foreground'} text-sm hover:text-primary flex gap-2`}
+            >
+              {item.title}
+            </Link>
+          ))}
+        </div>
 
         <div className="md:hidden text-muted-foreground">
           <MobileMenu navigation={navigation} />
