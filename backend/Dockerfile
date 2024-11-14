@@ -1,23 +1,34 @@
-## docker build -t ggtestcheck .
-## docker run -d -p 6969:6969 ggtestcheck
+# Use an official Python runtime as a parent image
+FROM python:3.9-slim-buster
 
-# Use the official Python image as base
-FROM python:3.9-slim
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the dependencies file to the working directory
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libc6-dev \
+    libffi-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip and install wheel
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# Copy the requirements file into the container
 COPY requirements.txt .
 
-# Install any dependencies
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code to the working directory
+# Copy the current directory contents into the container at /app
 COPY . .
 
-# Expose port 6969
 EXPOSE 6969
 
-# Command to run the Flask app
+# Run app.py when the container launches
 CMD ["python", "app.py"]
