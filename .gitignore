@@ -46,3 +46,5 @@ next-env.d.ts
 
 # GG docs
 /docs
+
+/backend/docs
