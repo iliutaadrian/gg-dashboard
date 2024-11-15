@@ -3,8 +3,8 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
-from config import DATA_FOLDER
-from search.syntactic_helper import find_snippet, highlight_terms
+from config.config import DATA_FOLDER
+from .syntactic_helper import find_snippet, highlight_terms
 from collections import defaultdict
 
 embeddings = OpenAIEmbeddings(model="text-embedding-3-small")

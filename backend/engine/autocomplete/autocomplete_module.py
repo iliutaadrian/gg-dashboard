@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from config.config import DATA_FOLDER
 import numpy as np
 
-from search.syntactic_helper import clear_text 
+from engine.search.syntactic_helper import clear_text 
 
 AUTOCOMPLETE_DB_PATH = os.path.join(DATA_FOLDER, 'autocomplete.db')
 MAX_PHRASE_LENGTH = 5

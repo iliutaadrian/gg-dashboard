@@ -2,12 +2,12 @@ import os
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import normalize
-from config import DATA_FOLDER
+from config.config import DATA_FOLDER
 import re
 import faiss
 from scipy.sparse import csr_matrix
 
-from search.syntactic_helper import clear_text, find_snippet, highlight_terms
+from .syntactic_helper import clear_text, find_snippet, highlight_terms
 
 documents = None
 tfidf_vectorizer = None

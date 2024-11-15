@@ -7,6 +7,9 @@ services:
       - "6969:6969"
     networks:
       - gg-network
+    volumes:
+      - ./backend/docs:/app/docs:ro
+      - ./backend/data:/app/data
     env_file:
       - ./backend/.env
     environment:
@@ -14,32 +17,32 @@ services:
       - CORS_ORIGIN=http://localhost:3000
     restart: unless-stopped
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    networks:
-      - gg-network
-    depends_on:
-      - backend
-    environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://backend:6969
-    restart: unless-stopped
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - gg-network
+  #   depends_on:
+  #     - backend
+  #   environment:
+  #     - NODE_ENV=development
+  #     - NEXT_PUBLIC_API_URL=http://backend:6969
+  #   restart: unless-stopped
 
-  cron-service:
-    build:
-      context: ./cronjob
-      dockerfile: Dockerfile
-    volumes:
-      - ./cronjob:/app
-    networks:
-      - gg-network
-    depends_on:
-      - frontend
-    restart: unless-stopped
+  # cron-service:
+  #   build:
+  #     context: ./cronjob
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./cronjob:/app
+  #   networks:
+  #     - gg-network
+  #   depends_on:
+  #     - frontend
+  #   restart: unless-stopped
 
 networks:
   gg-network:

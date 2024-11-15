@@ -1,14 +1,21 @@
 from flask import Blueprint, jsonify, request
+import json
+
+from engine.search.search_module import perform_search
+from engine.autocomplete.autocomplete_module import get_autocomplete_suggestions, update_click_count
+from engine.llm.llm_module import generate_ai_response
 
 search_routes = Blueprint('search_routes', __name__)
+
 
 @search_routes.route('/', methods=['GET'])
 def search():
     query = request.args.get('q', '')
-    aggregation_method = request.args.get('aggregationMethod', 'single')
-    syntactic_methods = json.loads(request.args.get('syntacticMethods', '[]'))
-    semantic_methods = json.loads(request.args.get('semanticMethods', '[]'))
-    options = json.loads(request.args.get('options', '[]'))
+    aggregation_method = request.args.get('aggregationMethod', 'rank_fusion')
+    
+    syntactic_methods = ['bm25']
+    semantic_methods = ['openai']
+    options = []
 
     if not query:
         return jsonify({"error": "No query provided"}), 400
@@ -17,16 +24,13 @@ def search():
 
     search_methods = syntactic_methods + semantic_methods
 
-    if 'caching' in options:
-        cached_results = get_results(query, aggregation_method, search_methods, options)
-        if cached_results:
-            return jsonify(cached_results)
+    # if 'caching' in options:
+    #     cached_results = get_results(query, aggregation_method, search_methods, options)
+    #     if cached_results:
+    #         return jsonify(cached_results)
 
     results = perform_search(query, aggregation_method, syntactic_methods, semantic_methods)
-    
-    if 'popularity_rank' in options:
-        results = apply_popularity_ranking(results)
-    
+
     ai_response = None
     if 'ai_assist' in options:
         ai_response = generate_ai_response(query, results[:3])
@@ -36,8 +40,8 @@ def search():
         "ai_response": ai_response.get('full_content', '') if ai_response else None
     }
 
-    if 'caching' in options:
-        store_results(query, aggregation_method, search_methods, options, results, response.get('ai_response'))
+    # if 'caching' in options:
+    #     store_results(query, aggregation_method, search_methods, options, results, response.get('ai_response'))
     
     return jsonify(response)
 

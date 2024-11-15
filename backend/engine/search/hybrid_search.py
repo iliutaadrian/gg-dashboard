@@ -1,5 +1,5 @@
-from search.bm25_search import init as init_bm25, search as search_bm25
-from search.openai_search import init as init_openai, search as search_openai
+from .bm25_search import init as init_bm25, search as search_bm25
+from .openai_search import init as init_openai, search as search_openai
 from collections import defaultdict
 
 METHOD_WEIGHTS = {

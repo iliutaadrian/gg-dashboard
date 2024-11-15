@@ -13,6 +13,7 @@ sys.path.extend([
 
 from document_processor import init_processor
 from search_module import init_search_module
+from autocomplete.autocomplete_module import init_autocomplete
 
 app = Flask(__name__)
 
@@ -45,8 +46,8 @@ if __name__ == "__main__":
     # print("\nInitializing cache module", flush=True)
     # init_cache_module()
 
-    # print("\nInitializing autocomplete module", flush=True)
-    # init_autocomplete(documents, indexed_count)
+    print("\nInitializing autocomplete module", flush=True)
+    init_autocomplete(documents, indexed_count)
 
     # print("\nInitializing LLM module", flush=True)
     # init_llm()

@@ -4,7 +4,7 @@ import markdown
 from PyPDF2 import PdfReader
 import re
 from bs4 import BeautifulSoup
-from config import DATA_FOLDER, DB_PATH, DOCS_FOLDER
+from config.config import DATA_FOLDER, DB_PATH, DOCS_FOLDER
 from docx import Document 
 
 from search.syntactic_helper import clear_text
