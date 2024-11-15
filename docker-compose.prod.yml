@@ -1,0 +1,48 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "6969:6969"
+    networks:
+      - gg-network
+    volumes:
+      - ./backend/docs:/app/docs:ro
+      - ./backend/data:/app/data
+    env_file:
+      - ./backend/.env.production
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CORS_ORIGIN=https://yourdomain.com
+    restart: unless-stopped
+    
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3000:3000"
+    networks:
+      - gg-network
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+    depends_on:
+      - backend
+
+  cron-service:
+    build:
+      context: ./cronjob
+      dockerfile: Dockerfile
+    volumes:
+      - ./cronjob:/app
+    networks:
+      - gg-network
+    depends_on:
+      - frontend
+    restart: unless-stopped
+
+networks:
+  gg-network:
+    name: gg-dashboard-network

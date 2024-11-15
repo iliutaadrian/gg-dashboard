@@ -1,13 +1,16 @@
+version: '3.8'
+
 services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: ${BACKEND_DOCKERFILE:-Dockerfile.dev}
     ports:
       - "6969:6969"
     networks:
       - gg-network
     volumes:
+      - ./backend:/app
       - ./backend/docs:/app/docs:ro
       - ./backend/data:/app/data
     env_file:
@@ -15,35 +18,28 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - CORS_ORIGIN=http://localhost:3000
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
     restart: unless-stopped
-
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - gg-network
-  #   depends_on:
-  #     - backend
-  #   environment:
-  #     - NODE_ENV=development
-  #     - NEXT_PUBLIC_API_URL=http://backend:6969
-  #   restart: unless-stopped
-
-  # cron-service:
-  #   build:
-  #     context: ./cronjob
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./cronjob:/app
-  #   networks:
-  #     - gg-network
-  #   depends_on:
-  #     - frontend
-  #   restart: unless-stopped
+    
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: ${FRONTEND_DOCKERFILE:-Dockerfile.dev}
+    ports:
+      - "3000:3000"
+    networks:
+      - gg-network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:6969
+    depends_on:
+      - backend
 
 networks:
   gg-network:
-    name: gg-dashboard-network
+    driver: bridge
