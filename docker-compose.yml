@@ -1,35 +1,46 @@
 services:
-  python:
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - "6969:6969"
     networks:
-      - my-network
+      - gg-network
+    env_file:
+      - ./backend/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CORS_ORIGIN=http://localhost:3000
     restart: unless-stopped
 
-  nextjs:
+  frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     networks:
-      - my-network
+      - gg-network
     depends_on:
-      - python
+      - backend
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://backend:6969
     restart: unless-stopped
 
-  cron-tests:
+  cron-service:
     build:
       context: ./cronjob
       dockerfile: Dockerfile
+    volumes:
+      - ./cronjob:/app
     networks:
-      - my-network
+      - gg-network
     depends_on:
-      - nextjs
+      - frontend
     restart: unless-stopped
 
 networks:
-  my-network:
+  gg-network:
+    name: gg-dashboard-network
