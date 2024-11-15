@@ -1,34 +1,35 @@
 // app/api/search/route.ts
-import { HybridSearch } from "@/lib/search";
+import { currentUser } from "@clerk/nextjs";
+import axios from "axios";
 import { NextResponse } from "next/server";
 
-let searchEngine: HybridSearch | null = null;
-
 export async function GET(request: Request) {
+  const user = await currentUser();
+  if (!user) {
+    return new NextResponse("Unauthorized", { status: 401 });
+  }
+
+  const { searchParams } = new URL(request.url);
+  const query = searchParams.get("q") || "";
+  const aggregationMethod = searchParams.get("aggregationMethod") || "rank_fusion";
+  const syntacticMethods = ["bm25"];
+  const semanticMethods = ["openai"];
+  const options = ["ai_assist"];
+
   try {
-    const { searchParams } = new URL(request.url);
-    const query = searchParams.get("q");
+    const response = await axios.get(`${process.env.PYTHON_URL}/api/search`, {
+      params: {
+        q: query,
+        aggregationMethod,
+        syntacticMethods: JSON.stringify(syntacticMethods),
+        semanticMethods: JSON.stringify(semanticMethods),
+        options: JSON.stringify(options)
+      }
+    });
 
-    if (!query) {
-      return NextResponse.json(
-        { error: "Query parameter is required" },
-        { status: 400 }
-      );
-    }
-
-    if (!searchEngine) {
-      searchEngine = new HybridSearch();
-      await searchEngine.initialize();
-    }
-
-    const results = await searchEngine.search(query);
-
-    return NextResponse.json(results);
+    return NextResponse.json(response.data);
   } catch (error) {
-    console.error('Search error:', error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    console.error("Search error:", error);
+    return new NextResponse("Search failed", { status: 500 });
   }
 }

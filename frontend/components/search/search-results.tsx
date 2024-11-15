@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Settings, BookOpen, FileText, BarChart3, Brain } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import axios from 'axios';
+import { useDebounce } from '@/hooks/use-debounce';
+import { FilePreview } from '@/components/search/file-preview';
+import SearchInput from './search-input';
+
+const getDocumentCategory = (path) => {
+  const categoryMap = {
+    '/app/docs/wiki': 'wiki',
+    '/app/docs/kb': 'kb',
+    '/app/docs/reports': 'reports'
+  };
+  return Object.entries(categoryMap).find(([prefix]) => path.startsWith(prefix))?.[1] || 'other';
+};
 
 const tabs = [
   { id: 'all', label: 'All', icon: Search },
@@ -12,109 +25,172 @@ const tabs = [
   { id: 'reports', label: 'Reports', icon: BarChart3 },
 ];
 
-const mockResults = [
-  {
-    title: "Jenkins Test Implementation Guide",
-    snippet: "A comprehensive guide on implementing automated testing using Jenkins. This document covers test configuration, pipeline setup, and best practices for continuous integration.",
-    type: "wiki",
-    url: "#"
-  },
-  {
-    title: "Test Failure Analysis Documentation",
-    snippet: "Learn how to analyze and debug test failures in the CI/CD pipeline. Includes common failure patterns and troubleshooting steps.",
-    type: "kb",
-    url: "#"
-  },
-  {
-    title: "Q4 2023 Test Coverage Report",
-    snippet: "Detailed analysis of test coverage across all microservices. Includes metrics on code coverage, test success rates, and areas for improvement.",
-    type: "reports",
-    url: "#"
-  },
-];
+export const SearchResults = () => {
+  const [activeTab, setActiveTab] = useState('all');
+  const [query, setQuery] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [results, setResults] = useState([]);
+  const [aiSummary, setAiSummary] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [preview, setPreview] = useState(null);
 
-const SearchResults = () => {
-  const [activeTab, setActiveTab] = React.useState('all');
-  const [searchQuery, setSearchQuery] = React.useState('Jenkins Test Implementation');
+  const debouncedQuery = useDebounce(query, 300);
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (debouncedQuery.length < 2) {
+        setSuggestions([]);
+        return;
+      }
+
+      try {
+        const response = await axios.get(`/api/autocomplete?q=${debouncedQuery}`);
+        setSuggestions(response.data);
+      } catch (error) {
+        console.error('Failed to fetch suggestions:', error);
+        setSuggestions([]);
+      }
+    };
+
+    fetchSuggestions();
+  }, [debouncedQuery]);
+
+  const handleSearch = async (searchQuery = query) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`/api/search?q=${searchQuery}`);
+      const resultsWithCategories = response.data.search_results.map(result => ({
+        ...result,
+        category: getDocumentCategory(result.path)
+      }));
+      setResults(resultsWithCategories);
+      setAiSummary(response.data.ai_response);
+      setSuggestions([]);
+    } catch (error) {
+      console.error('Search failed:', error);
+    }
+    setLoading(false);
+  };
+
+  const handlePreview = (result) => {
+    const filePath = result.path.replace('/app/docs/', '');
+    const fileType = filePath.split('.').pop().toLowerCase();
+
+    if (['pdf', 'docx', 'md'].includes(fileType)) {
+      setPreview({
+        fileUrl: `http://localhost:6969/docs/${filePath}`,
+        fileType,
+        title: filePath,
+        content: result.highlighted_content
+
+      });
+    }
+  };
+
+  const filteredResults = results.filter(result =>
+    activeTab === 'all' || result.category === activeTab
+  );
 
   return (
     <div className="min-h-screen bg-background">
       <div className="flex flex-col items-center justify-start pt-12 px-4">
-        <div className="text-4xl font-bold mb-8">
-          <span className="text-white">GG</span>
+        <div className="text-5xl font-bold mb-8">
+          <span className="text-primary">GG</span>
           {' '}
-          <span className="text-muted-foreground">Docs</span>
-        </div>
-        
-        <div className="w-full max-w-3xl mb-8">
-          <div className="relative">
-            <Input 
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-12 pl-12 pr-12 bg-primary/5 border-muted-foreground hover:bg-primary/10 focus:ring-primary"
-            />
-            <Search className="absolute left-4 top-3.5 h-5 w-5 text-muted-foreground" />
-            <Settings className="absolute right-4 top-3.5 h-5 w-5 text-muted-foreground cursor-pointer hover:text-primary" />
-          </div>
+          <span className="text-foreground">Docs</span>
         </div>
 
-        {/* AI Summary */}
-        <Card className="w-full max-w-3xl mb-6 bg-primary/5 border-muted-foreground">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 mb-3">
-              <Brain className="h-5 w-5 text-primary" />
-              <span className="text-sm font-semibold text-primary">AI Summary</span>
-            </div>
-            <p className="text-muted-foreground text-sm">
-              Based on the search results, Jenkins test implementation involves setting up automated testing pipelines with proper configuration. The documentation covers both basic setup and advanced troubleshooting. Key aspects include continuous integration practices, test failure analysis, and maintaining high test coverage across services. Recent reports indicate a focus on improving code coverage and test reliability.
-            </p>
-          </CardContent>
-        </Card>
+        <SearchInput
+          query={query}
+          setQuery={setQuery}
+          loading={loading}
+          handleSearch={handleSearch}
+          suggestions={suggestions}
+          setSuggestions={setSuggestions}
+        />
 
-        {/* Tabs */}
+        {preview && (
+          <FilePreview
+            isOpen={!!preview}
+            onClose={() => setPreview(null)}
+            {...preview}
+          />
+        )}
+
+        {aiSummary && (
+          <Card className="w-full max-w-3xl mb-6 bg-primary/5 border-muted-foreground">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 mb-3">
+                <Brain className="h-5 w-5 text-primary" />
+                <span className="text-sm font-semibold text-primary">AI Summary</span>
+              </div>
+              <p className="text-foreground text-sm">{aiSummary}</p>
+            </CardContent>
+          </Card>
+        )}
+
         <div className="flex w-full max-w-3xl border-b border-muted-foreground mb-6">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={cn(
-                "flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors",
-                activeTab === tab.id
-                  ? "border-primary text-primary"
-                  : "border-transparent text-muted-foreground hover:text-white hover:border-muted-foreground"
-              )}
-            >
-              <tab.icon className="h-4 w-4" />
-              {tab.label}
-            </button>
-          ))}
+          {tabs.map((tab) => {
+            const count = results.filter(r =>
+              tab.id === 'all' ? true : r.category === tab.id
+            ).length;
+
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors",
+                  activeTab === tab.id
+                    ? "border-primary text-primary"
+                    : "border-transparent text-muted-foreground hover:text-white hover:border-muted-foreground"
+                )}
+              >
+                <tab.icon className="h-4 w-4" />
+                {tab.label}
+                {count > 0 && (
+                  <span className="ml-1 text-xs bg-primary/20 text-primary px-1.5 py-0.5 rounded-full">
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Search Results */}
         <div className="w-full max-w-3xl space-y-4">
-          {mockResults
-            .filter(result => activeTab === 'all' || result.type === activeTab)
-            .map((result, index) => (
-              <Card 
-                key={index} 
+          {loading ? (
+            <div className="text-center text-muted-foreground">Searching...</div>
+          ) : filteredResults.length > 0 ? (
+            filteredResults.map((result, index) => (
+              <Card
+                key={index}
                 className="bg-primary/5 border-muted-foreground hover:bg-primary/10 transition-colors cursor-pointer"
+                onClick={() => handlePreview(result)}
               >
                 <CardContent className="pt-6">
-                  <h3 className="text-lg font-semibold text-white mb-2">
-                    {result.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {result.snippet}
-                  </p>
+                  <h3
+                    className="text-lg font-semibold text-white mb-2"
+                    dangerouslySetInnerHTML={{ __html: result.highlighted_name }}
+                  />
+                  <p
+                    className="text-sm text-muted-foreground"
+                    dangerouslySetInnerHTML={{ __html: result.content_snippet }}
+                  />
                   <div className="flex items-center gap-2 mt-3">
+                    <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary capitalize">
+                      {result.category}
+                    </span>
                     <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
-                      {result.type.toUpperCase()}
+                      Score: {Math.round(result.relevance_score)}
                     </span>
                   </div>
                 </CardContent>
               </Card>
-            ))}
+            ))
+          ) : query && (
+            <div className="text-center text-muted-foreground">No results found</div>
+          )}
         </div>
       </div>
     </div>

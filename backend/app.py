@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, send_from_directory
 from routes.test_routes import test_routes
 from routes.search_routes import search_routes
 from dotenv import load_dotenv
@@ -29,6 +29,10 @@ app = Flask(__name__)
 app.register_blueprint(test_routes, url_prefix='/api/tests')
 app.register_blueprint(search_routes, url_prefix='/api/search')
 
+@app.route("/docs/<path:filepath>")
+def serve_docs(filepath):
+    return send_from_directory('docs', filepath)
+
 @app.route("/")
 def index():
     return render_template("index.html", data=[])
@@ -36,9 +40,6 @@ def index():
 if __name__ == "__main__":
     print("\nInitializing documents", flush=True)
     indexed_count, documents = init_processor()
-
-    print(indexed_count)
-    print(documents)
 
     print("\nInitializing search module", flush=True)
     init_search_module(documents)
