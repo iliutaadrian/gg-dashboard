@@ -37,7 +37,7 @@ def search():
     
     response = {
         "search_results": results[:10],
-        "ai_response": ai_response.get('full_content', '') if ai_response else None
+        "ai_response": ai_response.get('full_content', 'test ai response') if ai_response else None
     }
 
     # if 'caching' in options:
@@ -52,12 +52,13 @@ def autocomplete():
         return jsonify([])
     
     suggestions = get_autocomplete_suggestions(query)
+    print(suggestions, flush=True)
     return jsonify(suggestions)
 
 @search_routes.route('/update_click_count', methods=['POST'])
 def update_click():
     data = request.json
-    phrase = data.get('phrase')
+    phrase = data.get('query')
     if not phrase:
         return jsonify({"error": "No phrase provided"}), 400
     
