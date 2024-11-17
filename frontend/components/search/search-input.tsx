@@ -6,10 +6,12 @@ import axios from 'axios';
 
 interface SearchInputProps {
   onSearch: (query: string) => Promise<void>;
+  className?: string;
+  initialQuery?: string;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({ onSearch }) => {
-  const [query, setQuery] = useState('');
+const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQuery = '' }) => {
+  const [query, setQuery] = useState(initialQuery);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [shouldFetchSuggestions, setShouldFetchSuggestions] = useState(true);
@@ -17,6 +19,10 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
+
   const closeSuggestions = () => {
     setSuggestions([]);
     setShouldFetchSuggestions(false);
@@ -125,7 +131,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch }) => {
   };
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} className={className}>
       <div className="relative">
         <Input
           ref={inputRef}
