@@ -27,7 +27,7 @@ const tabs = [
 const getDocumentCategory = (path) => {
   const categoryMap = {
     '/app/docs/wiki': 'wiki',
-    '/app/docs/kb': 'kb',
+    '/app/docs/kb/articles': 'kb',
     '/app/docs/reports': 'reports'
   };
   return Object.entries(categoryMap).find(([prefix]) => path.startsWith(prefix))?.[1] || 'other';
@@ -147,7 +147,7 @@ const SearchInterface = () => {
     <div className="min-h-screen bg-background">
       <div className="flex flex-col items-center justify-start px-6 py-16">
         <div className="w-full max-w-5xl mx-auto">
-          <div className="text-5xl font-bold mb-10 text-center">
+          <div className="text-6xl font-bold mb-10 text-center">
             <span className="text-primary">GG</span>
             {' '}
             <span className="text-foreground">Docs</span>

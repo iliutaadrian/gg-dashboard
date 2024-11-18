@@ -9,9 +9,9 @@ llm = None
 def init_llm():
     global llm
     llm = ChatOpenAI(
-        model_name="gpt-4o", 
+        model_name="gpt-3.5-turbo", 
         temperature=0.2,
-        max_tokens=2000
+        max_tokens=1000
     )
 
 def prepare_context(search_results, max_chars=2000):

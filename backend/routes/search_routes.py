@@ -16,7 +16,7 @@ def search():
     
     syntactic_methods = ['bm25']
     semantic_methods = ['openai']
-    options = ['ai_assist', 'caching']
+    options = ['ai_assist']
 
     if not query:
         return jsonify({"error": "No query provided"}), 400
