@@ -14,14 +14,14 @@ const tabs = [
   { id: 'reports', label: 'Reports', icon: BarChart3 },
 ];
 
-const popularSearches = [
-  { icon: '📱', query: 'mobile app development guidelines' },
-  { icon: '🔒', query: 'security best practices' },
-  { icon: '🚀', query: 'deployment procedures' },
-  { icon: '📊', query: 'quarterly reports 2024' },
-  { icon: '⚡', query: 'performance optimization' },
-  { icon: '🔍', query: 'code review checklist' },
-];
+  const popularSearches = [
+    { icon: '🚀', query: 'what are the ggstest deploy commands' },
+    { icon: '🗄️', query: 'fix postgress error export' },
+    { icon: '☁️', query: 'who do i contact to get aws access' },
+    { icon: '🌳', query: 'what type of branches can we have on github' },
+    { icon: '🎨', query: 'what class should i use for a small button' },
+    { icon: '💻', query: 'how to install setup onlocalhost' }
+  ];
 
 const getDocumentCategory = (path) => {
   const categoryMap = {
@@ -43,6 +43,7 @@ const SearchInterface = () => {
   const handleSearch = async (searchQuery) => {
     setLoading(true);
     setCurrentQuery(searchQuery); // Update the current query
+    setAiSummary('');
     try {
       const response = await axios.get(`/api/search?q=${searchQuery}`);
       const resultsWithCategories = response.data.search_results.map(result => ({

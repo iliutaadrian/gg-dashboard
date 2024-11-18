@@ -2,8 +2,8 @@ import re
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from nltk.util import ngrams
+from nltk.stem import PorterStemmer
+from typing import List, Set
 
 nltk.download('punkt_tab')
 nltk.download('punkt')
@@ -11,32 +11,62 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 
+# Initialize global objects (more efficient than creating them each time)
+STEMMER = PorterStemmer()
+STOP_WORDS = set(stopwords.words('english'))
 
-def clear_text(text):
-    # This function should mimic the preprocessing steps used for the documents
-    # You may need to import necessary libraries (e.g., nltk) at the top of the file
+# Add custom stop words that might not be helpful for search
+CUSTOM_STOP_WORDS = {
+    'etc', 'eg', 'ie', 'example', 'use', 'using', 'used', 'would', 'could', 
+    'should', 'may', 'might', 'must', 'shall'
+}
+STOP_WORDS.update(CUSTOM_STOP_WORDS)
 
+def get_custom_stop_words() -> Set[str]:
+    """
+    Return the combined set of stop words.
+    This can be useful for debugging or adjusting stop words.
+    """
+    return STOP_WORDS
+
+def clean_text(text, use_stemming = True): 
+    if not isinstance(text, str):
+        return ""
+    
     # Convert to lowercase
     text = text.lower()
     
+    # Remove URLs
+    text = re.sub(r'http[s]?://\S+', '', text)
+    
+    # Remove email addresses
+    text = re.sub(r'\S+@\S+', '', text)
+    
+    # Remove special characters and digits, replace with space
+    text = re.sub(r'[^a-z\s]', ' ', text)
+    
+    # Remove extra whitespace
+    text = ' '.join(text.split())
+    
     # Tokenize
-    tokens = word_tokenize(text)
+    try:
+        tokens = word_tokenize(text)
+    except Exception as e:
+        print(f"Tokenization error: {e}")
+        tokens = text.split()
     
-    # Remove stop words
-    stop_words = set(stopwords.words('english'))
-    tokens = [token for token in tokens if token not in stop_words]
+    # Process tokens
+    processed_tokens = []
+    for token in tokens:
+        if (len(token) >= 2 and  # Skip single characters
+            token not in STOP_WORDS):  # Skip stop words
+            if use_stemming:
+                token = STEMMER.stem(token)
+            if token:  # Only add non-empty tokens
+                processed_tokens.append(token)
     
-    # Lemmatization
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_tokens = [lemmatizer.lemmatize(token) for token in tokens]
-    
-    # Generate bigrams
-    bigrams = [' '.join(bg) for bg in ngrams(lemmatized_tokens, 2)]
-    
-    # Combine lemmatized tokens and bigrams
-    processed_text = ' '.join(lemmatized_tokens + bigrams)
-    
-    return processed_text
+    # Join tokens back together
+    return ' '.join(processed_tokens)
 
 def find_snippet(text, query, snippet_length=100):
     query_terms = query.lower().split()

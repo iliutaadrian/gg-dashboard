@@ -7,7 +7,7 @@ from config.config import DATA_FOLDER
 from .syntactic_helper import find_snippet, highlight_terms
 from collections import defaultdict
 
-embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
 documents = None
 vector_store = None
 FAISS_INDEX_PATH = os.path.join(DATA_FOLDER, "faiss_openai_index")
@@ -28,7 +28,7 @@ def init(docs):
 
 def create_new_index(docs):
     langchain_docs = [
-        Document(page_content=doc['content'], metadata={"path": doc['path'], "name": doc['name']})
+        Document(page_content=doc['original_content'], metadata={"path": doc['path'], "name": doc['name']})
         for doc in docs
     ]
     
