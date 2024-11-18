@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from typing import List, Dict, Any
+import re
 
 from langchain_community.document_loaders import (
     UnstructuredMarkdownLoader,
@@ -66,7 +67,7 @@ def extract_doc_name(path: str) -> str:
     """Extract and clean document name from path"""
     file_name = os.path.basename(path)
     file_name = os.path.splitext(file_name)[0]
-    file_name = file_name.replace('[TMS][REPORT]', '').replace('[TMS][Report]', '')
+    file_name = re.sub(r'\[.*?\]', '', file_name)
     return file_name.strip()
 
 def index_documents() -> int:

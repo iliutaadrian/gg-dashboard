@@ -6,6 +6,7 @@ import axios from 'axios';
 import SearchInput from './search-input';
 import SearchResult from './search-result';
 import { FilePreview } from './file-preview';
+import AIResponse from './ai-response';
 
 const tabs = [
   { id: 'all', label: 'All', icon: Search },
@@ -152,7 +153,7 @@ const SearchInterface = () => {
             <span className="text-foreground">Docs</span>
           </div>
 
-          <div className="w-full mb-5">
+          <div className="w-full mb-10">
             <SearchInput 
               onSearch={handleSearch} 
               className="w-full"
@@ -160,17 +161,8 @@ const SearchInterface = () => {
             />
           </div>
 
-          {aiSummary && (
-            <Card className="w-full mb-5 border-muted-foreground/10">
-              <CardContent className="p-6">
-                <pre className="flex items-center gap-2 mb-4">
-                  <Brain className="h-5 w-5 text-primary" />
-                  <span className="text-sm font-semibold text-primary">AI Summary</span>
-                </pre>
-                <p className="text-foreground text-sm leading-relaxed">{aiSummary}</p>
-              </CardContent>
-            </Card>
-          )}
+          <AIResponse response={aiSummary} />
+
 
           {results.length > 0 && (
             <div className="flex w-full border-b border-muted-foreground/20 mb-8">
