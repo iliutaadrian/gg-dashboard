@@ -136,7 +136,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQ
           value={query}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          className="h-14 bg-foreground/10 border-0 placeholder:text-white/50 text-lg focus-visible:ring-foreground/10 pr-20"
+          className="h-14 bg-foreground/10 border-0 text-lg focus-visible:ring-foreground/10 pr-20"
           placeholder="Search documents..."
         />
         <div className="absolute right-4 top-4 flex gap-4">
@@ -155,15 +155,15 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQ
         </div>
         
         {suggestions.length > 0 && (
-          <Card className="absolute w-full mt-2 bg-white/5 border-0 backdrop-blur-sm">
+          <Card className="absolute w-full mt-2 bg-foreground/5 border-0 backdrop-blur-sm">
             <ul className="py-2">
               {suggestions.map((suggestion, index) => (
                 <li
                   key={index}
-                  className={`px-4 py-2 text-white/70 cursor-pointer ${
+                  className={`px-4 py-2 cursor-pointer ${
                     index === selectedIndex 
-                      ? 'bg-white/20' 
-                      : 'hover:bg-white/10'
+                      ? 'bg-foreground/20' 
+                      : 'hover:bg-foreground/10'
                   }`}
                   onClick={() => handleSuggestionClick(suggestion)}
                   onMouseEnter={() => setSelectedIndex(index)}

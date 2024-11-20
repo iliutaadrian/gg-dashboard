@@ -14,13 +14,6 @@ h3 {
   @apply py-3;
 }
 
-mark {
-    background-color: #29140c;
-    padding: 0 2px;
-    border-radius: 2px;
-    color: #b6450d;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -48,6 +41,11 @@ mark {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    
+    /* Add mark variables for light theme */
+    --mark-bg: 24.6 95% 95%;
+    --mark-text: 20.5 90.2% 48.2%;
+    --mark-border: 24.6 95% 90%;
   }
 
   .dark {
@@ -75,5 +73,24 @@ mark {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    /* Add mark variables for dark theme */
+    --mark-bg: 20 43% 11%;
+    --mark-text: 24.6 95% 53.1%;
+    --mark-border: 20 43% 15%;
   }
+}
+
+/* Updated mark styling using HSL values */
+mark {
+  background-color: hsl(var(--mark-bg));
+  color: hsl(var(--mark-text));
+  border: 1px solid hsl(var(--mark-border));
+  padding: 0 2px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+mark:hover {
+  filter: brightness(1.1);
 }
