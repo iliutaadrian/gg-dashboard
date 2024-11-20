@@ -9,8 +9,8 @@ import { MobileMenu } from "./mobile-menu";
 
 export const Navbar = () => {
   const navigation = [
-    { name: "GG Docs", title: "Search", href: "/" },
-    { name: "Jenkins Test Difference", title: "Tests", href: "/tests" }
+    { name: "GG Docs", title: "GG Docs", href: "/" },
+    { name: "GG Tests", title: "GG Tests", href: "/tests" }
   ];
   const [currentPath, setCurrentPath] = useState("");
 
@@ -27,12 +27,12 @@ export const Navbar = () => {
           gg <span className="text-foreground">dashboard</span>
         </Link>
 
-        <div className="flex gap-8">
+        <div className="flex gap-4">
           {navigation.map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              className={`${item.href === currentPath ? 'text-primary' : 'text-muted-foreground'} text-sm hover:text-primary flex gap-2`}
+              className={`${item.href === currentPath ? 'text-primary' : 'text-muted-foreground'} w-20 text-sm hover:text-primary flex gap-5`}
             >
               {item.title}
             </Link>

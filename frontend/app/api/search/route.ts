@@ -11,10 +11,12 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("q") || "";
+  const aiAssist = searchParams.get("ai_assist") === "true";
+
   const aggregationMethod = searchParams.get("aggregationMethod") || "rank_fusion";
   const syntacticMethods = ["bm25"];
   const semanticMethods = ["openai"];
-  const options = ["ai_assist"];
+  const options = aiAssist ? ["ai_assist", "caching"] : ["caching"];
 
   try {
     const response = await axios.get(`${process.env.PYTHON_URL}/api/search`, {

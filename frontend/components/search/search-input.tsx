@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search } from "lucide-react";
+import { Search, Bot } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import axios from 'axios';
 
 interface SearchInputProps {
-  onSearch: (query: string) => Promise<void>;
+  onSearch: (query: string, useAI?: boolean) => Promise<void>;
   className?: string;
   initialQuery?: string;
 }
@@ -13,12 +13,12 @@ interface SearchInputProps {
 const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQuery = '' }) => {
   const [query, setQuery] = useState(initialQuery);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState('');
   const [shouldFetchSuggestions, setShouldFetchSuggestions] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     setQuery(initialQuery);
   }, [initialQuery]);
@@ -68,16 +68,16 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQ
     };
   }, []);
 
-  const handleSearch = async (searchQuery: string = query) => {
+  const handleSearch = async (searchQuery: string = query, aiAssist: boolean) => { 
     if (!searchQuery.trim()) return;
     
-    setLoading(true);
+    setLoading(aiAssist ? 'ai' : 'search');
     closeSuggestions();
     
     try {
-      await onSearch(searchQuery);
+      await onSearch(searchQuery, aiAssist); 
     } finally {
-      setLoading(false);
+      setLoading('');
     }
   };
 
@@ -85,7 +85,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQ
     setQuery(suggestion);
     closeSuggestions();
     await updateClickCount(suggestion);
-    await handleSearch(suggestion);
+    await handleSearch(suggestion, false);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,10 +114,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQ
           if (selectedIndex >= 0) {
             const selectedSuggestion = suggestions[selectedIndex];
             await handleSuggestionClick(selectedSuggestion);
-          } else {
-            await updateClickCount(query);
-            await handleSearch();
-          }
+          } 
           break;
           
         case 'Escape':
@@ -126,7 +123,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQ
       }
     } else if (e.key === 'Enter') {
       await updateClickCount(query);
-      await handleSearch();
+      await handleSearch(query, false);
     }
   };
 
@@ -139,13 +136,23 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQ
           value={query}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          className="h-14 bg-white/5 border-0 text-white placeholder:text-white/50 text-lg focus-visible:ring-white/5"
+          className="h-14 bg-foreground/10 border-0 placeholder:text-white/50 text-lg focus-visible:ring-foreground/10 pr-20"
           placeholder="Search documents..."
         />
-        <Search 
-          className={`absolute right-4 top-4 h-6 w-6 text-white/50 ${loading ? 'animate-spin' : ''} cursor-pointer`}
-          onClick={() => !loading && handleSearch()}
-        />
+        <div className="absolute right-4 top-4 flex gap-4">
+          <Search 
+            className={`h-6 w-6 text-foreground hover:text-primary transition-colors duration-200 ${
+              loading == 'search' ? 'animate-pulse text-primary' : ''
+            } cursor-pointer`}
+            onClick={() => !loading && handleSearch(query, false)}
+          />
+          <Bot 
+            className={`h-6 w-6 text-foreground hover:text-primary transition-colors duration-200 ${
+              loading == 'ai' ? 'animate-pulse text-primary' : ''
+            } cursor-pointer`}
+            onClick={() => !loading && handleSearch(query, true)}
+          />
+        </div>
         
         {suggestions.length > 0 && (
           <Card className="absolute w-full mt-2 bg-white/5 border-0 backdrop-blur-sm">

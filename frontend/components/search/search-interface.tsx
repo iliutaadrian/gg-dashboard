@@ -40,19 +40,22 @@ const SearchInterface = () => {
   const [aiSummary, setAiSummary] = useState('');
   const [loading, setLoading] = useState(false);
   const [currentQuery, setCurrentQuery] = useState('');
+  const [aiAssistEnabled, setAiAssistEnabled] = useState(false);
 
-  const handleSearch = async (searchQuery) => {
+  const handleSearch = async (searchQuery, aiAssistEnabled) => {
     setLoading(true);
     setCurrentQuery(searchQuery); // Update the current query
     setAiSummary('');
     try {
-      const response = await axios.get(`/api/search?q=${searchQuery}`);
+      const response = await axios.get(`/api/search?q=${searchQuery}&ai_assist=${aiAssistEnabled}`);
       const resultsWithCategories = response.data.search_results.map(result => ({
         ...result,
         category: getDocumentCategory(result.path)
       }));
       setResults(resultsWithCategories);
-      setAiSummary(response.data.ai_response);
+      if (aiAssistEnabled) {
+        setAiSummary(response.data.ai_response);
+      }
       return response;
     } catch (error) {
       console.error('Search failed:', error);
@@ -77,7 +80,7 @@ const SearchInterface = () => {
   };
 
   const handlePopularSearchClick = (query) => {
-    handleSearch(query);
+    handleSearch(query, true);
   };
 
   const filteredResults = results.filter(result =>

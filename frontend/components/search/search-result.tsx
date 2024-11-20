@@ -34,7 +34,7 @@ const SearchResult = ({ result, onClick, onPreview }) => {
       <CardContent className="p-6">
         <div className="flex justify-between items-start gap-4 mb-4">
           <h3
-            className="text-xl font-semibold text-white group-hover:text-primary transition-colors"
+            className="text-xl font-semibold  group-hover:text-primary transition-colors"
             dangerouslySetInnerHTML={{ __html: result.highlighted_name }}
           />
           <div className="flex items-center gap-2 shrink-0">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Brain } from "lucide-react";
+import { Bot, Brain } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const AIResponse = ({ response }) => {
@@ -31,8 +31,8 @@ const AIResponse = ({ response }) => {
     <Card className="w-full mb-5 border-muted-foreground/10">
       <CardContent className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <Brain className="h-5 w-5 text-primary" />
-          <span className="text-sm font-semibold text-primary">AI Summary</span>
+          <Bot className="h-5 w-5 text-primary" />
+          <span className="text-sm font-semibold text-primary">GG Bot</span>
         </div>
         <pre className="text-foreground whitespace-pre-line text-sm">
           {displayedText}
