@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Bot, Brain } from "lucide-react";
+import { Bot } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const AIResponse = ({ response }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-  
+  const [isTypingDone, setIsTypingDone] = useState(false);
+
   useEffect(() => {
     if (!response) {
       setDisplayedText('');
       setCurrentIndex(0);
+      setIsTypingDone(false);
       return;
     }
 
@@ -19,6 +21,7 @@ const AIResponse = ({ response }) => {
         setCurrentIndex(prev => prev + 1);
       } else {
         clearInterval(interval);
+        setIsTypingDone(true);
       }
     }, 10);
 
@@ -38,6 +41,11 @@ const AIResponse = ({ response }) => {
           {displayedText}
           {currentIndex < response.length && (
             <span className="animate-pulse">|</span>
+          )}
+          {isTypingDone && (
+            <div className="mt-4 text-xs text-muted-foreground">
+              Note: This is an AI-generated response. Please verify any critical information.
+            </div>
           )}
         </pre>
       </CardContent>

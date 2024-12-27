@@ -31,7 +31,7 @@ export const FilePreview = ({ isOpen, onClose, fileUrl, fileType, title, content
         </DialogHeader>
         
         <div className="flex-1 min-h-0">
-          {fileType === 'pdf' ? (
+          {fileType === 'pdf' || fileType === 'html' ? (
             <iframe
               src={`${fileUrl}#toolbar=0`}
               className="w-full h-full border-0"

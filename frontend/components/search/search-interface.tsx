@@ -27,7 +27,7 @@ const tabs = [
 const getDocumentCategory = (path) => {
   const categoryMap = {
     '/app/docs/wiki': 'wiki',
-    '/app/docs/kb/articles': 'kb',
+    '/app/docs/kb': 'kb',
     '/app/docs/reports': 'reports'
   };
   return Object.entries(categoryMap).find(([prefix]) => path.startsWith(prefix))?.[1] || 'other';
@@ -69,7 +69,7 @@ const SearchInterface = () => {
     const filePath = result.path.replace('/app/docs/', '');
     const fileType = filePath.split('.').pop().toLowerCase();
 
-    if (['pdf', 'docx', 'md'].includes(fileType)) {
+    if (['pdf', 'md', 'html'].includes(fileType)) {
       setPreview({
         fileUrl: `http://localhost:6969/docs/${filePath}`,
         fileType,

@@ -3,14 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "docker:dev": "docker compose up --build",
-    "docker:prod": "docker-compose -f docker-compose.prod.yml up --build",
-    "docker:down": "docker-compose down",
-    "docker:frontend": "docker-compose up --build frontend",
-    "docker:backend": "docker-compose up --build backend",
-    "frontend:dev": "cd frontend && npm run dev",
-    "frontend:build": "cd frontend && npm run build",
-    "frontend:start": "cd frontend && npm start",
-    "install:all": "npm install && cd frontend && npm install"
+    "docker:dev": "docker compose build && docker compose up ",
+    "docker:prod": "docker-compose -f docker-compose.prod.yml up --build"
   }
 }
