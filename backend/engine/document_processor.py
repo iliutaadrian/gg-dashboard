@@ -8,7 +8,6 @@ from langchain_community.document_loaders import (
     PDFMinerLoader,
     TextLoader,
     UnstructuredHTMLLoader,
-    Docx2txtLoader
 )
 from langchain_core.documents import Document
 
@@ -19,9 +18,9 @@ from search.syntactic_helper import clean_text
 LOADER_MAPPING = {
     '.md': UnstructuredMarkdownLoader,
     '.pdf': PDFMinerLoader,
-    '.txt': TextLoader,
     '.html': UnstructuredHTMLLoader,
-    '.docx': Docx2txtLoader
+    # '.txt': TextLoader,
+    # '.docx': Docx2txtLoader
 }
 
 def init_db():

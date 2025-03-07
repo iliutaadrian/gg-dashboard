@@ -15,14 +15,20 @@ const tabs = [
   { id: 'reports', label: 'Reports', icon: BarChart3 },
 ];
 
-  const popularSearches = [
-    { icon: '🚀', query: 'what are the ggstest deploy commands' },
-    { icon: '🗄️', query: 'fix postgress error export' },
-    { icon: '☁️', query: 'who do i contact to get aws access' },
-    { icon: '🌳', query: 'what type of branches can we have on github' },
-    { icon: '🎨', query: 'what class should i use for a small button' },
-    { icon: '💻', query: 'how to install setup onlocalhost' }
-  ];
+const popularSearches = [
+  { icon: '🚀', query: 'what are the ggstest deploy commands' },
+  { icon: '🗄️', query: 'fix postgress error export' },
+  { icon: '☁️', query: 'who do i contact to get aws access' },
+  { icon: '🌳', query: 'what type of branches can we have on github' },
+  { icon: '🎨', query: 'what class should i use for a small button' },
+  { icon: '💻', query: 'how to install setup onlocalhost' }
+];
+
+const starterSearches = [
+  { icon: '💻', query: 'Home', link: "https://github.com/golfgenius/golfgenius/wiki"},
+  { icon: '🚀', query: 'Engineering Resources', link: "https://github.com/golfgenius/golfgenius/wiki/Engineering-Support-Resources" },
+  { icon: '🗄️', query: 'Onboarding', link: "https://github.com/golfgenius/golfgenius/wiki/Onboarding-Checklist" },
+];
 
 const getDocumentCategory = (path) => {
   const categoryMap = {
@@ -69,6 +75,13 @@ const SearchInterface = () => {
     const filePath = result.path.replace('/app/docs/', '');
     const fileType = filePath.split('.').pop().toLowerCase();
 
+    if (fileType === 'md') {
+      const fileName = filePath.split('/').pop().replace('.md', '');
+
+      window.open(`https://github.com/golfgenius/golfgenius/wiki/${fileName}`, '_blank');
+      return;
+    }
+
     if (['pdf', 'md', 'html'].includes(fileType)) {
       setPreview({
         fileUrl: `http://localhost:6969/docs/${filePath}`,
@@ -110,12 +123,34 @@ const SearchInterface = () => {
               </p>
             </div>
           )}
-          
+
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <TrendingUp className="h-4 w-4" />
+              <span className="text-sm font-medium">Don't know where to start?</span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {starterSearches.map((item, index) => (
+                <a
+                  key={index}
+                  href={item.link}
+                  target="_blank"
+                  className="flex items-center gap-3 p-4 text-sm text-left rounded-lg border border-border hover:bg-accent transition-colors duration-200"
+                >
+                  <span className="text-lg">{item.icon}</span>
+                  <span className="text-foreground">{item.query}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <TrendingUp className="h-4 w-4" />
               <span className="text-sm font-medium">Popular Searches</span>
             </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
               {popularSearches.map((item, index) => (
                 <button
@@ -123,7 +158,6 @@ const SearchInterface = () => {
                   onClick={() => handlePopularSearchClick(item.query)}
                   className="flex items-center gap-3 p-4 text-sm text-left rounded-lg border border-border hover:bg-accent transition-colors duration-200"
                 >
-                  <span className="text-lg">{item.icon}</span>
                   <span className="text-foreground">{item.query}</span>
                 </button>
               ))}
@@ -157,10 +191,10 @@ const SearchInterface = () => {
           </div>
 
           <div className="w-full mb-10">
-            <SearchInput 
-              onSearch={handleSearch} 
+            <SearchInput
+              onSearch={handleSearch}
               className="w-full"
-              initialQuery={currentQuery} 
+              initialQuery={currentQuery}
             />
           </div>
 

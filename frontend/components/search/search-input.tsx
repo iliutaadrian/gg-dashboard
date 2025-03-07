@@ -115,6 +115,10 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQ
             const selectedSuggestion = suggestions[selectedIndex];
             await handleSuggestionClick(selectedSuggestion);
           } 
+          else {
+            updateClickCount(query);
+            await handleSearch(query, false);
+          }
           break;
           
         case 'Escape':

@@ -23,7 +23,7 @@ const AIResponse = ({ response }) => {
         clearInterval(interval);
         setIsTypingDone(true);
       }
-    }, 10);
+    }, 5);
 
     return () => clearInterval(interval);
   }, [response, currentIndex]);
