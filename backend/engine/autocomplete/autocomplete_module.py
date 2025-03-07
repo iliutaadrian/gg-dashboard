@@ -2,7 +2,7 @@ import sqlite3
 import os
 import re
 from collections import defaultdict
-from rank_bm25 import BM25Okapi
+from rank_bm25 import BM25Plus
 import pickle
 from config.config import DATA_FOLDER
 import numpy as np
@@ -16,7 +16,7 @@ BATCH_SIZE = 1000
 TOP_BM25_WORDS = 20
 
 MIN_BM25_THRESHOLD_WORD = 0.5
-MIN_BM25_THRESHOLD_PHRASE = 0.5
+MIN_BM25_THRESHOLD_PHRASE = 2
 MIN_BM25_THRESHOLD_DOC_NAME = 0
 
 # Weights for the ranking formula
@@ -98,12 +98,11 @@ def populate_autocomplete_from_documents(documents):
     doc_names = []
     
     # Prepare corpus for BM25
-    cleaned_documents = [clean_text(doc['original_content'], use_stemming=False) for doc in documents]
+    cleaned_documents = [doc['content'] for doc in documents]
     tokenized_corpus = [doc.split() for doc in cleaned_documents]
-    
 
     # Initialize BM25
-    bm25 = BM25Okapi(tokenized_corpus)
+    bm25 = BM25Plus(tokenized_corpus)
     
     # Save the BM25 model for future use
     with open(AUTOCOMPLETE_MODEL_PATH, 'wb') as f:

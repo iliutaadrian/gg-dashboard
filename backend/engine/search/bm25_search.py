@@ -1,8 +1,9 @@
 import os
 import pickle
-from rank_bm25 import BM25Okapi
+from rank_bm25 import BM25Plus
 from config.config import DATA_FOLDER
 from engine.search.syntactic_helper import clean_text, find_snippet, highlight_terms
+from nltk.tokenize import word_tokenize
 
 # Global variables
 documents = None
@@ -31,10 +32,10 @@ def init(docs):
     if bm25 is None or tokenized_corpus is None:
         # Process documents for BM25
         processed_docs = [f"{doc['name']} {doc['content']}" for doc in docs]
-        tokenized_corpus = [doc.split() for doc in processed_docs]
+        tokenized_corpus = [word_tokenize(doc) for doc in processed_docs]
         
         # Initialize BM25
-        bm25 = BM25Okapi(tokenized_corpus)
+        bm25 = BM25Plus(tokenized_corpus)
         
         # Store the model
         with open(BM25_MODEL_PATH, 'wb') as f:
