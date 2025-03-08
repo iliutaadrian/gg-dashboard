@@ -30,6 +30,9 @@ STEMMER = PorterStemmer()
 LEMMATIZER = WordNetLemmatizer()
 STOP_WORDS = set(stopwords.words('english'))
 
+CUSTOM_STOP_WORDS = set(["http", "https", "etc", "com", "mov", "fig", "row"])
+STOP_WORDS.update(CUSTOM_STOP_WORDS)
+
 def extract_domain_from_url(url):
     try:
         parsed = urlparse(url)

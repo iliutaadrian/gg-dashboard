@@ -113,8 +113,8 @@ def index_documents() -> int:
                 except Exception as e:
                     print(f"Error processing {file_path}: {str(e)}")
                     continue
-            else:
-                print(f"Skipping unchanged file: {file_path}")
+            # else:
+            #     print(f"Skipping unchanged file: {file_path}")
     
     conn.commit()
     conn.close()
