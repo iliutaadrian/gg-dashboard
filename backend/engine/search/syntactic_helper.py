@@ -30,17 +30,6 @@ STEMMER = PorterStemmer()
 LEMMATIZER = WordNetLemmatizer()
 STOP_WORDS = set(stopwords.words('english'))
 
-# Add custom stop words that might not be helpful for search
-CUSTOM_STOP_WORDS = {
-    'etc', 'eg', 'ie', 'example', 'use', 'using', 'used', 'would', 'could', 
-    'should', 'may', 'might', 'must', 'shall', 'com'
-}
-STOP_WORDS.update(CUSTOM_STOP_WORDS)
-
-def get_custom_stop_words():
-    return STOP_WORDS
-
-
 def extract_domain_from_url(url):
     try:
         parsed = urlparse(url)
@@ -62,48 +51,67 @@ def replace_urls_with_domains(text):
     
     return processed_text
 
+
 def clean_text(text, 
                use_stemming=False, 
                use_lemmatization=True, 
+               remove_repeated_chars=True,
+               remove_non_alphanumeric=True,
+               remove_numeric=False,
                min_token_length=2):
     """
-    Clean and normalize text for document indexing.
+    Clean and normalize text for document indexing with additional cleaning filters.
     
     Args:
         text: The text to clean
         use_stemming: Whether to apply stemming
         use_lemmatization: Whether to apply lemmatization
         min_token_length: Minimum token length to keep
+        remove_patterns: Whether to remove problematic patterns (UUIDs, emails, etc.)
+        remove_repeated_chars: Whether to remove text with repeated characters
+        remove_non_alphanumeric: Whether to remove tokens without alphanumeric chars
+        remove_numeric: Whether to remove primarily numeric tokens
         
     Returns:
         str: Cleaned text
     """
     if not isinstance(text, str):
         return ""
+
+    # Convert to lowercase
+    text = text.lower()
     
+    # Replace repeated characters (like 'nnnnnn') with a empty string
+    if remove_repeated_chars:
+        text = re.sub(r'(.)\1{2,}', r'', text)
+
+    # Remove numeric tokens
+    if remove_numeric:
+        text = re.sub(r'\b\d+\b', '', text)
+
     # Replace URLs with domains before processing
     text_with_domains = replace_urls_with_domains(text)
-
+    
     # Remove figure references (Fig. X.X.X.) but keep the caption text
-    # Pattern matches variations like "Fig.", "Figure", "FIG" followed by numbers and dots
     fig_pattern = r'(?i)(fig(?:ure)?\.?\s+\d+(?:\.\d+)*\.?)\s+'
-    text = re.sub(fig_pattern, '', text)
-    
-    # Convert to lowercase
-    text = text_with_domains.lower()
-    
-    # Replace punctuation with spaces
-    translator = str.maketrans({c: ' ' for c in string.punctuation})
-    text = text.translate(translator)
+    text = re.sub(fig_pattern, ' ', text_with_domains)
+
+    # Remove non-alphanumeric characters
+    if remove_non_alphanumeric:
+        text = re.sub(r'[^a-zA-Z0-9\s]', ' ', text)
     
     # Remove extra whitespace
-    text = ' '.join(text.split())
+    text = re.sub(r'\s+', ' ', text)
+    
+    # Skip further processing if text is too short after cleaning
+    if len(text) < min_token_length * 2:
+        return ""
     
     # Tokenize
     try:
         tokens = word_tokenize(text)
     except Exception as e:
-        print(f"Tokenization error: {e}")
+        print("Tokenization error: {0}".format(e))
         tokens = text.split()
     
     # Process tokens
@@ -117,7 +125,7 @@ def clean_text(text,
         # Skip stop words
         if token in STOP_WORDS:
             continue
-        
+            
         # Apply lemmatization (gentler than stemming)
         if use_lemmatization:
             token = LEMMATIZER.lemmatize(token)
@@ -130,6 +138,7 @@ def clean_text(text,
             processed_tokens.append(token)
     
     return ' '.join(processed_tokens)
+
 
 def find_snippet(text, query, snippet_length=100):
     query_terms = query.lower().split()
