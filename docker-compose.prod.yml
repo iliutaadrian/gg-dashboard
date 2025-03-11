@@ -11,7 +11,7 @@ services:
       - ./backend/docs:/app/docs:ro
       - ./backend/data:/app/data
     env_file:
-      - ./backend/.env.production
+      - ./backend/.env
     environment:
       - PYTHONUNBUFFERED=1
       - CORS_ORIGIN=https://yourdomain.com

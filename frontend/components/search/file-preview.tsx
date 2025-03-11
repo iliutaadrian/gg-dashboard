@@ -4,7 +4,15 @@ import { FileText, X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export const FilePreview = ({ isOpen, onClose, fileUrl, fileType, title, content }) => {
+interface Props {
+  isOpen: boolean;
+  onClose: () => void;
+  fileUrl: string;
+  fileType: string;
+  title: string;
+  content: string;
+}
+export const FilePreview = ({ isOpen, onClose, fileUrl, fileType, title, content }: Props) => {
   console.log(fileUrl)
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

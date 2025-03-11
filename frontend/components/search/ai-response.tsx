@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Bot } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
-const AIResponse = ({ response }) => {
+const AIResponse = ({ response }: { response: string }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTypingDone, setIsTypingDone] = useState(false);

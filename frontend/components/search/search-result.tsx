@@ -1,7 +1,11 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 
-const SearchResult = ({ result, onClick, onPreview }) => {
+interface SearchResultProps {
+  result: any;
+  onPreview?: (data: any) => void;
+}
+const SearchResult = ({ result, onPreview }: SearchResultProps) => {
   const handleClick = async () => {
     try {
       // Open the preview
@@ -13,15 +17,12 @@ const SearchResult = ({ result, onClick, onPreview }) => {
         });
       }
       
-      // Call the optional click handler
-      onClick?.(result);
     } catch (error) {
       console.error('Failed to handle click:', error);
-      onClick?.(result);
     }
   };
 
-  const getFileType = (path) => {
+  const getFileType = (path: any) => {
     const extension = path.split('.').pop().toLowerCase();
     return extension === 'pdf' ? 'pdf' : 'text';
   };

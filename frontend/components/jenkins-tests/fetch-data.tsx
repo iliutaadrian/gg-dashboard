@@ -41,7 +41,7 @@ export const FetchData = ({ project, builds }: Props) => {
       setStep(2);
       setReports(builds);
     }
-  }, [builds, setStep]);
+  }, [builds, setStep, setReports]);
 
   const lastBuild = builds?.length ? builds[builds.length - 1] : {
     number_of_failures: "x",
