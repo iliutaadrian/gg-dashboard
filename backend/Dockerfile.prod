@@ -1,34 +1,36 @@
-# Use an official Python runtime as a parent image
+# Use Python slim image for smaller size
 FROM python:3.9-slim-buster
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Install system dependencies
+# Install only necessary system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    libc6-dev \
-    libffi-dev \
-    python3-dev \
+    libmagic1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install wheel
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel
-
-# Copy the requirements file into the container
+# Copy requirements first for better caching
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir gunicorn
 
-# Copy the current directory contents into the container at /app
+# Copy app code
 COPY . .
 
+# Create a non-root user and switch to it
+RUN useradd -m appuser && \
+    chown -R appuser:appuser /app
+USER appuser
+
+# Expose the port
 EXPOSE 6969
 
-# Command to run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:6969", "--workers", "4", "app:app"]
+# Run gunicorn with reasonable defaults
+CMD ["gunicorn", "--bind", "0.0.0.0:6969", "--workers", "4", "--timeout", "60", "app:app"]
