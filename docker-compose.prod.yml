@@ -1,48 +1,37 @@
+version: '3.8'
+
 services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.dev
     ports:
       - "6969:6969"
     networks:
       - gg-network
     volumes:
+      - ./backend:/app
       - ./backend/docs:/app/docs:ro
       - ./backend/data:/app/data
     env_file:
       - ./backend/.env
-    environment:
-      - PYTHONUNBUFFERED=1
-      - CORS_ORIGIN=https://yourdomain.com
     restart: unless-stopped
     
   frontend:
     build: 
       context: ./frontend
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.dev
     ports:
-      - "3000:3000"
+      - "3069:3000"
     networks:
       - gg-network
-    environment:
-      - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
     depends_on:
       - backend
 
-  cron-service:
-    build:
-      context: ./cronjob
-      dockerfile: Dockerfile
-    volumes:
-      - ./cronjob:/app
-    networks:
-      - gg-network
-    depends_on:
-      - frontend
-    restart: unless-stopped
-
 networks:
   gg-network:
-    name: gg-dashboard-network
+    driver: bridge

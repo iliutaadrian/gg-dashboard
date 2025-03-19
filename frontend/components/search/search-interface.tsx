@@ -1,7 +1,7 @@
 // @ts-nocheck
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BookOpen, FileText, BarChart3, Search, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import axios from 'axios';
@@ -78,19 +78,6 @@ export default function SearchInterface() {
   const [currentQuery, setCurrentQuery] = useState<string>('');
   const [aiAssistEnabled, setAiAssistEnabled] = useState<boolean>(false);
   const [hasSearched, setHasSearched] = useState<boolean>(false);
-  const [pageLoaded, setPageLoaded] = useState<boolean>(false);
-  const [animateItems, setAnimateItems] = useState<boolean>(false);
-
-  // Handle initial animations
-  useEffect(() => {
-    setPageLoaded(true);
-    // Delay the animation of individual items
-    const timer = setTimeout(() => {
-      setAnimateItems(true);
-    }, 200);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleSearch = async (searchQuery: string, aiAssistEnabled: boolean = false) => {
     setLoading(true);
@@ -104,22 +91,17 @@ export default function SearchInterface() {
         category: getDocumentCategory(result.path)
       }));
       
-      // Add small delay before showing results to allow animation to complete
-      setTimeout(() => {
-        setResults(resultsWithCategories);
-        if (aiAssistEnabled) {
-          setAiSummary(response.data.ai_response);
-        }
-      }, 300);
+      setResults(resultsWithCategories);
+      if (aiAssistEnabled) {
+        setAiSummary(response.data.ai_response);
+      }
       
       return response;
     } catch (error) {
       console.error('Search failed:', error);
       throw error;
     } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 300);
+      setLoading(false);
     }
   };
 
@@ -155,7 +137,7 @@ export default function SearchInterface() {
     if (results.length === 0) return null;
     
     return (
-      <div className="flex w-full border-b border-muted-foreground/20 mb-8 animate-fadeIn">
+      <div className="flex w-full border-b border-muted-foreground/20 mb-8">
         {tabs.map((tab) => {
           const count = results.filter(r =>
             tab.id === 'all' ? true : r.category === tab.id
@@ -166,9 +148,9 @@ export default function SearchInterface() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "flex items-center gap-2 px-6 py-3 text-sm font-medium border-b-2 transition-all duration-300",
+                "flex items-center gap-2 px-6 py-3 text-sm font-medium border-b-2",
                 activeTab === tab.id
-                  ? "border-primary text-primary translate-y-0"
+                  ? "border-primary text-primary"
                   : "border-transparent hover:text-muted-foreground hover:border-muted-foreground"
               )}
             >
@@ -189,28 +171,17 @@ export default function SearchInterface() {
   const renderContent = () => {
     if (loading) {
       return (
-        <div className="text-center py-12 text-muted-foreground animate-pulse">
-          <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
-          <span className="animate-pulse">Searching...</span>
+        <div className="text-center py-12 text-muted-foreground">
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+          <span>Searching...</span>
         </div>
       );
     }
 
     if (!hasSearched || results.length === 0) {
       return (
-        <div className="space-y-8">
-          {currentQuery && results.length === 0 && (
-            <div className="text-center py-8 animate-fadeIn">
-              <p className="text-lg text-muted-foreground mb-2">
-                No results found for &quot;{currentQuery}&quot;
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Try different keywords or browse popular searches below
-              </p>
-            </div>
-          )}
-
-          <div className="space-y-4 animate-fadeSlideUp" style={{ animationDelay: '0.1s' }}>
+        <div className="space-y-8 z-1">
+          <div className="space-y-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <TrendingUp className="h-4 w-4" />
               <span className="text-sm font-medium">Don&apos;t know where to start?</span>
@@ -223,17 +194,16 @@ export default function SearchInterface() {
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-4 text-sm text-left rounded-lg border border-border hover:bg-accent transition-all duration-300 hover:shadow-md hover:-translate-y-1"
-                  style={{ animationDelay: `${0.1 + index * 0.05}s` }}
+                  className="flex items-center gap-3 p-4 text-sm text-left rounded-lg border border-border hover:bg-accent hover:shadow-md"
                 >
-                  <span className="text-lg transform transition-transform duration-300 hover:scale-125">{item.icon}</span>
+                  <span className="text-lg">{item.icon}</span>
                   <span className="text-foreground">{item.query}</span>
                 </a>
               ))}
             </div>
           </div>
 
-          <div className="space-y-4 animate-fadeSlideUp" style={{ animationDelay: '0.3s' }}>
+          <div className="space-y-4">
             <div className="flex items-center gap-2 text-muted-foreground">
               <TrendingUp className="h-4 w-4" />
               <span className="text-sm font-medium">Popular Searches</span>
@@ -244,10 +214,9 @@ export default function SearchInterface() {
                 <button
                   key={index}
                   onClick={() => handlePopularSearchClick(item.query)}
-                  className="flex items-center gap-3 p-4 text-sm text-left rounded-lg border border-border hover:bg-accent transition-all duration-300 hover:shadow-md hover:-translate-y-1"
-                  style={{ animationDelay: `${0.3 + index * 0.05}s` }}
+                  className="flex items-center gap-3 p-4 text-sm text-left rounded-lg border border-border hover:bg-accent hover:shadow-md"
                 >
-                  <span className="text-lg transform transition-transform duration-300 hover:scale-125">{item.icon}</span>
+                  <span className="text-lg">{item.icon}</span>
                   <span className="text-foreground">{item.query}</span>
                 </button>
               ))}
@@ -258,13 +227,9 @@ export default function SearchInterface() {
     }
 
     return (
-      <div className="space-y-6 animate-fadeSlideUp">
+      <div className="space-y-6">
         {filteredResults.map((result, index) => (
-          <div 
-            key={index} 
-            className="animate-fadeSlideUp" 
-            style={{ animationDelay: `${0.1 + index * 0.05}s` }}
-          >
+          <div key={index}>
             <SearchResult
               result={result}
               onPreview={handlePreview}
@@ -277,13 +242,12 @@ export default function SearchInterface() {
 
   // Calculate dynamic classes for vertical alignment
   const containerClasses = cn(
-    "bg-background min-h-screen w-full flex flex-col transition-all duration-700",
-    !hasSearched && "justify-center",
-    pageLoaded ? "opacity-100" : "opacity-0"
+    "bg-background min-h-screen w-full flex flex-col",
+    !hasSearched && "justify-center"
   );
 
   const contentClasses = cn(
-    "flex flex-col items-center px-6 py-16 w-full transition-all duration-700",
+    "flex flex-col items-center px-6 py-16 w-full",
     !hasSearched && "flex-1 justify-center"
   );
 
@@ -292,22 +256,18 @@ export default function SearchInterface() {
       <div className={contentClasses}>
         <div className="w-full max-w-5xl mx-auto">
           <div className={cn(
-            "text-6xl font-bold mb-10 text-center transition-all duration-700 animate-fadeSlideDown",
-            !hasSearched && "mb-16",
-            animateItems ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
+            "text-6xl font-bold mb-10 text-center",
+            !hasSearched && "mb-16"
           )}>
-            <span className="text-primary animate-colorPulse inline-block">GG</span>
+            <span className="text-primary inline-block">GG</span>
             {' '}
             <span className="text-foreground">Docs</span>
           </div>
 
-          <div className={cn(
-            "w-full mb-10 transition-all duration-500",
-            animateItems ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          )}>
+          <div className="w-full mb-10">
             <SearchInput
               onSearch={handleSearch}
-              className="w-full transition-transform duration-300 hover:scale-[1.01] focus-within:scale-[1.01]"
+              className="w-full"
               initialQuery={currentQuery}
             />
           </div>
@@ -326,39 +286,6 @@ export default function SearchInterface() {
           />
         )}
       </div>
-
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        @keyframes fadeSlideUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes fadeSlideDown {
-          from { opacity: 0; transform: translateY(-20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-fadeIn {
-          animation: fadeIn 0.5s ease-out forwards;
-        }
-        
-        .animate-fadeSlideUp {
-          animation: fadeSlideUp 0.5s ease-out forwards;
-        }
-        
-        .animate-fadeSlideDown {
-          animation: fadeSlideDown 0.5s ease-out forwards;
-        }
-        
-        .animate-colorPulse {
-          animation: colorPulse 3s infinite;
-        }
-      `}</style>
     </div>
   );
 }

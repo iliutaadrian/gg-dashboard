@@ -39,4 +39,9 @@ python app.py
 
 ## DOCKER
 
-docker compose build && docker compose up -d
+### Production
+docker compose -f docker-compose.prod.yml build && docker compose -f docker-compose.prod.yml up -d
+
+### Development
+docker compose -f docker-compose.dev.yml build && docker compose -f docker-compose.dev.yml up
+

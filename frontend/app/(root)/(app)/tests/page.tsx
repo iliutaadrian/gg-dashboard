@@ -22,7 +22,7 @@ async function Page() {
         </div>
 
         <Button variant="default">
-          <Link href="/settings">Settings</Link>
+          <Link href="/tests/settings">Settings</Link>
         </Button>
       </div>
       <Separator className="bg-muted-foreground my-5" />
