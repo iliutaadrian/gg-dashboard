@@ -4,7 +4,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     ports:
       - "6969:6969"
     networks:
@@ -18,7 +18,7 @@ services:
   frontend:
     build: 
       context: ./frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     ports:
       - "3069:3000"
     networks:

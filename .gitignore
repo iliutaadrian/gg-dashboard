@@ -93,3 +93,4 @@ logs/
 .cache/
 __pycache__/
 .pytest_cache/
+backend/data

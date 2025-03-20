@@ -117,7 +117,7 @@ export default function SearchInterface() {
 
     if (['pdf', 'md', 'html'].includes(fileType)) {
       setPreview({
-        fileUrl: `http://localhost:6969/docs/${filePath}`,
+        fileUrl: `${process.env.PYTHON_URL}/docs/${filePath}`,
         fileType,
         title: filePath,
         content: result.highlighted_content
