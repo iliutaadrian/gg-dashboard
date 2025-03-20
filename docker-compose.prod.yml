@@ -11,8 +11,6 @@ services:
       - gg-network
     volumes:
       - ./backend:/app
-      - ./backend/docs:/app/docs:ro
-      - ./backend/data:/app/data
     env_file:
       - ./backend/.env
     restart: unless-stopped
@@ -31,6 +29,19 @@ services:
       - /app/.next
     depends_on:
       - backend
+    restart: unless-stopped
+
+  cron-service:
+    build:
+      context: ./cronjob
+      dockerfile: Dockerfile
+    volumes:
+      - ./cronjob:/app
+    networks:
+      - gg-network
+    depends_on:
+      - frontend
+    restart: unless-stopped
 
 networks:
   gg-network:
