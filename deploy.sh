@@ -27,4 +27,10 @@ docker push ${REGISTRY}/${USERNAME}/${APP_NAME}-backend:latest
 docker push ${REGISTRY}/${USERNAME}/${APP_NAME}-frontend:latest
 docker push ${REGISTRY}/${USERNAME}/${APP_NAME}-cronjob:latest
 
-# Rest of your script...
+# VPS
+# # Pull images using a specific compose file
+# docker compose -f docker-compose.prod.yml pull
+
+# # Start containers with the same file
+# docker compose -f docker-compose.prod.yml up -d
+

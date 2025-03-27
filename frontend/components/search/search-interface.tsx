@@ -116,7 +116,7 @@ export default function SearchInterface() {
     }
 
     if (['pdf', 'md', 'html'].includes(fileType)) {
-      window.open(`${process.env.NEXT_PUBLIC_PYTHON_URL}/docs/${filePath}`, '_blank');
+      window.open(`https://ggbackend.iliutaadrian.cloud/docs/${filePath}`, '_blank');
       // setPreview({
       //   fileUrl: `${process.env.NEXT_PUBLIC_PYTHON_URL}/docs/${filePath}`,
       //   fileType,
