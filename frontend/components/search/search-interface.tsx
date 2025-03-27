@@ -116,12 +116,13 @@ export default function SearchInterface() {
     }
 
     if (['pdf', 'md', 'html'].includes(fileType)) {
-      setPreview({
-        fileUrl: `${process.env.PYTHON_URL}/docs/${filePath}`,
-        fileType,
-        title: filePath,
-        content: result.highlighted_content
-      });
+      window.open(`${process.env.NEXT_PUBLIC_PYTHON_URL}/docs/${filePath}`, '_blank');
+      // setPreview({
+      //   fileUrl: `${process.env.NEXT_PUBLIC_PYTHON_URL}/docs/${filePath}`,
+      //   fileType,
+      //   title: filePath,
+      //   content: result.highlighted_content
+      // });
     }
   };
 
@@ -274,7 +275,7 @@ export default function SearchInterface() {
 
           <AIResponse response={aiSummary} />
 
-          {renderSearchTabs()}
+          {!loading && renderSearchTabs()}
           {renderContent()}
         </div>
 

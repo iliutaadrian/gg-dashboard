@@ -40,7 +40,7 @@ export async function GET(
 
 
     const data = await axios
-      .get(`${process.env.PYTHON_URL}/api/tests/fetch-data`, {
+      .get(`${process.env.NEXT_PUBLIC_PYTHON_URL}/api/tests/fetch-data`, {
         params: {
           imap_server: "imap.gmail.com",
           email_address: userSettings[0].email,
@@ -64,7 +64,7 @@ export async function GET(
         })
 
         const data = await axios
-          .get(`${process.env.PYTHON_URL}/api/tests/get_test`, {
+          .get(`${process.env.NEXT_PUBLIC_PYTHON_URL}/api/tests/get_test`, {
             params: {
               file: item.link,
             },

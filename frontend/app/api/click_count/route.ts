@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     const { query } = body;
 
     const response = await axios.post(
-      `${process.env.PYTHON_URL}/api/search/update_click_count`,
+      `${process.env.NEXT_PUBLIC_PYTHON_URL}/api/search/update_click_count`,
       { query }
     );
     

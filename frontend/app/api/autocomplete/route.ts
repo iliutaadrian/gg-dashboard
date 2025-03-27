@@ -14,7 +14,7 @@ export async function GET(request: Request) {
 
   try {
     const response = await axios.get(
-      `${process.env.PYTHON_URL}/api/search/autocomplete`,
+      `${process.env.NEXT_PUBLIC_PYTHON_URL}/api/search/autocomplete`,
       {
         params: { q: query }
       }

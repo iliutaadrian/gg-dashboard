@@ -19,7 +19,7 @@ export async function GET(request: Request) {
   const options = aiAssist ? ["ai_assist", "caching"] : ["caching"];
 
   try {
-    const response = await axios.get(`${process.env.PYTHON_URL}/api/search`, {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_PYTHON_URL}/api/search`, {
       params: {
         q: query,
         aggregationMethod,
