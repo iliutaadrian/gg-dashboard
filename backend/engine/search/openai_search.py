@@ -57,7 +57,7 @@ def search(query, k=5):
     
     for doc, score in semantic_results:
         doc_path = doc.metadata["path"]
-        relevance_score = 1 - score
+        relevance_score = float(1 - score)
         
         doc_results[doc_path]['chunks'].append({
             'content': doc.page_content,

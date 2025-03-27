@@ -172,7 +172,7 @@ export default function SearchInterface() {
     if (loading) {
       return (
         <div className="text-center py-12 text-muted-foreground">
-          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4 animate-spin" />
           <span>Searching...</span>
         </div>
       );

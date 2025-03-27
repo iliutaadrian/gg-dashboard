@@ -16,7 +16,7 @@ def search():
     
     syntactic_methods = json.loads(request.args.get('syntacticMethods', '["bm25"]'))
     semantic_methods = json.loads(request.args.get('semanticMethods', '["openai"]'))
-    options = json.loads(request.args.get('options', '[]'))
+    options = json.loads(request.args.get('options', '["ai_assist", "caching"]'))
 
     if not query:
         return jsonify({"error": "No query provided"}), 400

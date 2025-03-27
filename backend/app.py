@@ -4,6 +4,7 @@ from routes.search_routes import search_routes
 from dotenv import load_dotenv
 
 import sys
+import os
 sys.path.extend([
     'engine',
     'engine/search',
@@ -17,6 +18,24 @@ from autocomplete.autocomplete_module import init_autocomplete
 from cache.cache_module import init_cache_module
 
 app = Flask(__name__)
+
+# Initialize the required modules at startup
+if not os.environ.get('SKIP_INIT', False):
+    print("\nInitializing documents", flush=True)
+    indexed_count, documents = init_processor()
+    
+    print("\nInitializing search module", flush=True)
+    init_search_module(documents)
+    
+    print("\nInitializing cache module", flush=True)
+    init_cache_module()
+    
+    print("\nInitializing autocomplete module", flush=True)
+    init_autocomplete(documents, indexed_count)
+
+    print("\nInitializing LLM module", flush=True)
+    
+    print("\nInitialization complete!", flush=True)
 
 # Tests:
 # - GET  /api/tests/fetch-data
@@ -39,18 +58,4 @@ def index():
     return render_template("index.html", data=[])
 
 if __name__ == "__main__":
-    print("\nInitializing documents", flush=True)
-    indexed_count, documents = init_processor()
-
-    print("\nInitializing search module", flush=True)
-    init_search_module(documents)
-
-    print("\nInitializing cache module", flush=True)
-    init_cache_module()
-
-    print("\nInitializing autocomplete module", flush=True)
-    init_autocomplete(documents, indexed_count)
-
-    print("\nInitializing LLM module", flush=True)
-
     app.run(debug=True, host="0.0.0.0", port=6969)

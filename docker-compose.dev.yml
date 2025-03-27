@@ -25,24 +25,9 @@ services:
       - gg-network
     volumes:
       - ./frontend:/app
-      - /app/node_modules
-      - /app/.next
     depends_on:
       - backend
     restart: unless-stopped
-
-  cron-service:
-    build:
-      context: ./cronjob
-      dockerfile: Dockerfile
-    volumes:
-      - ./cronjob:/app
-    networks:
-      - gg-network
-    depends_on:
-      - frontend
-    restart: unless-stopped
-
 
 networks:
   gg-network:
