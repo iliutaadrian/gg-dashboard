@@ -15,7 +15,7 @@ docker compose -f docker-compose.prod.yml build --no-cache
 echo "Tagging images for registry..."
 docker tag ${APP_NAME}-backend:latest ${REGISTRY}/${USERNAME}/${APP_NAME}-backend:latest
 docker tag ${APP_NAME}-frontend:latest ${REGISTRY}/${USERNAME}/${APP_NAME}-frontend:latest
-docker tag ${APP_NAME}-cron:latest ${REGISTRY}/${USERNAME}/${APP_NAME}-cron:latest
+docker tag ${APP_NAME}-cronjob:latest ${REGISTRY}/${USERNAME}/${APP_NAME}-cronjob:latest
 
 # Step 3: Login to your registry
 echo "Logging in to Docker registry..."
@@ -25,6 +25,6 @@ docker login ${REGISTRY}
 echo "Pushing images to registry..."
 docker push ${REGISTRY}/${USERNAME}/${APP_NAME}-backend:latest
 docker push ${REGISTRY}/${USERNAME}/${APP_NAME}-frontend:latest
-docker push ${REGISTRY}/${USERNAME}/${APP_NAME}-cron:latest
+docker push ${REGISTRY}/${USERNAME}/${APP_NAME}-cronjob:latest
 
 # Rest of your script...
