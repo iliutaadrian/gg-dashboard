@@ -20,13 +20,15 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.dev
     ports:
-      - "3000:3000"
+      - "3069:3000"
     networks:
       - gg-network
+    env_file:
+      - ./frontend/.env
     volumes:
       - ./frontend:/app
-    depends_on:
-      - backend
+      - /app/node_modules
+      - /app/.next
     restart: unless-stopped
 
 networks:
