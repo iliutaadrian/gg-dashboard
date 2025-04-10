@@ -85,36 +85,33 @@ def index_documents() -> int:
                 
             last_modified = os.path.getmtime(file_path)
             
-            c.execute("SELECT last_modified FROM documents WHERE path = ?", (file_path,))
-            result = c.fetchone()
+            c.execute("SELECT path FROM documents WHERE path = ?", (file_path,))
+            if c.fetchone():
+                # print(f"Skipping unchanged file: {file_path}")
+                continue
             
-            if not result or result[0] < last_modified:
-                try:
-                    # Load document content directly
-                    original_content = load_document(file_path)
-                    
-                    if not original_content:
-                        continue
-                        
-                    # Process the content
-                    optimized_content = clean_text(original_content)
-                    name = extract_doc_name(file_path)
-                    path = file_path.replace(DOCS_FOLDER, '')
-                    
-                    c.execute("""INSERT OR REPLACE INTO documents 
-                                 (path, name, content, original_content, last_modified) 
-                                 VALUES (?, ?, ?, ?, ?)""",
-                              (file_path, name, optimized_content, 
-                               original_content, last_modified))
-                    
-                    indexed_count += 1
-                    print(f"Indexed: {file_path}")
-                    
-                except Exception as e:
-                    print(f"Error processing {file_path}: {str(e)}")
+            try:
+                original_content = load_document(file_path)
+                
+                if not original_content:
                     continue
-            # else:
-            #     print(f"Skipping unchanged file: {file_path}")
+                    
+                optimized_content = clean_text(original_content)
+                name = extract_doc_name(file_path)
+                path = file_path.replace(DOCS_FOLDER, '')
+                
+                c.execute("""INSERT OR REPLACE INTO documents 
+                             (path, name, content, original_content, last_modified) 
+                             VALUES (?, ?, ?, ?, ?)""",
+                          (file_path, name, optimized_content, 
+                           original_content, last_modified))
+                
+                indexed_count += 1
+                print(f"Indexed: {file_path}")
+                
+            except Exception as e:
+                print(f"Error processing {file_path}: {str(e)}")
+                continue
     
     conn.commit()
     conn.close()

@@ -109,7 +109,7 @@ def build_inverted_index(documents, max_phrase_length=4, min_doc_count=2):
     print(f"Found {len(qualified_phrases)} phrases that appear in at least {min_doc_count} documents")
     
     # Handle document names
-    doc_names = [(clean_text(doc['name'], use_lemmatization=False, remove_numeric=True), 15.0) for doc in documents]
+    doc_names = [(doc['name'], 15.0) for doc in documents]
 
     add_or_update_items(qualified_phrases)
     add_or_update_items(doc_names, is_doc_name=True)
@@ -136,14 +136,16 @@ def get_autocomplete_suggestions(query, limit=10):
         SELECT phrase,
                (? * score + 
                 ? * (CAST(click_count AS REAL) / (SELECT MAX(click_count) FROM autocomplete_items)) + 
-                ? * CAST(is_doc_name AS REAL)) AS combined_score
+                ? * CAST(is_doc_name AS REAL)) AS combined_score,
+                is_doc_name
+
         FROM autocomplete_items
         WHERE phrase LIKE ? || '%'
         ORDER BY combined_score DESC, length(phrase) ASC
         LIMIT ?
     ''', (SCORE_WEIGHT, CLICK_COUNT_WEIGHT, DOC_NAME_WEIGHT, query.lower(), limit))
     
-    suggestions = [row[0] for row in cursor.fetchall()]
+    suggestions = [(row[0], row[2]) for row in cursor.fetchall()]
     
     conn.close()
     

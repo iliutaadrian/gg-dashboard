@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Bot } from "lucide-react";
+import { Search, Bot, Folder } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import axios from 'axios';
@@ -164,15 +164,17 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQ
               {suggestions.map((suggestion, index) => (
                 <li
                   key={index}
-                  className={`px-4 py-2 cursor-pointer ${
+                  className={`flex items-center gap-2 px-4 py-2 cursor-pointer ${
                     index === selectedIndex 
                       ? 'bg-foreground/20' 
                       : 'hover:bg-foreground/10'
                   }`}
-                  onClick={() => handleSuggestionClick(suggestion)}
+                  onClick={() => handleSuggestionClick(suggestion[0])}
                   onMouseEnter={() => setSelectedIndex(index)}
                 >
-                  {suggestion}
+                  {suggestion[1] == 1 && <Folder size={16} /> }
+
+                  {suggestion[0]}
                 </li>
               ))}
             </ul>
