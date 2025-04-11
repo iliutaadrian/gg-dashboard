@@ -3,10 +3,10 @@ import axios from "axios";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const user = await currentUser();
-  if (!user) {
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
+  // const user = await currentUser();
+  // if (!user) {
+  //   return new NextResponse("Unauthorized", { status: 401 });
+  // }
 
   try {
     const body = await request.json();

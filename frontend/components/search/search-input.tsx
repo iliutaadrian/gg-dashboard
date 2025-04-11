@@ -172,7 +172,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ onSearch, className, initialQ
                   onClick={() => handleSuggestionClick(suggestion[0])}
                   onMouseEnter={() => setSelectedIndex(index)}
                 >
-                  {suggestion[1] == 1 && <Folder size={16} /> }
+                  {suggestion[1] == "1" && <Folder size={16} /> }
 
                   {suggestion[0]}
                 </li>

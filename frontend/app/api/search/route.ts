@@ -4,10 +4,10 @@ import axios from "axios";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const user = await currentUser();
-  if (!user) {
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
+  // const user = await currentUser();
+  // if (!user) {
+  //   return new NextResponse("Unauthorized", { status: 401 });
+  // }
 
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("q") || "";
