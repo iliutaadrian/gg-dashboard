@@ -2,10 +2,11 @@
 const cron = require("node-cron");
 const axios = require("axios");
 
-cron.schedule('0 8-20/4 * * *', async () => {
-  console.log("Running a task every 4 hours");
+cron.schedule('*/2 * * * *', async () => {
+  console.log("Running a task every 2 minutes");
   try {
     const response = await axios.get("http://frontend:3000/api/jenkins/cron");
+
     console.log("Response received:", response.data);
 
   } catch (error) {

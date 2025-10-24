@@ -30,7 +30,7 @@ export async function GET(
     const builds = previousBuilds.map((item) => item.build);
 
     const data = await axios
-      .get(`${process.env.NEXT_PUBLIC_PYTHON_URL}/api/tests/fetch_data`, {
+      .get(`${process.env.NEXT_PUBLIC_PYTHON_URL}/api/tests/fetch-data`, {
         params: {
           imap_server: "imap.gmail.com",
           email_address: userSettings[0].email,
@@ -76,10 +76,6 @@ export async function GET(
       }
     }
 
-    previousBuilds = await db
-      .select()
-      .from(BuildTable)
-      .where(eq(BuildTable.project, projects[0]));
 
     return new NextResponse(
       JSON.stringify(

@@ -86,11 +86,6 @@ export async function GET(
       }
     }
 
-    previousBuilds = await db
-      .select()
-      .from(BuildTable)
-      .where(eq(BuildTable.project, params.project));
-
     return new NextResponse(
       JSON.stringify(
         previousBuilds.slice(previousBuilds.length - 10, previousBuilds.length),

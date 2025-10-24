@@ -128,7 +128,7 @@ def fetch_data():
     search_criteria = f'(SUBJECT "{request.args.get("project")}")'
 
     link_pattern = re.compile(
-        r"Rspec Report\s*<\s*(http://s3.amazonaws.com/golfgenius-dev/coverage/\S+)>",
+        r"Rspec Report\s*<\s*(https://public-assets-cdn.ggstest.com/coverage/\S+)>",
         re.IGNORECASE,
     )
 
