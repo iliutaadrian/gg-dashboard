@@ -30,9 +30,23 @@ def fetch_and_parse_emails(mail, email_ids, link_pattern, failures_pattern):
         if isinstance(subject, bytes):
             subject = subject.decode(encoding if encoding is not None else "utf-8")
 
+        # Guard to handle malformed subject lines
+        try:
+            subject_parts = subject.split("#")
+            if len(subject_parts) < 2:
+                continue  # Skip this email if it doesn't have the expected format
+
+            build_parts = subject_parts[1].split(" ")
+            if len(build_parts) < 2:
+                continue  # Skip this email if it doesn't have the expected format
+
+            build_number = build_parts[1]
+        except (IndexError, AttributeError):
+            continue  # Skip this email if parsing fails
+
         email_info = {
             "subject": subject,
-            "build": subject.split("#")[1].split(" ")[1],
+            "build": build_number,
             "link": "",
             "date": "",
             "number_of_failures": "",
