@@ -1,6 +1,10 @@
-import { sql } from "@vercel/postgres";
-import { drizzle } from "drizzle-orm/vercel-postgres";
 import { integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
+
+const connectionString = process.env.POSTGRES_URL_NON_POOLING!;
+const client = postgres(connectionString);
 
 // export const UserAPILimitTable = pgTable("user_api_limit", {
 //   id: serial("id").primaryKey(),
@@ -53,4 +57,4 @@ export type Build = typeof BuildTable.$inferSelect;
 export type Test = typeof TestTable.$inferSelect;
 
 // Connect to Vercel Postgres
-export const db = drizzle(sql);
+export const db = drizzle(client);

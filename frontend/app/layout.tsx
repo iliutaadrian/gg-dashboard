@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <script defer src="https://umami.iliutaadrian.cloud/script.js" data-website-id="9fb601c5-952b-4d26-930a-99aa8a5c0337"></script>
+        <script defer src="https://umami.iliutaadrian.com/script.js" data-website-id="9fb601c5-952b-4d26-930a-99aa8a5c0337"></script>
       </head>
       <body className={cn("bg-background", inter.className)}>
         <ClerkProvider>

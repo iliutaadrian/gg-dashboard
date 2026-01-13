@@ -151,7 +151,7 @@ def fetch_data():
     mail = connect_to_gmail(imap_server, email_address, password)
     mail.select(mailbox)
 
-    email_ids = search_emails(mail, mailbox, search_criteria, num_emails=20)
+    email_ids = search_emails(mail, mailbox, search_criteria, num_emails=15)
     email_data_list = fetch_and_parse_emails(mail, email_ids, link_pattern, failures_pattern)
 
     mail.logout()
@@ -166,8 +166,8 @@ def fetch_data():
             date_time_obj_romania = email_info["date"] + timedelta(hours=romania_timezone_offset)
             day_of_week = date_time_obj_romania.strftime("%A")
             
-            if day_of_week in ("Saturday",):
-                continue
+            # if day_of_week in ("Saturday",):
+            #     continue
 
             response.append({
                 "build": email_info["build"],
