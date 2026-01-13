@@ -20,7 +20,6 @@ export async function POST(request: Request) {
   try {
     const builds = [] as string[]
 
-    // take last 20 builds
     for (let i = 0; i < 30; i++) {
       builds.push((parseInt(file_2) - i).toString());
     }
@@ -32,7 +31,7 @@ export async function POST(request: Request) {
         ${builds.map((build) => `'${build}'`).join(",")}
       )
     `));
-    const testResults: Test[] = testsQuery.rows as Test[];
+    const testResults: Test[] = testsQuery as unknown as Test[];
 
     // Separate tests by file
     const testsFile1 = testResults.filter((test) => test.build === file_1);

@@ -117,7 +117,8 @@ export const GenerateDiff = () => {
       <CardFooter className="flex flex-col gap-10 border-t px-6 py-4">
         <div className="flex flex-col gap-5 w-full">
           Test Difference
-          {testDiff.length &&
+          {testDiff.length === 0 && <p className="text-muted-foreground">No difference found between the two reports.</p>}
+          {testDiff.length > 0 &&
             testDiff.map((element: Test) => {
               return (
                 <Accordion
@@ -132,10 +133,16 @@ export const GenerateDiff = () => {
                         <div className={`${getSeverity(element.occurrences)} w-10 h-10 rounded-full border-2 border-primary flex justify-center items-center`}>
                           <p> {element.number}</p>
                         </div>
-                        {element.name} {element.occurrences}/30
+                        {element.name.length > 70 ? element.name.substring(0, 70) + "..." : element.name} {element.occurrences}/30
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="flex flex-col gap-5">
+                      <p className="flex items-center text-md gap-2">
+                        <span className="font-bold text-primary">Name</span>
+                        {element.name}
+                      </p>
+
+
                       <p className="flex items-center text-md gap-2">
                         <span className="font-bold text-primary">Occurrences</span>
                         {element.occurrences}
