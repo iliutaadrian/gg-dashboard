@@ -39,7 +39,7 @@ export const FetchData = ({ project, builds }: Props) => {
   useEffect(() => {
     if (builds?.length) {
       setStep(2);
-      setReports(builds);
+      setReports(builds.sort((a: any, b: any) => a.build - b.build));
     }
   }, [builds, setStep, setReports]);
 
